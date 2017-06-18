@@ -5,6 +5,6 @@ public class HelloServer {
 
     public static void main(String[] args)
     {
-        System.out.println("Hi server");
+        System.out.println("Hi server 1");
     }
 }
