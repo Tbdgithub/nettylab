@@ -8,5 +8,6 @@ public class HelloClient {
 
     public static void main(String[] args) {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
+        System.out.println("i am out");
     }
 }
