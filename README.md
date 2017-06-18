@@ -1,2 +1,2 @@
 # nettylab
-hi
+local1
