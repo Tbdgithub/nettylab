@@ -1,4 +1,4 @@
-package com.saturn.server.echo;
+package com.saturn.server.sendback;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +12,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-
+        System.out.println("read channel");
         ByteBuf in = (ByteBuf) msg;
 //        try {
 //            while (in.isReadable()) { // (1)

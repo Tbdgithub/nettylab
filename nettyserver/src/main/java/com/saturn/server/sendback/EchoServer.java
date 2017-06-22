@@ -1,4 +1,4 @@
-package com.saturn.server.echo;
+package com.saturn.server.sendback;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -42,14 +42,28 @@ public class EchoServer {
                             if (sslCtx != null) {
                                 p.addLast(sslCtx.newHandler(ch.alloc()));
                             }
-                            //p.addLast(new LoggingHandler(LogLevel.INFO));
-                            p.addLast(new EchoServerHandler());
+                            //p.daddLast(new LoggingHandler(LogLevel.INFO));
+                            // p.addLast(new EchoServerHandler());
+                            p.addLast("decoder 0", new EchoMessageDecoder());
+                            p.addLast("inhandler1", new InboundHandler1());
+                            p.addLast("InHandler2", new InHandler2());
+
+
+                            //out
+                            p.addLast("out0", new MsgEncoder());
+                            p.addLast("out1", new OutHandler1());
+                            p.addLast("out2", new OutHandler2());
+
+
+
                         }
                     });
 
+            System.out.println("begin bind");
             // Start the server.
             ChannelFuture f = b.bind(PORT).sync();
 
+            System.out.println("bind ok");
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync();
         } finally {
@@ -59,3 +73,4 @@ public class EchoServer {
         }
     }
 }
+
