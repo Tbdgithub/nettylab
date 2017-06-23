@@ -13,7 +13,7 @@ public class Msg2MsgHandler extends MessageToMessageEncoder<String> {
     @Override
     protected void encode(ChannelHandlerContext ctx, String msg, List<Object> out) throws Exception {
         System.out.println("client:outbound 1");
-        String chanedTxt = "append --" +this.hashCode()+" " + msg;
+        String chanedTxt = "hash:" + this.hashCode() + " client append --" + " " + msg;
         out.add(chanedTxt);
     }
 }

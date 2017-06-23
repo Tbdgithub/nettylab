@@ -53,16 +53,10 @@ public class EchoClient {
                             p.addLast("inbound", new InboundHandler1());
 
                             //outbound
-                            //
-
                             p.addLast("encoder", new EchoMessageEncoder());
                             p.addLast("out1", new Msg2MsgHandler());
                             //p.addLast("out2", new Msg2MsgHandler());
 
-
-//                            //inbound
-//                            p.addLast("decoder", new EchoMessageDecoder());
-//                            p.addLast("inbound", new InboundHandler1());
 
                         }
                     });
