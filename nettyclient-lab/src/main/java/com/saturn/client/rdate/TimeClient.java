@@ -15,7 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class TimeClient {
     public static void main(String[] args) throws Exception {
-        String host ;
+        String host;
         int port;
 
         host = "thinkpad";
@@ -30,7 +30,12 @@ public class TimeClient {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new TimeClientHandler());
+
+
+
+                    ch.pipeline().addLast("inbound0", new TimeDecoder());
+
+                    ch.pipeline().addLast("inbound1", new TimeClientHandler());
                 }
             });
 

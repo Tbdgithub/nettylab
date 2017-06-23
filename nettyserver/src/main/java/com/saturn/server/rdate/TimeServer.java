@@ -30,6 +30,7 @@ public class TimeServer {
                             ChannelPipeline p = ch.pipeline();
 
 
+                            p.addLast("outbound 0", new TimeEncoder());
                             p.addLast("inbound 0", new TimeServerHandler());
 
                         }
