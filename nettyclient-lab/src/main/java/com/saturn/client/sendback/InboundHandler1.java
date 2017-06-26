@@ -11,8 +11,8 @@ public class InboundHandler1 extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 
-        System.out.println("client inbound 1");
-        System.out.println("received :" + msg);
+        // System.out.println("client inbound 1");
+        System.out.println(msg);
 
 
     }

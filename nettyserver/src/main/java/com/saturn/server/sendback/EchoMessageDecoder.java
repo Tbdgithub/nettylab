@@ -16,7 +16,7 @@ public class EchoMessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
-        System.out.println("inbound 0");
+       // System.out.println("inbound 0");
         //in.markReaderIndex();
         ByteBufInputStream is = new ByteBufInputStream(in, in.readableBytes());
         String msg = is.readLine();

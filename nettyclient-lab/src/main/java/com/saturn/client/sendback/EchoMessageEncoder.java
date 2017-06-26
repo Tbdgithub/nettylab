@@ -13,7 +13,7 @@ public class EchoMessageEncoder extends MessageToByteEncoder<String> {
     @Override
     protected void encode(ChannelHandlerContext ctx, String msg, ByteBuf out) throws Exception {
         //out.resetWriterIndex();
-        System.out.println("client:outbound 0");
+       // System.out.println("client:outbound 0");
         try {
             ByteBufOutputStream os = new ByteBufOutputStream(out);
 

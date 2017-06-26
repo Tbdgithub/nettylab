@@ -11,10 +11,11 @@ public class InHandler2 extends SimpleChannelInboundHandler<String> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-        System.out.println("s:InHandler2");
+        // System.out.println("s:InHandler2");
 
-        String backMsg = "s:" + msg;
-        System.out.println("send back:" + backMsg);
+        //  String backMsg = "s:" + msg;
+        //   System.out.println("send back:" + backMsg);
+        String backMsg = msg;
         Channel channel = ctx.channel();
         channel.writeAndFlush(backMsg);
     }

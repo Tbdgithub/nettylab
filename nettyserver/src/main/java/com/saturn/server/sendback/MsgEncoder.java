@@ -15,7 +15,7 @@ public class MsgEncoder extends MessageToByteEncoder<String> {
     protected void encode(ChannelHandlerContext ctx, String msg, ByteBuf out) throws Exception {
 
         // out.resetWriterIndex();
-        System.out.println("out handler 0");
+       // System.out.println("out handler 0");
         try {
             ByteBufOutputStream os = new ByteBufOutputStream(out);
 

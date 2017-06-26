@@ -16,6 +16,9 @@ public class TimeDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
         if (in.readableBytes() < 4) {
+
+            System.out.println("zan bao le,读完了再说");
+            //处理粘包
             return;
         }
 

@@ -25,7 +25,7 @@ public class EchoMessageDecoder extends ByteToMessageDecoder {
 
         // String msg = new String(readBuff);
         //String msg = is.readLine();
-        System.out.println("client inbound 0");
+       // System.out.println("client inbound 0");
 
         StringBuilder sb = new StringBuilder();
 

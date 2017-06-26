@@ -9,8 +9,9 @@ public class OutHandler1 extends ChannelOutboundHandlerAdapter {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         //ctx.write(msg, promise);
-        System.out.println("OutHandler1 write");
-        String append="handler1:"+msg;
+       // System.out.println("OutHandler1 write");
+       // String append="handler1:"+msg;
+        String append=""+msg;
         ctx.writeAndFlush(append);
 
 

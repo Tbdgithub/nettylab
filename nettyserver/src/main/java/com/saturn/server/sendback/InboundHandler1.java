@@ -12,7 +12,7 @@ public class InboundHandler1 extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 
         //System.out.println("read :" + msg);
-        System.out.println("InboundHandler1 read:"+msg);
+      //  System.out.println("InboundHandler1 read:"+msg);
 
         //下一个handler
         ctx.fireChannelRead(msg);
@@ -53,7 +53,7 @@ public class InboundHandler1 extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        System.out.println("s: active inbound 1");
+       // System.out.println("s: active inbound 1");
        // super.channelActive(ctx);
 
         //Channel channel = ctx.channel();
