@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,11 +33,14 @@ public class Decoder1 extends ByteToMessageDecoder {
             }
 
             if (headerIdentity.getCommandId() == 0x00000001) {
-                System.out.println("link check req,tranId:" + headerIdentity.getTransactionID());
-                //  return;
-            } else
-            //if (headerIdentity.getCommandId() == 0x00000006) {
-            {
+                System.out.println("link check request,tranId:" + headerIdentity.getTransactionID());
+
+                keepalive(ctx);
+
+            } else if (headerIdentity.getCommandId() == 0x80000001) {
+                System.out.println("link check response,tranId:" + headerIdentity.getTransactionID());
+
+            } else {
                 System.out.println("other resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
             }
 
@@ -48,7 +52,8 @@ public class Decoder1 extends ByteToMessageDecoder {
             }
 
             if (nextToRead == 0) {
-                out.add(new RespBody());
+                System.out.println("keepalive do nothing .date:" + new Date().toString());
+                // out.add(new RespBody());
                 return;
             }
 
@@ -64,6 +69,19 @@ public class Decoder1 extends ByteToMessageDecoder {
             out.add(respBody);
 
         }
+    }
+
+    private void keepalive(ChannelHandlerContext ctx) {
+        RequestMsg requestMsg = new RequestMsg();
+
+        requestMsg.setBodyBuff(new byte[0]);
+        HeaderIdentity header = new HeaderIdentity();
+        header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
+        header.setCommandId(0x00000001);
+        header.setTransactionID(IdGenerator.getNextTid());
+        requestMsg.setHeaderIdentity(header);
+
+        ctx.channel().writeAndFlush(requestMsg);
     }
 
 

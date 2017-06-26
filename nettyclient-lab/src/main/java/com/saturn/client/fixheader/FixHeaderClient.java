@@ -7,7 +7,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -37,13 +36,11 @@ public class FixHeaderClient {
                             p.addLast("decoder", new Decoder1());
 
                             //outbound
-                            p.addLast("encoder", new Encoder1());
-
-
-
+                            p.addLast("encoder1", new MsgEncoder());
+                            // p.addLast("encoder", new Encoder1());
+                            //   p.addLast("KeepaliveEncoder",new KeepaliveEncoder());
                         }
                     });
-
 
             ChannelFuture cf = b.connect(HOST, PORT);
             Channel channel = cf.channel();
@@ -60,7 +57,7 @@ public class FixHeaderClient {
         @Override
         public void operationComplete(ChannelFuture future) {
             if (future.isSuccess()) {
-                System.out.println("future succeed");
+                System.out.println("operationComplete future succeed");
             } else {
                 future.cause().printStackTrace();
                 future.channel().close();
@@ -78,7 +75,17 @@ public class FixHeaderClient {
 
             while (!line.equals("quit")) {
 
-                ChannelFuture channelFuture = channel.writeAndFlush(line);
+                RequestMsg requestMsg = new RequestMsg();
+
+                requestMsg.setBodyBuff(line.getBytes("utf-8"));
+
+                HeaderIdentity header = new HeaderIdentity();
+                header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
+                header.setCommandId(0x00000006);
+                header.setTransactionID(IdGenerator.getNextTid());
+                requestMsg.setHeaderIdentity(header);
+
+                ChannelFuture channelFuture = channel.writeAndFlush(requestMsg);
                 channelFuture.addListener(trafficGenerator);
 
                 line = bf.readLine();
@@ -91,7 +98,7 @@ public class FixHeaderClient {
             if (bf != null) {
                 try {
                     bf.close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
