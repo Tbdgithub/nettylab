@@ -53,6 +53,7 @@ public class Connection {
     }
 
 
+
     public String getConnKey() {
         InetSocketAddress address = (InetSocketAddress) channel.localAddress();
         String localAddr = address.getAddress().getHostAddress() + ":" + address.getPort();

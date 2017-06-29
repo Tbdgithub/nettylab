@@ -17,7 +17,7 @@ public class ClientRespHandler extends SimpleChannelInboundHandler<RespBody> {
         //tran
 
         if (msg.getHeaderIdentity() == null) {
-            System.out.println("empty body");
+            // System.out.println("empty body");
             return;
         }
 

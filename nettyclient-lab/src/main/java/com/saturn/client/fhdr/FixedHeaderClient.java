@@ -66,21 +66,34 @@ public class FixedHeaderClient {
                     continue;
                 }
 
-                RequestMsg requestMsg = new RequestMsg();
+                final RequestMsg requestMsg = new RequestMsg();
                 requestMsg.setBodyBuff(line.getBytes("utf-8"));
 
                 HeaderIdentity header = new HeaderIdentity();
                 header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
                 header.setCommandId(0x00000006);
-                header.setTransactionID(IdGenerator.getNextTid());
                 requestMsg.setHeaderIdentity(header);
 
-//                RespBody respBody = client.sendMessage(requestMsg);
-//                if (respBody != null) {
-//                    System.out.println("client resp:" + respBody.getRespCode());
-//                }
 
-                client.sendMessageAsync(requestMsg);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            RespBody respBody = client.sendMessage(requestMsg);
+                            if (respBody != null) {
+                                System.out.println("client resp:" + respBody.getRespCode());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                t.start();
+
+
+                // client.sendMessageAsync(requestMsg);
 
                 line = bf.readLine();
             }
@@ -97,6 +110,10 @@ public class FixedHeaderClient {
             }
         }
 
+    }
+
+    public void keepalive() {
+        //todo thread
     }
 
 
@@ -181,7 +198,6 @@ public class FixedHeaderClient {
             RespFuture respFuture = transaction.begin();
             respFuture.setTimeout(Timeout);
             respBody = respFuture.getValue();
-
         }
 
         return respBody;
@@ -197,6 +213,7 @@ public class FixedHeaderClient {
             if (connection != null) {
                 // System.out.println("conn:" + connection.getConnKey());
                 Transaction transaction = connection.createTransaction();
+                requestMsg.getHeaderIdentity().setTransactionID(Integer.parseInt(transaction.getTid()));
                 transaction.setRequest(requestMsg);
                 RespFuture respFuture = transaction.begin();
                 respFuture.setTimeout(Timeout);

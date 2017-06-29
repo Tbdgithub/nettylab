@@ -12,12 +12,17 @@ public class Transaction {
 
     private Connection connection;
 
+
     public Transaction(Connection connection) {
         this.connection = connection;
+        this.setTid(String.valueOf(IdGenerator.getNextTid()));
+
+
     }
 
     public void handleResp(RespBody response) {
 
+        System.out.println("handleResp:");
         future.complete(response);
     }
 
@@ -63,7 +68,8 @@ public class Transaction {
         //Response respBody = result.getValue();
         this.future = result;
         TransactionManager.Instance.addTransaction(this);
-        System.out.println("txid:"+this.getTid());
+        System.out.println("txid:" + this.getTid());
+        this.getRequest().getHeaderIdentity().setTransactionID(Integer.parseInt(this.getTid()));
         connection.sendRequest(this.getRequest());
         return result;
 

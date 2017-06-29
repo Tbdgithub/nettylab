@@ -28,8 +28,8 @@ public class TransactionManager {
     }
 
     public Transaction addTransaction(Transaction tx) {
-        tx.setTid(String.valueOf(getNextTid()));
-        Transaction putedTx = txs.put(tx.getTid(), tx);
+       // tx.setTid(String.valueOf(getNextTid()));
+        txs.put(tx.getTid(), tx);
         return tx;
     }
 

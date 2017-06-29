@@ -38,9 +38,9 @@ public class ClientDecoder extends ByteToMessageDecoder {
                 System.out.println("received link check request,tranId:" + headerIdentity.getTransactionID());
 
             } else if (headerIdentity.getCommandId() == 0x80000006) {
-                System.out.println("received notice resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
+                System.out.println("received notice resp,tranId:" + headerIdentity.getTransactionID() + " commandId:0x" + Integer.toHexString( headerIdentity.getCommandId()));
             } else {
-                System.out.println("received unknown resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
+                System.out.println("received unknown resp,tranId:" + headerIdentity.getTransactionID() + " commandId:0x" +Integer.toHexString( headerIdentity.getCommandId()));
             }
 
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
