@@ -1,6 +1,8 @@
 package com.saturn.client.fhdr;
 
 import com.saturn.infrastructure.Future;
+import com.saturn.infrastructure.FutureListener;
+import com.saturn.infrastructure.Result;
 import com.saturn.infrastructure.util.StringUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -42,13 +44,14 @@ public class FixedHeaderClient {
 
         FixedHeaderClient client = new FixedHeaderClient("218.205.115.242", 55062);
         client.setTimeout(20 * 1000);
+        System.out.println("Please input:");
         readInput(client);
 
         System.out.println("quited!");
 
     }
 
-    private static void readInput(FixedHeaderClient client) {
+    private static void readInput(final FixedHeaderClient client) {
 
         BufferedReader bf = null;
         try {
@@ -72,10 +75,12 @@ public class FixedHeaderClient {
                 header.setTransactionID(IdGenerator.getNextTid());
                 requestMsg.setHeaderIdentity(header);
 
-                RespBody respBody = client.sendMessage(requestMsg);
-                if (respBody != null) {
-                    System.out.println("client resp:" + respBody.getRespCode());
-                }
+//                RespBody respBody = client.sendMessage(requestMsg);
+//                if (respBody != null) {
+//                    System.out.println("client resp:" + respBody.getRespCode());
+//                }
+
+                client.sendMessageAsync(requestMsg);
 
                 line = bf.readLine();
             }
@@ -165,25 +170,54 @@ public class FixedHeaderClient {
 
     public RespBody sendMessage(RequestMsg requestMsg) throws Exception {
 
-        //1. getconnection
-        //2. send
-
         RespBody respBody = null;
         RemoteHostAndPort remoteHostAndPort = new RemoteHostAndPort(host, port);
         Connection connection = getConnection(remoteHostAndPort);
 
         if (connection != null) {
-            System.out.println("conn:" + connection.getConnKey());
-            //connection.sendRequest(requestMsg);
+            // System.out.println("conn:" + connection.getConnKey());
             Transaction transaction = connection.createTransaction();
             transaction.setRequest(requestMsg);
             RespFuture respFuture = transaction.begin();
-
+            respFuture.setTimeout(Timeout);
             respBody = respFuture.getValue();
+
+        }
+
+        return respBody;
+    }
+
+    public void sendMessageAsync(RequestMsg requestMsg) {
+
+
+        try {
+            RemoteHostAndPort remoteHostAndPort = new RemoteHostAndPort(host, port);
+            Connection connection = getConnection(remoteHostAndPort);
+
+            if (connection != null) {
+                // System.out.println("conn:" + connection.getConnKey());
+                Transaction transaction = connection.createTransaction();
+                transaction.setRequest(requestMsg);
+                RespFuture respFuture = transaction.begin();
+                respFuture.setTimeout(Timeout);
+                respFuture.addListener(new FutureListener<RespBody>() {
+                    @Override
+                    public void run(Result<RespBody> result) {
+
+                        try {
+                            System.out.println("client resp:" + respFuture.getValue().getRespCode());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
-        return respBody;
     }
 
 

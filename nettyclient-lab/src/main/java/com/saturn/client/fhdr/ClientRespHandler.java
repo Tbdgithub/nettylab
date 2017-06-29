@@ -16,6 +16,11 @@ public class ClientRespHandler extends SimpleChannelInboundHandler<RespBody> {
         //1.header->tid
         //tran
 
+        if (msg.getHeaderIdentity() == null) {
+            System.out.println("empty body");
+            return;
+        }
+
         int seq = msg.getHeaderIdentity().getTransactionID();
         String seqkey = String.valueOf(seq);
         Transaction tx = TransactionManager.Instance.removeTransaction(seqkey);

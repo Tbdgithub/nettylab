@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,15 +31,16 @@ public class ClientDecoder extends ByteToMessageDecoder {
             }
 
             if (headerIdentity.getCommandId() == 0x00000001) {
-                //System.out.println("link check request,tranId:" + headerIdentity.getTransactionID());
-
+                System.out.println("send link check response ,tranId:" + headerIdentity.getTransactionID());
                 keepalive(ctx);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
-                //System.out.println("link check response,tranId:" + headerIdentity.getTransactionID());
+                System.out.println("received link check request,tranId:" + headerIdentity.getTransactionID());
 
+            } else if (headerIdentity.getCommandId() == 0x80000006) {
+                System.out.println("received notice resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
             } else {
-                //System.out.println("other resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
+                System.out.println("received unknown resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
             }
 
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
@@ -51,8 +51,8 @@ public class ClientDecoder extends ByteToMessageDecoder {
             }
 
             if (nextToRead == 0) {
-                System.out.println("keepalive do nothing .date:" + new Date().toString());
-                // out.add(new RespBody());
+                // System.out.println("keepalive do nothing .date:" + new Date().toString());
+                out.add(new RespBody());
                 return;
             }
 
@@ -64,7 +64,7 @@ public class ClientDecoder extends ByteToMessageDecoder {
             RespBody respBody = RespBody.fromBuffer(bodyBuff);
 
             respBody.setHeaderIdentity(headerIdentity);
-           // System.out.println("resp:" + respBody.getRespCode());
+            System.out.println("decode resp:" + respBody.getRespCode());
             //todo connection response
             out.add(respBody);
 
@@ -77,7 +77,7 @@ public class ClientDecoder extends ByteToMessageDecoder {
         requestMsg.setBodyBuff(new byte[0]);
         HeaderIdentity header = new HeaderIdentity();
         header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
-        header.setCommandId(0x00000001);
+        header.setCommandId(0x80000001);
         header.setTransactionID(IdGenerator.getNextTid());
         requestMsg.setHeaderIdentity(header);
 

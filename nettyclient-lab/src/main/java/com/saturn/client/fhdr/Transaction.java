@@ -63,7 +63,7 @@ public class Transaction {
         //Response respBody = result.getValue();
         this.future = result;
         TransactionManager.Instance.addTransaction(this);
-        System.out.println(this.getTid());
+        System.out.println("txid:"+this.getTid());
         connection.sendRequest(this.getRequest());
         return result;
 
