@@ -11,15 +11,14 @@ import java.util.List;
 /**
  * Created by john.y on 2017-6-26.
  */
-public class Decoder1 extends ByteToMessageDecoder {
+public class ClientDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
         int HeaderSize = 12;
         while (in.isReadable(HeaderSize)) {
-
-            System.out.println("decode:");
+            //System.out.println("decode:");
             in.markReaderIndex();
 
             byte[] idtBuffer = new byte[HeaderSize];
@@ -33,15 +32,15 @@ public class Decoder1 extends ByteToMessageDecoder {
             }
 
             if (headerIdentity.getCommandId() == 0x00000001) {
-                System.out.println("link check request,tranId:" + headerIdentity.getTransactionID());
+                //System.out.println("link check request,tranId:" + headerIdentity.getTransactionID());
 
                 keepalive(ctx);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
-                System.out.println("link check response,tranId:" + headerIdentity.getTransactionID());
+                //System.out.println("link check response,tranId:" + headerIdentity.getTransactionID());
 
             } else {
-                System.out.println("other resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
+                //System.out.println("other resp,tranId:" + headerIdentity.getTransactionID() + " " + headerIdentity.getCommandId());
             }
 
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
@@ -64,7 +63,8 @@ public class Decoder1 extends ByteToMessageDecoder {
 
             RespBody respBody = RespBody.fromBuffer(bodyBuff);
 
-            System.out.println("resp:" + respBody.getRespCode());
+            respBody.setHeaderIdentity(headerIdentity);
+           // System.out.println("resp:" + respBody.getRespCode());
             //todo connection response
             out.add(respBody);
 

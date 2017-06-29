@@ -1,5 +1,7 @@
 package com.saturn.client.fhdr;
 
+import com.saturn.infrastructure.util.ByteUtils;
+
 /**
  * Created by john.y on 2017-6-26.
  */

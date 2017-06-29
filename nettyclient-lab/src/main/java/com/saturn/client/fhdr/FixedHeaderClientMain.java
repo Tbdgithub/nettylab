@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 
 /**
  * Created by john.y on 2017-6-26.
@@ -33,7 +34,7 @@ public class FixedHeaderClientMain {
                             ChannelPipeline p = ch.pipeline();
 
                             //inbound
-                            p.addLast("decoder", new Decoder1());
+                            p.addLast("decoder", new ClientDecoder());
 
                             //outbound
                             p.addLast("encoder1", new MsgEncoder());
@@ -43,8 +44,16 @@ public class FixedHeaderClientMain {
                     });
 
             ChannelFuture cf = b.connect(HOST, PORT);
-            cf.addListener(trafficGenerator);
+            cf.addListener(a ->
+                    {
+
+                    }
+
+            );
+
+
             Channel channel = cf.channel();
+            // System.out.println(channel.localAddress().toString()+"-"+channel.remoteAddress().toString());
             readInput(channel);
             cf.channel().closeFuture().sync();
 
@@ -58,6 +67,15 @@ public class FixedHeaderClientMain {
         @Override
         public void operationComplete(ChannelFuture future) {
             if (future.isSuccess()) {
+                Channel channel = future.channel();
+
+                InetSocketAddress address = (InetSocketAddress) channel.localAddress();
+                String localAddr = address.getAddress().getHostAddress() + ":" + address.getPort();
+
+                InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
+                String remoteAddr = remoteAddress.getAddress().getHostAddress() + ":" + remoteAddress.getPort();
+
+                System.out.println(localAddr + "-" + remoteAddr);
                 System.out.println("operationComplete future succeed");
             } else {
                 future.cause().printStackTrace();

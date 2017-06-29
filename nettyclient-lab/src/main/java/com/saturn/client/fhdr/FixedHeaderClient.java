@@ -1,10 +1,17 @@
 package com.saturn.client.fhdr;
 
+import com.saturn.infrastructure.Future;
+import com.saturn.infrastructure.util.StringUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by john.y on 2017-6-29.
@@ -16,7 +23,76 @@ public class FixedHeaderClient {
     private Bootstrap bootstrap;
     private Channel clientChannel;
 
-    private int Timeout=5000;
+    /**
+     * mini second
+     */
+    private int Timeout = 5000;
+
+    public int getTimeout() {
+        return Timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        Timeout = timeout;
+    }
+
+    private volatile ConcurrentMap<RemoteHostAndPort, Connection> connections = new ConcurrentHashMap<RemoteHostAndPort, Connection>();
+
+    public static void main(String[] args) throws Exception {
+
+        FixedHeaderClient client = new FixedHeaderClient("218.205.115.242", 55062);
+        client.setTimeout(20 * 1000);
+        readInput(client);
+
+        System.out.println("quited!");
+
+    }
+
+    private static void readInput(FixedHeaderClient client) {
+
+        BufferedReader bf = null;
+        try {
+            bf = new BufferedReader(new InputStreamReader(System.in));
+
+            String line = bf.readLine();
+
+            while (!line.equals("quit")) {
+
+                if (StringUtils.isNullOrEmpty(line)) {
+                    line = bf.readLine();
+                    continue;
+                }
+
+                RequestMsg requestMsg = new RequestMsg();
+                requestMsg.setBodyBuff(line.getBytes("utf-8"));
+
+                HeaderIdentity header = new HeaderIdentity();
+                header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
+                header.setCommandId(0x00000006);
+                header.setTransactionID(IdGenerator.getNextTid());
+                requestMsg.setHeaderIdentity(header);
+
+                RespBody respBody = client.sendMessage(requestMsg);
+                if (respBody != null) {
+                    System.out.println("client resp:" + respBody.getRespCode());
+                }
+
+                line = bf.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bf != null) {
+                try {
+                    bf.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
 
 
     public FixedHeaderClient(String host, int port) throws Exception {
@@ -33,35 +109,81 @@ public class FixedHeaderClient {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
-
                         //inbound
-                        p.addLast("decoder", new Decoder1());
+                        p.addLast("decoder", new ClientDecoder());
+                        p.addLast("ClientRespHandler", new ClientRespHandler());
 
                         //outbound
                         p.addLast("encoder1", new MsgEncoder());
-                        // p.addLast("encoder", new Encoder1());
-                        //   p.addLast("KeepaliveEncoder",new KeepaliveEncoder());
+
                     }
                 });
 
     }
 
 
-    public void start() throws Exception {
-        // Configure the client.
+    public void createConnection() throws Exception {
 
+        final Future<Throwable> future = new Future<Throwable>();
         ChannelFuture cf = bootstrap.connect(host, port);
-        cf.addListener(trafficGenerator);
-        clientChannel = cf.channel();
 
-        //readInput(channel);
-        // cf.channel().closeFuture().sync();
+        cf.addListener(a ->
+                {
+                    if (a.isSuccess()) {
+
+                        Connection connection = new Connection(cf.channel());
+
+                        connections.put(connection.getRemoteHostAndPort(), connection);
+                        future.complete(null);
+                    } else {
+
+                        //future.complete(null);
+                        a.cause().printStackTrace();
+                        future.complete(cf.cause());
+                    }
+                }
+
+        );
+
+        // cf.get(10, TimeUnit.SECONDS);
+
+        future.setTimeout(Timeout);
+        Throwable error = future.getValue();
 
     }
 
-    public RespBody sendMessage(RequestMsg requestMsg) {
 
-        return null;
+    private Connection getConnection(RemoteHostAndPort endPoint) throws Exception {
+
+        Connection connection = connections.get(endPoint);
+        if (connection == null) {
+            createConnection();
+            connection = connections.get(endPoint);
+        }
+        return connection;
+    }
+
+    public RespBody sendMessage(RequestMsg requestMsg) throws Exception {
+
+        //1. getconnection
+        //2. send
+
+        RespBody respBody = null;
+        RemoteHostAndPort remoteHostAndPort = new RemoteHostAndPort(host, port);
+        Connection connection = getConnection(remoteHostAndPort);
+
+        if (connection != null) {
+            System.out.println("conn:" + connection.getConnKey());
+            //connection.sendRequest(requestMsg);
+            Transaction transaction = connection.createTransaction();
+            transaction.setRequest(requestMsg);
+            RespFuture respFuture = transaction.begin();
+
+            respBody = respFuture.getValue();
+        }
+
+
+        return respBody;
     }
 
 

@@ -3,7 +3,7 @@ package com.saturn.client.fhdr;
 /**
  * Created by john.y on 2017-6-26.
  */
-public class RequestMsg {
+public class RequestMsg extends Request {
 
     private HeaderIdentity headerIdentity;
 
