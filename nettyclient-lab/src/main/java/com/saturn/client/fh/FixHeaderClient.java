@@ -1,4 +1,4 @@
-package com.saturn.client.fixheader;
+package com.saturn.client.fh;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -43,6 +43,7 @@ public class FixHeaderClient {
                     });
 
             ChannelFuture cf = b.connect(HOST, PORT);
+            cf.addListener(trafficGenerator);
             Channel channel = cf.channel();
             readInput(channel);
             cf.channel().closeFuture().sync();
@@ -90,7 +91,6 @@ public class FixHeaderClient {
 
                 line = bf.readLine();
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
