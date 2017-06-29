@@ -1,4 +1,4 @@
-package com.saturn.client.fh;
+package com.saturn.client.fhdr;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 /**
  * Created by john.y on 2017-6-26.
  */
-public class FixHeaderClient {
+public class FixedHeaderClientMain {
 
     static final String HOST = "218.205.115.242";
     static final int PORT = Integer.parseInt("55062");

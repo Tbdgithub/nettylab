@@ -2,4 +2,5 @@ rootProject.name = 'nettylab'
 include 'nettyclient-lab'
 include 'nettyserver'
 include 'nettyadapter'
+include 'infrastructure'
 
