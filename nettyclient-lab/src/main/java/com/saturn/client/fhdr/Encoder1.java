@@ -32,7 +32,7 @@ public class Encoder1 extends MessageToByteEncoder<String> {
         ByteUtils.fillByteBufferWithInt32(0x00000006, commandIdBuff, 0, true);
 
         byte[] tranIdBuff = new byte[4];
-        int tranId = IdGenerator.getNextTid();
+        int tranId = TransactionManager.getNextTid();
         ByteUtils.fillByteBufferWithInt32(tranId, tranIdBuff, 0, true);
 
         os.write(headerLenBuff);

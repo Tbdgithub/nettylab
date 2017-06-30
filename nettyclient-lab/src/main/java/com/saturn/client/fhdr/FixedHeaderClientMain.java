@@ -37,7 +37,7 @@ public class FixedHeaderClientMain {
                             p.addLast("decoder", new ClientDecoder());
 
                             //outbound
-                            p.addLast("encoder1", new MsgEncoder());
+                            p.addLast("encoder1", new ClientMsgEncoder());
                             // p.addLast("encoder", new Encoder1());
                             //   p.addLast("KeepaliveEncoder",new KeepaliveEncoder());
                         }
@@ -101,7 +101,7 @@ public class FixedHeaderClientMain {
                 HeaderIdentity header = new HeaderIdentity();
                 header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
                 header.setCommandId(0x00000006);
-                header.setTransactionID(IdGenerator.getNextTid());
+                header.setTransactionID(TransactionManager.getNextTid());
                 requestMsg.setHeaderIdentity(header);
 
                 ChannelFuture channelFuture = channel.writeAndFlush(requestMsg);

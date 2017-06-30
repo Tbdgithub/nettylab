@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,6 +31,8 @@ public class FixedHeaderClient {
      */
     private int Timeout = 5000;
 
+    private Thread checkThread;
+
     public int getTimeout() {
         return Timeout;
     }
@@ -45,11 +48,14 @@ public class FixedHeaderClient {
         FixedHeaderClient client = new FixedHeaderClient("218.205.115.242", 55062);
         client.setTimeout(20 * 1000);
         System.out.println("Please input:");
+
+
         readInput(client);
 
         System.out.println("quited!");
 
     }
+
 
     private static void readInput(final FixedHeaderClient client) {
 
@@ -114,6 +120,30 @@ public class FixedHeaderClient {
 
     public void keepalive() {
         //todo thread
+
+        while (true) {
+            try {
+                Thread.sleep(10 * 1000);
+
+                for (Map.Entry<RemoteHostAndPort, Connection> item : connections.entrySet()) {
+                    //if connected
+                    Connection connection = item.getValue();
+
+                    RequestMsg emptyMsg = new RequestMsg();
+                    emptyMsg.setBodyBuff(new byte[0]);
+
+                    HeaderIdentity header = new HeaderIdentity();
+                    header.setLength(emptyMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
+                    header.setCommandId(0x00000001);
+                    header.setTransactionID(TransactionManager.getNextTid());
+                    emptyMsg.setHeaderIdentity(header);
+                    connection.sendRequest(emptyMsg);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -136,10 +166,21 @@ public class FixedHeaderClient {
                         p.addLast("ClientRespHandler", new ClientRespHandler());
 
                         //outbound
-                        p.addLast("encoder1", new MsgEncoder());
+                        p.addLast("encoder1", new ClientMsgEncoder());
 
                     }
                 });
+
+        checkThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+               // keepalive();
+            }
+        });
+        checkThread.setName("client-keepalive");
+        checkThread.setDaemon(true);
+        checkThread.start();
 
     }
 

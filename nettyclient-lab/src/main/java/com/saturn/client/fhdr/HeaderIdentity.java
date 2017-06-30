@@ -12,7 +12,7 @@ public class HeaderIdentity {
     private int TransactionID;
 
     public static int HeaderLen = 12;
-    public static int MaxBodyLen = 1024 * 1024  * 4;
+    public static int MaxBodyLen = 1024 * 1024 * 4;
 
     public int getLength() {
         return Length;
@@ -46,5 +46,10 @@ public class HeaderIdentity {
         idt.setTransactionID(ByteUtils.byteArrayToInt32(buffer, 8, true));
 
         return idt;
+    }
+
+    public String printContent() {
+        String result = "tranId:" + this.getTransactionID() + " commandId:0x" + Integer.toHexString(this.getCommandId());
+        return result;
     }
 }

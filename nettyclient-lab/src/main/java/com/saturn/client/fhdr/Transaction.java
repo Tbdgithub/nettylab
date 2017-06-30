@@ -15,14 +15,14 @@ public class Transaction {
 
     public Transaction(Connection connection) {
         this.connection = connection;
-        this.setTid(String.valueOf(IdGenerator.getNextTid()));
+        this.setTid(String.valueOf(TransactionManager.getNextTid()));
 
 
     }
 
     public void handleResp(RespBody response) {
 
-        System.out.println("handleResp:");
+       // System.out.println("handleResp:");
         future.complete(response);
     }
 

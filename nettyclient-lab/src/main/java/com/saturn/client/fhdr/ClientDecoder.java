@@ -31,16 +31,16 @@ public class ClientDecoder extends ByteToMessageDecoder {
             }
 
             if (headerIdentity.getCommandId() == 0x00000001) {
-                System.out.println("send link check response ,tranId:" + headerIdentity.getTransactionID());
+                System.out.println("link check from server ," + headerIdentity.printContent());
                 keepalive(ctx);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
-                System.out.println("received link check request,tranId:" + headerIdentity.getTransactionID());
+                System.out.println("link check response," + headerIdentity.printContent());
 
             } else if (headerIdentity.getCommandId() == 0x80000006) {
-                System.out.println("received notice resp,tranId:" + headerIdentity.getTransactionID() + " commandId:0x" + Integer.toHexString( headerIdentity.getCommandId()));
+                System.out.println("notice resp," + headerIdentity.printContent());
             } else {
-                System.out.println("received unknown resp,tranId:" + headerIdentity.getTransactionID() + " commandId:0x" +Integer.toHexString( headerIdentity.getCommandId()));
+                System.out.println("unknown resp," + headerIdentity.printContent());
             }
 
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
@@ -64,7 +64,7 @@ public class ClientDecoder extends ByteToMessageDecoder {
             RespBody respBody = RespBody.fromBuffer(bodyBuff);
 
             respBody.setHeaderIdentity(headerIdentity);
-            System.out.println("decode resp:" + respBody.getRespCode());
+           // System.out.println("decode resp:" + respBody.getRespCode());
             //todo connection response
             out.add(respBody);
 
@@ -78,10 +78,11 @@ public class ClientDecoder extends ByteToMessageDecoder {
         HeaderIdentity header = new HeaderIdentity();
         header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
         header.setCommandId(0x80000001);
-        header.setTransactionID(IdGenerator.getNextTid());
+        header.setTransactionID(TransactionManager.getNextTid());
         requestMsg.setHeaderIdentity(header);
 
         ctx.channel().writeAndFlush(requestMsg);
+
     }
 
 

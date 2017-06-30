@@ -11,20 +11,24 @@ import java.io.IOException;
 /**
  * Created by john.y on 2017-6-26.
  */
-public class MsgEncoder extends MessageToByteEncoder<RequestMsg> {
+public class ClientMsgEncoder extends MessageToByteEncoder<RequestMsg> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, RequestMsg msg, ByteBuf out) throws Exception {
 
 
         if (msg.getHeaderIdentity().getCommandId() == 0x00000006) {
-
+            System.out.println("notice request," + msg.getHeaderIdentity().printContent());
             writeMsg(msg, out);
+        } else if (msg.getHeaderIdentity().getCommandId() == 0x00000001) {
+            writeMsg(msg, out);
+            System.out.println("link check request," + msg.getHeaderIdentity().printContent());
         }
-        else  if (msg.getHeaderIdentity().getCommandId() == 0x00000001)
-        {
-            writeMsg(msg,out);
+        else if (msg.getHeaderIdentity().getCommandId() == 0x80000001) {
+            writeMsg(msg, out);
+            System.out.println("link check response," + msg.getHeaderIdentity().printContent());
         }
+
 
     }
 
