@@ -3,4 +3,5 @@ include 'nettyclient-lab'
 include 'nettyserver'
 include 'nettyadapter'
 include 'infrastructure'
+include 'commonlib'
 

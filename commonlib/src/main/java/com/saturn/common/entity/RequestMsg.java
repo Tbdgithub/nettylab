@@ -1,4 +1,4 @@
-package com.saturn.client.fhdr;
+package com.saturn.common.entity;
 
 /**
  * Created by john.y on 2017-6-26.

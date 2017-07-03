@@ -1,4 +1,4 @@
-package com.saturn.client.fhdr;
+package com.saturn.common.entity;
 
 import java.net.InetSocketAddress;
 

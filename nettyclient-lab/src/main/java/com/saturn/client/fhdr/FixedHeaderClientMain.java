@@ -1,5 +1,8 @@
 package com.saturn.client.fhdr;
 
+import com.saturn.common.entity.HeaderIdentity;
+import com.saturn.common.entity.RequestMsg;
+import com.saturn.common.entity.TransactionManager;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

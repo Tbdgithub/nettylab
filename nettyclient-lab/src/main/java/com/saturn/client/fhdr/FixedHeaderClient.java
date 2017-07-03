@@ -1,5 +1,6 @@
 package com.saturn.client.fhdr;
 
+import com.saturn.common.entity.*;
 import com.saturn.infrastructure.Future;
 import com.saturn.infrastructure.FutureListener;
 import com.saturn.infrastructure.Result;
@@ -45,7 +46,9 @@ public class FixedHeaderClient {
 
     public static void main(String[] args) throws Exception {
 
-        FixedHeaderClient client = new FixedHeaderClient("218.205.115.242", 55062);
+        String host = "218.205.115.242";
+        host = "thinkpad";
+        FixedHeaderClient client = new FixedHeaderClient(host, 55062);
         client.setTimeout(20 * 1000);
         System.out.println("Please input:");
 
@@ -97,9 +100,6 @@ public class FixedHeaderClient {
                 });
 
                 t.start();
-
-
-                // client.sendMessageAsync(requestMsg);
 
                 line = bf.readLine();
             }
@@ -175,7 +175,7 @@ public class FixedHeaderClient {
             @Override
             public void run() {
 
-               // keepalive();
+                // keepalive();
             }
         });
         checkThread.setName("client-keepalive");

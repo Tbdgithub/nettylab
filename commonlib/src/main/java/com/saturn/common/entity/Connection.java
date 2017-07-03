@@ -1,4 +1,4 @@
-package com.saturn.client.fhdr;
+package com.saturn.common.entity;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;

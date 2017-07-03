@@ -1,9 +1,9 @@
-package com.saturn.client.fhdr;
+package com.saturn.common.entity;
 
 import com.saturn.infrastructure.util.ByteUtils;
 
 /**
- * Created by john.y on 2017-6-26.
+ * Created by john.y on 2017-7-3.
  */
 public class HeaderIdentity {
 

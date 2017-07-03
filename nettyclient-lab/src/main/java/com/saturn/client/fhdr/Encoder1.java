@@ -1,5 +1,7 @@
 package com.saturn.client.fhdr;
 
+import com.saturn.common.entity.HeaderIdentity;
+import com.saturn.common.entity.TransactionManager;
 import com.saturn.infrastructure.util.ByteUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;

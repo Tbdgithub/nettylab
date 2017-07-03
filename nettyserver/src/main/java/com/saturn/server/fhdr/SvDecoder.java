@@ -1,4 +1,4 @@
-package com.saturn.client.fhdr;
+package com.saturn.server.fhdr;
 
 import com.saturn.common.entity.HeaderIdentity;
 import com.saturn.common.entity.RequestMsg;
@@ -12,10 +12,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 
 /**
- * Created by john.y on 2017-6-26.
+ * Created by john.y on 2017-7-3.
  */
-public class ClientDecoder extends ByteToMessageDecoder {
-
+public class SvDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
@@ -36,15 +35,18 @@ public class ClientDecoder extends ByteToMessageDecoder {
 
             if (headerIdentity.getCommandId() == 0x00000001) {
                 System.out.println("link check from server ," + headerIdentity.printContent());
-                keepalive(ctx);
+                // keepalive(ctx);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
                 System.out.println("link check response," + headerIdentity.printContent());
 
-            } else if (headerIdentity.getCommandId() == 0x80000006) {
-                System.out.println("notice resp," + headerIdentity.printContent());
+
+            } else if (headerIdentity.getCommandId() == 0x00000006) {
+
+                //todo
+                System.out.println("notice request," + headerIdentity.printContent());
             } else {
-                System.out.println("unknown resp," + headerIdentity.printContent());
+                System.out.println("unknown request," + headerIdentity.printContent());
             }
 
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
@@ -65,15 +67,19 @@ public class ClientDecoder extends ByteToMessageDecoder {
             byte[] bodyBuff = new byte[nextToRead];
             is.read(bodyBuff, 0, bodyBuff.length);
 
-            RespBody respBody = RespBody.fromBuffer(bodyBuff);
+            // RespBody respBody = RespBody.fromBuffer(bodyBuff);
+            RequestMsg requestMsg = new RequestMsg();
 
-            respBody.setHeaderIdentity(headerIdentity);
-            // System.out.println("decode resp:" + respBody.getRespCode());
-            //todo connection response
-            out.add(respBody);
+            requestMsg.setHeaderIdentity(headerIdentity);
+            String notice = new String(bodyBuff, "utf-8");
+            System.out.println("notice:" + notice);
+            requestMsg.setBodyBuff(bodyBuff);
+
+            out.add(requestMsg);
 
         }
     }
+
 
     private void keepalive(ChannelHandlerContext ctx) {
         RequestMsg requestMsg = new RequestMsg();
@@ -88,6 +94,5 @@ public class ClientDecoder extends ByteToMessageDecoder {
         ctx.channel().writeAndFlush(requestMsg);
 
     }
-
 
 }

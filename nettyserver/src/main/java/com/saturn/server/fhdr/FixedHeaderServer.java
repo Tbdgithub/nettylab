@@ -1,7 +1,5 @@
 package com.saturn.server.fhdr;
 
-import com.saturn.server.rdate.TimeEncoder;
-import com.saturn.server.rdate.TimeServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -13,10 +11,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class FixedHeaderServer {
 
-    static final int PORT = Integer.parseInt(System.getProperty("port", "55062"));
 
     public static void main(String[] args) throws Exception {
 
+        int PORT = 55062;
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -31,8 +29,10 @@ public class FixedHeaderServer {
                             ChannelPipeline p = ch.pipeline();
 
 
-                            p.addLast("outbound 0", new TimeEncoder());
-                            p.addLast("inbound 0", new TimeServerHandler());
+                            // p.addLast("outbound 0", new TimeEncoder());
+                            p.addLast("decoder", new SvDecoder());
+                            p.addLast("SvHandler",new SvHandler());
+                            p.addLast("SvEncoder",new SvEncoder());
 
                         }
                     });
