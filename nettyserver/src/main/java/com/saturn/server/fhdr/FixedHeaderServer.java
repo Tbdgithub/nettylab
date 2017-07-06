@@ -5,6 +5,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * Created by john.y on 2017-6-29.
@@ -15,7 +16,8 @@ public class FixedHeaderServer {
     public static void main(String[] args) throws Exception {
 
         int PORT = 55062;
-        // Configure the server.
+        int idleSecond=10;
+
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -32,6 +34,8 @@ public class FixedHeaderServer {
                             // p.addLast("outbound 0", new TimeEncoder());
                             p.addLast("decoder", new SvDecoder());
                             p.addLast("SvHandler",new SvHandler());
+                            p.addLast("IdleStateHandler",new IdleStateHandler(idleSecond,0,0));
+                            p.addLast("idlecheck",new IdleCheckHandler());
                             p.addLast("SvEncoder",new SvEncoder());
 
                         }

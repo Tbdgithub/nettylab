@@ -17,6 +17,14 @@ import java.util.List;
 public class ClientDecoder extends ByteToMessageDecoder {
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+
+        System.out.println("channelInactive. from server");
+        super.channelInactive(ctx);
+    }
+
+    @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
         int HeaderSize = 12;

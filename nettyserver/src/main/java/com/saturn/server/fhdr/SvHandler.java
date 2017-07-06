@@ -15,6 +15,7 @@ public class SvHandler extends SimpleChannelInboundHandler<RequestMsg> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RequestMsg msg) throws Exception {
 
+        System.out.println("ctx channel:" + ctx.channel().hashCode());
         RespBody respMsg = new RespBody();
 
         int respCode = getRespCode(msg);

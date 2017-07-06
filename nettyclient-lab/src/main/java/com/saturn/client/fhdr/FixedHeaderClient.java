@@ -190,11 +190,13 @@ public class FixedHeaderClient {
         final Future<Throwable> future = new Future<Throwable>();
         ChannelFuture cf = bootstrap.connect(host, port);
 
+
         cf.addListener(a ->
                 {
                     if (a.isSuccess()) {
 
                         Connection connection = new Connection(cf.channel());
+                        System.out.println("cf channel:"+cf.channel().hashCode());
 
                         connections.put(connection.getRemoteHostAndPort(), connection);
                         future.complete(null);

@@ -19,6 +19,7 @@ public class ClientMsgEncoder extends MessageToByteEncoder<RequestMsg> {
     protected void encode(ChannelHandlerContext ctx, RequestMsg msg, ByteBuf out) throws Exception {
 
 
+        System.out.println("client ctx channel:"+ctx.channel().hashCode());
         if (msg.getHeaderIdentity().getCommandId() == 0x00000006) {
             System.out.println("notice request," + msg.getHeaderIdentity().printContent());
             writeMsg(msg, out);
