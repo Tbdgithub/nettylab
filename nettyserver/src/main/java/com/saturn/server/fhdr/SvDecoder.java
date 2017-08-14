@@ -3,7 +3,6 @@ package com.saturn.server.fhdr;
 import com.saturn.common.entity.HeaderIdentity;
 import com.saturn.common.entity.RequestMsg;
 import com.saturn.common.entity.RespBody;
-import com.saturn.common.entity.TransactionManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,7 +34,7 @@ public class SvDecoder extends ByteToMessageDecoder {
 
             if (headerIdentity.getCommandId() == 0x00000001) {
                 System.out.println("link check from server ," + headerIdentity.printContent());
-                // keepalive(ctx);
+                keepalive(ctx, headerIdentity);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
                 System.out.println("link check response," + headerIdentity.printContent());
@@ -81,17 +80,28 @@ public class SvDecoder extends ByteToMessageDecoder {
     }
 
 
-    private void keepalive(ChannelHandlerContext ctx) {
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+
+        System.out.println("SvDecoder find a exception");
+        ctx.fireExceptionCaught(cause);
+    }
+
+
+    private void keepalive(ChannelHandlerContext ctx, HeaderIdentity headerIdentity) {
         RequestMsg requestMsg = new RequestMsg();
 
         requestMsg.setBodyBuff(new byte[0]);
         HeaderIdentity header = new HeaderIdentity();
         header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
         header.setCommandId(0x80000001);
-        header.setTransactionID(TransactionManager.getNextTid());
+        header.setTransactionID(headerIdentity.getTransactionID());
+        //TransactionManager.getNextTid()
         requestMsg.setHeaderIdentity(header);
 
         ctx.channel().writeAndFlush(requestMsg);
+        System.out.println("pong "+header.printContent());
 
     }
 

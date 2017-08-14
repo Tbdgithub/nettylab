@@ -19,7 +19,7 @@ public class ClientMsgEncoder extends MessageToByteEncoder<RequestMsg> {
     protected void encode(ChannelHandlerContext ctx, RequestMsg msg, ByteBuf out) throws Exception {
 
 
-        System.out.println("client ctx channel:"+ctx.channel().hashCode());
+     //   System.out.println("client ctx channel:"+ctx.channel().hashCode());
         if (msg.getHeaderIdentity().getCommandId() == 0x00000006) {
             System.out.println("notice request," + msg.getHeaderIdentity().printContent());
             writeMsg(msg, out);
@@ -29,7 +29,7 @@ public class ClientMsgEncoder extends MessageToByteEncoder<RequestMsg> {
         }
         else if (msg.getHeaderIdentity().getCommandId() == 0x80000001) {
             writeMsg(msg, out);
-            System.out.println("link check response," + msg.getHeaderIdentity().printContent());
+           // System.out.println("encode link check response," + msg.getHeaderIdentity().printContent());
         }
 
 

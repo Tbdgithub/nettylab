@@ -3,7 +3,6 @@ package com.saturn.client.fhdr;
 import com.saturn.common.entity.HeaderIdentity;
 import com.saturn.common.entity.RequestMsg;
 import com.saturn.common.entity.RespBody;
-import com.saturn.common.entity.TransactionManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,6 +21,11 @@ public class ClientDecoder extends ByteToMessageDecoder {
 
         System.out.println("channelInactive. from server");
         super.channelInactive(ctx);
+
+        //1 attr key
+        //2.find connection
+        //3. set state
+
     }
 
     @Override
@@ -43,8 +47,8 @@ public class ClientDecoder extends ByteToMessageDecoder {
             }
 
             if (headerIdentity.getCommandId() == 0x00000001) {
-                System.out.println("link check from server ," + headerIdentity.printContent());
-                keepalive(ctx);
+                System.out.println("ping from server ," + headerIdentity.printContent());
+                keepalive(ctx, headerIdentity);
 
             } else if (headerIdentity.getCommandId() == 0x80000001) {
                 System.out.println("link check response," + headerIdentity.printContent());
@@ -83,17 +87,20 @@ public class ClientDecoder extends ByteToMessageDecoder {
         }
     }
 
-    private void keepalive(ChannelHandlerContext ctx) {
+    private void keepalive(ChannelHandlerContext ctx, HeaderIdentity headerIdentity) {
         RequestMsg requestMsg = new RequestMsg();
 
         requestMsg.setBodyBuff(new byte[0]);
         HeaderIdentity header = new HeaderIdentity();
         header.setLength(requestMsg.getBodyBuff().length + HeaderIdentity.HeaderLen);
         header.setCommandId(0x80000001);
-        header.setTransactionID(TransactionManager.getNextTid());
+        header.setTransactionID(headerIdentity.getTransactionID());
+        //TransactionManager.getNextTid()
         requestMsg.setHeaderIdentity(header);
 
         ctx.channel().writeAndFlush(requestMsg);
+        System.out.println("pong from client ," + header.printContent());
+
 
     }
 

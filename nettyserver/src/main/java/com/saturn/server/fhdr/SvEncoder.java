@@ -40,5 +40,13 @@ public class SvEncoder extends MessageToByteEncoder<RespBody> {
         os.flush();
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+
+        System.out.println("SvEncoder find a exception");
+        // ctx.fireExceptionCaught(cause);
+    }
+
 
 }

@@ -13,4 +13,6 @@ dependencies {
     compile group: 'io.netty', name: 'netty-all', version: '4.1.12.Final'
     compile project(':commonlib')
 
+    compile group: 'org.apache.phoenix', name: 'phoenix-core', version: '4.11.0-HBase-1.2'
+
 }

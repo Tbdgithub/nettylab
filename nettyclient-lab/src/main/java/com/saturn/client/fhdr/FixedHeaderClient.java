@@ -47,7 +47,7 @@ public class FixedHeaderClient {
     public static void main(String[] args) throws Exception {
 
         String host = "218.205.115.242";
-        host = "thinkpad";
+        //host = "thinkpad";
         FixedHeaderClient client = new FixedHeaderClient(host, 55062);
         client.setTimeout(20 * 1000);
         System.out.println("Please input:");
@@ -196,7 +196,7 @@ public class FixedHeaderClient {
                     if (a.isSuccess()) {
 
                         Connection connection = new Connection(cf.channel());
-                        System.out.println("cf channel:"+cf.channel().hashCode());
+                        System.out.println("cf channel:" + cf.channel().hashCode());
 
                         connections.put(connection.getRemoteHostAndPort(), connection);
                         future.complete(null);
@@ -223,8 +223,12 @@ public class FixedHeaderClient {
         Connection connection = connections.get(endPoint);
         if (connection == null) {
             createConnection();
-            connection = connections.get(endPoint);
+        } else if (connection.isIdle()) {
+            //closed,disconnected.idele
         }
+
+        connection = connections.get(endPoint);
+
         return connection;
     }
 

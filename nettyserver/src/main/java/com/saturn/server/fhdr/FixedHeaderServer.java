@@ -16,7 +16,7 @@ public class FixedHeaderServer {
     public static void main(String[] args) throws Exception {
 
         int PORT = 55062;
-        int idleSecond=10;
+        int idleSecond=180;
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -31,11 +31,13 @@ public class FixedHeaderServer {
                             ChannelPipeline p = ch.pipeline();
 
 
-                            // p.addLast("outbound 0", new TimeEncoder());
+                            //inbound
                             p.addLast("decoder", new SvDecoder());
                             p.addLast("SvHandler",new SvHandler());
                             p.addLast("IdleStateHandler",new IdleStateHandler(idleSecond,0,0));
                             p.addLast("idlecheck",new IdleCheckHandler());
+
+                            //outbound
                             p.addLast("SvEncoder",new SvEncoder());
 
                         }

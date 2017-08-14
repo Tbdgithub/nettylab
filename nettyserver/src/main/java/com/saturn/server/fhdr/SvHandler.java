@@ -3,7 +3,6 @@ package com.saturn.server.fhdr;
 import com.saturn.common.entity.HeaderIdentity;
 import com.saturn.common.entity.RequestMsg;
 import com.saturn.common.entity.RespBody;
-import com.saturn.common.entity.TransactionManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -15,7 +14,7 @@ public class SvHandler extends SimpleChannelInboundHandler<RequestMsg> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RequestMsg msg) throws Exception {
 
-        System.out.println("ctx channel:" + ctx.channel().hashCode());
+       // System.out.println("ctx channel:" + ctx.channel().hashCode());
         RespBody respMsg = new RespBody();
 
         int respCode = getRespCode(msg);
@@ -24,7 +23,8 @@ public class SvHandler extends SimpleChannelInboundHandler<RequestMsg> {
         header.setLength(4 + HeaderIdentity.HeaderLen);
         int commandId = getRespCommandId(msg.getHeaderIdentity().getCommandId());
         header.setCommandId(commandId);
-        header.setTransactionID(TransactionManager.getNextTid());
+        //header.setTransactionID(TransactionManager.getNextTid());
+        header.setTransactionID(msg.getHeaderIdentity().getTransactionID());
         respMsg.setHeaderIdentity(header);
 
         ctx.channel().writeAndFlush(respMsg);
@@ -63,5 +63,13 @@ public class SvHandler extends SimpleChannelInboundHandler<RequestMsg> {
         //ByteUtils.fillByteBufferWithInt32(resp, buff, 0, true);
 
         return resp;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+
+        System.out.println("SvHandler find a exception");
+        ctx.fireExceptionCaught(cause);
     }
 }
