@@ -1,0 +1,16 @@
+group 'com.saturn'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(':infrastructure')
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.12.Final'
+}
