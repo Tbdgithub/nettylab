@@ -5,10 +5,9 @@ package com.saturn.server.transfer;
  */
 public class Port2Port {
 
-
     public void func1()
     {
-        int b=20;
-        System.out.println(b);
+        int c=20;
+        System.out.println(c);
     }
 }
