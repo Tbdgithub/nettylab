@@ -13,17 +13,18 @@ import io.netty.handler.logging.LoggingHandler;
  */
 public final class HexDumpProxy {
 
-    static final int LOCAL_PORT = Integer.parseInt(System.getProperty("localPort", "8443"));
-    //static final String REMOTE_HOST = System.getProperty("remoteHost", "www.google.com");
-    static final String REMOTE_HOST = System.getProperty("remoteHost", "192.168.143.27");
-    //http://192.168.143.27:8082/bmp/login.html
-//    static final int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "443"));
-    static final int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "8082"));
+    int LOCAL_PORT = Integer.parseInt(System.getProperty("localPort", "8443"));
+    String REMOTE_HOST = System.getProperty("remoteHost", "192.168.143.27");
+    int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "8082"));
 
-    public static void main(String[] args) throws Exception {
-        System.err.println("Proxying *:" + LOCAL_PORT + " to " + REMOTE_HOST + ':' + REMOTE_PORT + " ...");
+    public HexDumpProxy(int LOCAL_PORT, String REMOTE_HOST, int REMOTE_PORT) {
+        this.LOCAL_PORT = LOCAL_PORT;
+        this.REMOTE_HOST = REMOTE_HOST;
+        this.REMOTE_PORT = REMOTE_PORT;
+    }
 
-        // Configure the bootstrap.
+    public void Start() throws Exception {
+
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -38,5 +39,24 @@ public final class HexDumpProxy {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        if (args.length < 3) {
+            System.err.println("Format is :HexDumpProxy LOCAL_PORT REMOTE_HOST REMOTE_PORT");
+            return;
+        }
+
+        System.err.println("Proxying *  LOCAL_PORT:" + args[0] + " to REMOTE_HOST:" + args[1] + " REMOTE_PORT:" + args[2] + " ...");
+
+        int localPort = Integer.parseInt(args[0]);
+        String remoteHost = args[1];
+        int remotePort = Integer.parseInt(args[2]);
+
+        HexDumpProxy proxy = new HexDumpProxy(localPort, remoteHost, remotePort);
+        proxy.Start();
+
     }
 }
