@@ -19,7 +19,7 @@ public class Decoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         int HeaderSize = Constants.HeaderLen;
         while (in.isReadable(HeaderSize)) {
-            //System.out.println("decode:");
+            System.out.println("decode:");
             in.markReaderIndex();
 
             byte[] idtBuffer = new byte[HeaderSize];
@@ -32,7 +32,6 @@ public class Decoder extends ByteToMessageDecoder {
                 return;
             }
 
-
             int nextToRead = headerIdentity.getLength() - HeaderIdentity.HeaderLen;
 
             if (!in.isReadable(nextToRead)) {
@@ -40,31 +39,19 @@ public class Decoder extends ByteToMessageDecoder {
                 return;
             }
 
-//            if (nextToRead == 0) {
-//                System.out.println("keepalive do nothing .date:" + new Date().toString());
-//                //out.add(new RespBody());
-//                //toto return keepalive package (len 12,payload zero)
-//                out.add(new ACTIVE_TEST_RESP());
-//                return;
-//            }
-
             ByteBufInputStream is = new ByteBufInputStream(in, nextToRead);
 
             byte[] bodyBuff = new byte[nextToRead];
             is.read(bodyBuff, 0, bodyBuff.length);
 
-
             String hexStr = ByteUtils.toHexString(bodyBuff, "", false);
             System.out.println("decode networkBytes:" + hexStr);
 
             int commandId = headerIdentity.getCommandId();
-            //ByteUtils.byteArrayToInt32(bodyBuff, 4, true);
 
             if (commandId == 0x00000008) {
                 System.out.println("keepalive do nothing .date:" + new Date().toString());
                 ACTIVE_TEST_RESP test_resp = new ACTIVE_TEST_RESP();
-                //test_resp.setLength(headerIdentity.getLength());
-                //test_resp.setCommandId(headerIdentity.getCommandId());
                 test_resp.setTransactionID(headerIdentity.getTransactionID());
 
                 out.add(test_resp);
@@ -81,18 +68,6 @@ public class Decoder extends ByteToMessageDecoder {
             } else {
                 System.out.println("not imp commandId:" + commandId);
             }
-
-            //AuthResp authResp = new AuthResp();
-            //  authResp.parse(bodyBuff);
-
-            // out.add(authResp);
-            //RespBody respBody = RespBody.fromBuffer(bodyBuff);
-
-            //respBody.setHeaderIdentity(headerIdentity);
-            // System.out.println("decode resp:" + respBody.getRespCode());
-            //todo connection response
-            //out.add(respBody);
-
 
         }
     }

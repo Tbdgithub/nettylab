@@ -13,8 +13,6 @@ public class InboundBizHandler extends SimpleChannelInboundHandler<PPMessage> {
 
         System.out.println("InboundBizHandler");
 
-        //if(msg.getCommandId())
-
         if (msg instanceof ACTIVE_TEST_RESP) {
             ACTIVE_TEST_RESP empty = (ACTIVE_TEST_RESP) msg;
 
