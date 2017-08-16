@@ -9,14 +9,14 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * Created by john.y on 2017-8-15.
  */
-public class Encoder extends MessageToByteEncoder<ReqMsg> {
+public class Encoder extends MessageToByteEncoder<PPMessage> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, ReqMsg msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, PPMessage msg, ByteBuf out) throws Exception {
 
         byte[] networkBytes = msg.getBytes();
         // System.out.print("networkBytes:" + msg);
-        String hexStr = ByteUtils.toHexString(networkBytes, " ");
+        String hexStr = ByteUtils.toHexString(networkBytes, "",false);
         System.out.println("networkBytes:" + hexStr);
         ByteBufOutputStream os = new ByteBufOutputStream(out);
         os.write(networkBytes);

@@ -52,13 +52,18 @@ public class ByteUtils {
         return hex;
     }
 
-    public static String toHexString(byte[] b, String sep) {
+    public static String toHexString(byte[] b, String sep, boolean upper) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < b.length; i++) {
-            sb.append(toHexString(b[i]).toUpperCase());
+            if (upper) {
+                sb.append(toHexString(b[i]).toUpperCase());
+            } else {
+                sb.append(toHexString(b[i]).toLowerCase());
+            }
             sb.append(sep);
         }
-        sb = sb.length() > 0 ? sb.delete(sb.length() - 1, sb.length()) : sb;
+
+        //sb = sb.length() > 0 ? sb.delete(sb.length() - 1, sb.length()) : sb;
         return sb.toString();
     }
 

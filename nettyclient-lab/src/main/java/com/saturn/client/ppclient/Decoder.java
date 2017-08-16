@@ -1,6 +1,7 @@
 package com.saturn.client.ppclient;
 
 import com.saturn.common.entity.HeaderIdentity;
+import com.saturn.infrastructure.util.ByteUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,11 +40,13 @@ public class Decoder extends ByteToMessageDecoder {
                 return;
             }
 
-            if (nextToRead == 0) {
-                System.out.println("keepalive do nothing .date:" + new Date().toString());
-                //out.add(new RespBody());
-                return;
-            }
+//            if (nextToRead == 0) {
+//                System.out.println("keepalive do nothing .date:" + new Date().toString());
+//                //out.add(new RespBody());
+//                //toto return keepalive package (len 12,payload zero)
+//                out.add(new ACTIVE_TEST_RESP());
+//                return;
+//            }
 
             ByteBufInputStream is = new ByteBufInputStream(in, nextToRead);
 
@@ -51,6 +54,38 @@ public class Decoder extends ByteToMessageDecoder {
             is.read(bodyBuff, 0, bodyBuff.length);
 
 
+            String hexStr = ByteUtils.toHexString(bodyBuff, "", false);
+            System.out.println("decode networkBytes:" + hexStr);
+
+            int commandId = headerIdentity.getCommandId();
+            //ByteUtils.byteArrayToInt32(bodyBuff, 4, true);
+
+            if (commandId == 0x00000008) {
+                System.out.println("keepalive do nothing .date:" + new Date().toString());
+                ACTIVE_TEST_RESP test_resp = new ACTIVE_TEST_RESP();
+                //test_resp.setLength(headerIdentity.getLength());
+                //test_resp.setCommandId(headerIdentity.getCommandId());
+                test_resp.setTransactionID(headerIdentity.getTransactionID());
+
+                out.add(test_resp);
+            } else if (commandId == 0x80000001) {
+                AuthResp authResp = new AuthResp();
+
+                authResp.setLength(headerIdentity.getLength());
+                authResp.setCommandId(headerIdentity.getCommandId());
+                authResp.setTransactionID(headerIdentity.getTransactionID());
+
+                authResp.parse(bodyBuff);
+                out.add(authResp);
+
+            } else {
+                System.out.println("not imp commandId:" + commandId);
+            }
+
+            //AuthResp authResp = new AuthResp();
+            //  authResp.parse(bodyBuff);
+
+            // out.add(authResp);
             //RespBody respBody = RespBody.fromBuffer(bodyBuff);
 
             //respBody.setHeaderIdentity(headerIdentity);

@@ -84,6 +84,7 @@ public class ConnManager {
 
                             //inbound
                             p.addLast("Decoder", new Decoder());
+                            p.addLast("InboundBizHandler",new InboundBizHandler());
 
                             //outbound
                             p.addLast("Encoder", new Encoder());

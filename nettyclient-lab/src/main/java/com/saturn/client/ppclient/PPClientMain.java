@@ -8,13 +8,13 @@ public class PPClientMain {
     public static void main(String[] args) throws Exception {
 
         ConnManager manager = new ConnManager();
-        manager.init(1, "192.168.110.172", 8443);
+        manager.init(1, "192.168.110.172", 7890);
 
         manager.start();
 
         Thread.sleep(1000);
 
-        AuthMsg authMsg = new AuthMsg();
+        AuthReq authMsg = new AuthReq();
         authMsg.setTransactionID(0);
 
         authMsg.setSpCode("901487");
@@ -26,4 +26,6 @@ public class PPClientMain {
         Thread.sleep(1000 * 500);
 
     }
+
+
 }
