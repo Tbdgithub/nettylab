@@ -20,7 +20,10 @@ public class InboundBizHandler extends SimpleChannelInboundHandler<PPMessage> {
 
         } else if (msg instanceof AuthResp) {
             AuthResp bizObj = (AuthResp) msg;
-            System.out.print("AuthResp status:" + (bizObj.getStatus() == 0 ? "succ" : "failed"));
+            System.out.print("AuthResp status:" + bizObj.getStatus() + " " + (bizObj.getStatus() == 0 ? "succ" : "failed"));
+        } else if (msg instanceof SUBMIT_RESP) {
+            SUBMIT_RESP obj = (SUBMIT_RESP) msg;
+            System.out.println("SUBMIT_RESP result:" + obj.getResult());
         }
     }
 }

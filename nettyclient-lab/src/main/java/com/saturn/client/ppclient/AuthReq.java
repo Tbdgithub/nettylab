@@ -32,6 +32,26 @@ public class AuthReq extends PPMessage {
         this.setCommandId(0x00000001);
     }
 
+    private String timestamp = "0000000000";
+
+    private byte versoin;//(byte)(_isMo ? 0x01 : 0x00)
+
+    public byte getVersoin() {
+        return versoin;
+    }
+
+    public void setVersoin(byte versoin) {
+        this.versoin = versoin;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
 
     @Override
     public byte[] getPayload() throws Exception {
@@ -39,7 +59,6 @@ public class AuthReq extends PPMessage {
         if (payload == null) {
             int len = 39 - Constants.HeaderLen;
             byte[] result = new byte[len];
-
 
             byte[] SpCodeBuff = this.SpCode.getBytes("ASCII");
 
@@ -59,7 +78,6 @@ public class AuthReq extends PPMessage {
             System.arraycopy(AuthenticatorSourceBuff, 0, result, 6, AuthenticatorSourceBuff.length);
 
             result[26] = getVersoin();
-            setPayloadLen(result.length);
 
             payload = result;
 
@@ -69,30 +87,4 @@ public class AuthReq extends PPMessage {
 
     }
 
-//    @Override
-//    public byte[] getBytes() throws Exception {
-//
-//
-//        int totalLen = Constants.HeaderLen + getPayload().length;
-//        byte[] headerLenBuff = new byte[4];
-//        ByteUtils.fillByteBufferWithInt32(totalLen, headerLenBuff, 0, true);
-//
-//        byte[] commandIdBuff = new byte[4];
-//        ByteUtils.fillByteBufferWithInt32(getCommandId(), commandIdBuff, 0, true);
-//
-//        byte[] tranIdBuff = new byte[4];
-//        ByteUtils.fillByteBufferWithInt32(getTransactionID(), tranIdBuff, 0, true);
-//
-//
-//        byte[] totalBuff = new byte[totalLen];
-//
-//        System.arraycopy(headerLenBuff, 0, totalBuff, 0, 4);
-//        System.arraycopy(commandIdBuff, 0, totalBuff, 4, 4);
-//        System.arraycopy(tranIdBuff, 0, totalBuff, 8, 4);
-//
-//
-//        System.arraycopy(getPayload(), 0, totalBuff, 12, getPayloadLen());
-//        return totalBuff;
-//
-//    }
 }

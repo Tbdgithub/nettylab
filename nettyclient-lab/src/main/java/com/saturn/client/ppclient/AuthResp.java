@@ -22,21 +22,9 @@ public class AuthResp extends PPMessage {
     @Override
     public PPMessage parse(byte[] buff) throws Exception {
 
-        //header
-        //
-        //this.setLength();
         if (buff.length != 18) {
             throw new Exception("bad len");
         }
-
-//        int length = ByteUtils.byteArrayToInt32(buff, 0, true);
-//        this.setLength(length);
-//
-//        int commandId = ByteUtils.byteArrayToInt32(buff, 4, true);
-//        this.setCommandId(commandId);
-//
-//        int tranId = ByteUtils.byteArrayToInt32(buff, 8, true);
-//        this.setTransactionID(tranId);
 
         byte status = buff[0];
         this.setStatus(status);

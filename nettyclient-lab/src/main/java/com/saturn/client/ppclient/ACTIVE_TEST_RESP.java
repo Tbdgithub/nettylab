@@ -18,7 +18,7 @@ public class ACTIVE_TEST_RESP extends PPMessage {
         if (payload == null) {
 
             payload = new byte[1];
-            setPayloadLen(1);
+            //setPayloadLen(1);
         }
 
         return payload;

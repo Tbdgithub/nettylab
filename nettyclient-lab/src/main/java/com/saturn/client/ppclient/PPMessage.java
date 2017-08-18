@@ -10,46 +10,16 @@ public class PPMessage {
     private int Length;
     private int CommandId;
     private int TransactionID;
-
     protected byte[] payload;
-
-    private int payloadLen;
-
-    private String timestamp = "0000000000";
-
-    private byte versoin;//(byte)(_isMo ? 0x01 : 0x00)
-
     private byte[] totalBytes;
-
-    public byte getVersoin() {
-        return versoin;
-    }
-
-    public void setVersoin(byte versoin) {
-        this.versoin = versoin;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getPayloadLen() {
-        return payloadLen;
-    }
-
-    public void setPayloadLen(int payloadLen) {
-        this.payloadLen = payloadLen;
-    }
 
     public byte[] getBytes() throws Exception {
 
 
         if (totalBytes == null) {
             int totalLen = Constants.HeaderLen + getPayload().length;
+
+            //header
             byte[] headerLenBuff = new byte[4];
             ByteUtils.fillByteBufferWithInt32(totalLen, headerLenBuff, 0, true);
 
@@ -59,15 +29,14 @@ public class PPMessage {
             byte[] tranIdBuff = new byte[4];
             ByteUtils.fillByteBufferWithInt32(getTransactionID(), tranIdBuff, 0, true);
 
-
             byte[] totalBuff = new byte[totalLen];
 
             System.arraycopy(headerLenBuff, 0, totalBuff, 0, 4);
             System.arraycopy(commandIdBuff, 0, totalBuff, 4, 4);
             System.arraycopy(tranIdBuff, 0, totalBuff, 8, 4);
 
-
-            System.arraycopy(getPayload(), 0, totalBuff, 12, getPayloadLen());
+            //body
+            System.arraycopy(getPayload(), 0, totalBuff, 12, getPayload().length);
 
             totalBytes = totalBuff;
         }
@@ -76,15 +45,12 @@ public class PPMessage {
     }
 
 
-    public byte[] getPayload() throws Exception
-
-    {
+    public byte[] getPayload() throws Exception {
         return payload;
     }
 
     public void setPayload(byte[] payload) {
         this.payload = payload;
-        this.payloadLen = payload.length;
     }
 
     public int getLength() {

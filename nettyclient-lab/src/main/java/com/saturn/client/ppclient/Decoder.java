@@ -65,6 +65,16 @@ public class Decoder extends ByteToMessageDecoder {
                 authResp.parse(bodyBuff);
                 out.add(authResp);
 
+            } else if (commandId == 0x80000004) {
+                SUBMIT_RESP ppResp = new SUBMIT_RESP();
+
+                ppResp.setLength(headerIdentity.getLength());
+                ppResp.setCommandId(headerIdentity.getCommandId());
+                ppResp.setTransactionID(headerIdentity.getTransactionID());
+
+                ppResp.parse(bodyBuff);
+                out.add(ppResp);
+
             } else {
                 System.out.println("not imp commandId:" + commandId);
             }
