@@ -5,4 +5,5 @@ include 'nettyadapter'
 include 'infrastructure'
 include 'commonlib'
 include 'HexDumpProxyMain'
+include 'basic-exercise'
 
