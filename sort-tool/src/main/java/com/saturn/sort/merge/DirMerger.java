@@ -89,7 +89,7 @@ public class DirMerger {
             public boolean accept(File pathname) {
 
 
-                if (pathname.getName().indexOf(FileCutter.outputFileTail) != -1) {
+                if (pathname.getName().indexOf(Constants.outputFileTail) != -1) {
                     return true;
                 } else {
                     return false;

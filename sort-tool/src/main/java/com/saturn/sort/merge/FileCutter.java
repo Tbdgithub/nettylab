@@ -15,7 +15,7 @@ public class FileCutter {
     private File outputDirFile;
     private int maxLinePerFile;
     private AtomicInteger numCounter = new AtomicInteger(0);
-    static String outputFileTail = ".txt";
+
     static String lineSeperator = "\r\n";
     public static String outputFilehead = "sorted_";
     int outputFileIndex = 0;
@@ -222,7 +222,7 @@ public class FileCutter {
     }
 
     private   String getOutputFileName(int outputFileIndex) {
-        return outputFilehead + outputFileIndex + outputFileTail;
+        return outputFilehead + outputFileIndex + Constants.outputFileTail;
     }
 
     private void close(Reader reader) {
@@ -252,7 +252,7 @@ public class FileCutter {
             public boolean accept(File pathname) {
 
 
-                if (pathname.getName().indexOf(outputFileTail) != -1) {
+                if (pathname.getName().indexOf(Constants.outputFileTail) != -1) {
                     return true;
                 } else {
                     return false;

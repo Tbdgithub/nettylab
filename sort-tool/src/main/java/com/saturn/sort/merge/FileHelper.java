@@ -8,20 +8,61 @@ import java.io.*;
 public class FileHelper {
 
 
-    public static  void cleanFilesInDir(File dir)
-    {
+    static int MaxRecursiveLevel = 32;
 
+    public static void rmDirForce(File dir) {
+        //  cleanDirRecursize(dir, 0);
+        //cleanDirRecursize(dir, 0);
+        // boolean succ= dir.delete();
+        // cleanDirRecursize(dir, 0);
+        //System.out.println("remove empty dir:"+dir.getAbsolutePath());
     }
 
-    public static  void cleanDirForce(File dir)
-    {
+    public static void cleanDirRecursize(File dir, int level) {
+        if (level >= MaxRecursiveLevel) {
+            System.out.println("over limit MaxRecursiveLevel:" + MaxRecursiveLevel);
+            return;
+        }
+
+
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return true;
+            }
+        });
+
+        if (files.length == 0 && dir.isDirectory()) {
+            boolean succ = dir.delete();
+            System.out.println("clean tmp dir:" + dir.getAbsolutePath() + " result:" + succ);
+            return;
+        }
+
+
+        for (File file : files) {
+            if (!file.isDirectory()) {
+
+                if (file.getName().indexOf(Constants.outputFileTail) != -1) {
+                    boolean succ = file.delete();
+                    System.out.println("clean tmp file:" + file.getAbsolutePath() + " result:" + succ);
+
+                } else {
+                    System.out.println("only file type :" + Constants.outputFileTail + " can be delete");
+                }
+            } else {
+                cleanDirRecursize(file, level + 1);
+            }
+
+
+        }
+
 
     }
 
     public static void copyFile(File src, File target) {
 
         //todo 1024*1024*16  16M
-        copyFile(src, target, 1024*1024*16);
+        copyFile(src, target, 1024 * 1024 * 16);
     }
 
     public static void copyFile(File src, File target, int buffLen) {

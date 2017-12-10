@@ -26,6 +26,21 @@ public class DirProcessor {
         this.tempDir = tempDir;
     }
 
+    private void ensureEmptyTempDir(File tempDir)
+    {
+
+        if (!tempDirFile.exists()) {
+            tempDirFile.mkdir();
+        }
+        else
+        {
+            FileHelper.rmDirForce(tempDir);
+        }
+
+
+    }
+
+
     public void start() throws Exception {
         System.out.println("starting...");
 
@@ -33,13 +48,12 @@ public class DirProcessor {
         outputDirFile = new File(outputDir);
         tempDirFile = new File(tempDir);
 
+        ensureEmptyTempDir(tempDirFile);
         if (!outputDirFile.exists()) {
             outputDirFile.mkdir();
         }
 
-        if (!tempDirFile.exists()) {
-            tempDirFile.mkdir();
-        }
+
 
         FileCutter cutter = new FileCutter(inputDirFile, tempDirFile, MaxLinePerFile);
         cutter.start();
