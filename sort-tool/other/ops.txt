@@ -1,0 +1,1 @@
+java -jar sort-tool.jar -i /sz/inputDir -o /sz/outputDir -t /sz/tempDir
