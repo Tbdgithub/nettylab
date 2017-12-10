@@ -10,12 +10,10 @@ public class FileHelper {
 
     static int MaxRecursiveLevel = 32;
 
-    public static void rmDirForce(File dir) {
-        //  cleanDirRecursize(dir, 0);
-        //cleanDirRecursize(dir, 0);
-        // boolean succ= dir.delete();
-        // cleanDirRecursize(dir, 0);
-        //System.out.println("remove empty dir:"+dir.getAbsolutePath());
+    public static void rmSubDirsForce(File dir) {
+        cleanDirRecursize(dir, 0);
+        //dir.delete();
+
     }
 
     public static void cleanDirRecursize(File dir, int level) {
@@ -51,6 +49,7 @@ public class FileHelper {
                 }
             } else {
                 cleanDirRecursize(file, level + 1);
+                file.delete();
             }
 
 

@@ -29,12 +29,12 @@ public class DirProcessor {
     private void ensureEmptyTempDir(File tempDir)
     {
 
+        if (tempDirFile.exists()) {
+            FileHelper.rmSubDirsForce(tempDir);
+        }
+
         if (!tempDirFile.exists()) {
             tempDirFile.mkdir();
-        }
-        else
-        {
-            FileHelper.rmDirForce(tempDir);
         }
 
 
@@ -68,6 +68,8 @@ public class DirProcessor {
         FileHelper.copyFile(mergeFinished,tagetOutput);
         System.out.println("finished file:"+tagetOutput.getAbsolutePath());
 
+        FileHelper.rmSubDirsForce(tempDirFile);
+        System.out.println("temp dir cleaned:"+tempDirFile.getAbsolutePath());
         System.out.println("All finished");
     }
 
