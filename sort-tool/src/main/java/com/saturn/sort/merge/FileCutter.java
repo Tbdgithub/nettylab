@@ -2,6 +2,7 @@ package com.saturn.sort.merge;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,7 +17,7 @@ public class FileCutter {
     private AtomicInteger numCounter = new AtomicInteger(0);
     static String outputFileTail = ".txt";
     static String lineSeperator = "\r\n";
-    static String outputFilehead = "tmpout_";
+    public static String outputFilehead = "sorted_";
     int outputFileIndex = 0;
 
     public FileCutter(File inputDirFile, File outputDirFile, int maxLinePerFile) throws Exception {
@@ -34,11 +35,120 @@ public class FileCutter {
 
 
         for (File item : files0) {
-            cutFile(item);
+
+            cutAndSort(item, true);
         }
 
     }
 
+
+    private void cutAndSort(File file, boolean asc) {
+
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+
+        long currentLine = 0;
+        long totalLine = 0;
+
+
+        List<Long> bucket = new ArrayList<Long>(maxLinePerFile);
+
+        try {
+
+            fr = new FileReader(file);
+            br = new BufferedReader(fr);
+
+            String line = br.readLine();
+            do {
+
+                if (CommonHelper.isNullOrEmpty(line)) {
+                    break;
+                }
+
+                ++totalLine;
+                ++currentLine;
+
+                if (currentLine > maxLinePerFile) {
+                    throw new Exception("bug !");
+                }
+
+                //new file
+                if (currentLine == 1) {
+                    ++outputFileIndex;
+                    File outputFile = new File(outputDirFile, getOutputFileName(outputFileIndex));
+                    fw = new FileWriter(outputFile);
+                    bw = new BufferedWriter(fw);
+                }
+
+                if (currentLine == maxLinePerFile) {
+
+                    //reset
+                    bucket.add(Long.parseLong(line));
+                    //sort and write
+
+                    flushBucket(bw, bucket,asc);
+
+                    bucket.clear();
+                    currentLine = 0;
+                    //++outputFileIndex;
+                    bw.close();
+                    fw.close();
+
+                } else {
+
+                    bucket.add(Long.parseLong(line));
+                }
+
+                line = br.readLine();
+            }
+            while (!CommonHelper.isNullOrEmpty(line));
+
+
+            flushBucket(bw, bucket,asc);
+
+            System.out.println("total line:" + totalLine);
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+
+            close(br);
+            close(fr);
+
+            close(bw);
+            close(fw);
+        }
+
+    }
+
+    private void flushBucket(BufferedWriter bw, List<Long> bucket,boolean sortAsc) throws IOException {
+
+
+        final  boolean sortDirection=sortAsc;
+
+        if (bucket.size() > 0) {
+
+            bucket.sort(new Comparator<Long>() {
+                @Override
+                public int compare(Long o1, Long o2) {
+
+                    if (sortDirection) {
+                        return o1.compareTo(o2);
+                    } else {
+                        return o2.compareTo(o1);
+                    }
+                }
+            });
+
+            for (Long item : bucket) {
+                bw.write(String.valueOf(item) + lineSeperator);
+            }
+        }
+    }
 
     private void cutFile(File file) {
 
@@ -111,7 +221,7 @@ public class FileCutter {
 
     }
 
-    private String getOutputFileName(int outputFileIndex) {
+    private   String getOutputFileName(int outputFileIndex) {
         return outputFilehead + outputFileIndex + outputFileTail;
     }
 

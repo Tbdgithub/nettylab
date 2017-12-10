@@ -20,13 +20,13 @@ public class DirProcessor {
 
     static int MaxLinePerFile = 5;
 
-    DirProcessor(String inputDir, String outputDir, String tempDir)  throws Exception{
+    DirProcessor(String inputDir, String outputDir, String tempDir) throws Exception {
         this.inputDir = inputDir;
         this.outputDir = outputDir;
         this.tempDir = tempDir;
     }
 
-    public void start()  throws Exception{
+    public void start() throws Exception {
         System.out.println("starting...");
 
         inputDirFile = new File(inputDir);
@@ -41,14 +41,21 @@ public class DirProcessor {
             tempDirFile.mkdir();
         }
 
-        FileCutter cutter = new FileCutter(inputDirFile, tempDirFile,MaxLinePerFile);
+        FileCutter cutter = new FileCutter(inputDirFile, tempDirFile, MaxLinePerFile);
         cutter.start();
 
+        System.out.println("File cut finished");
 
-        System.out.println("finished");
+        DirMerger dirMerger = new DirMerger(tempDirFile);
+        dirMerger.start();
+
+        File mergeFinished = dirMerger.getFinishedFile();
+        File tagetOutput=new File(outputDirFile,"succ.txt");
+        FileHelper.copyFile(mergeFinished,tagetOutput);
+        System.out.println("finished file:"+tagetOutput.getAbsolutePath());
+
+        System.out.println("All finished");
     }
-
-
 
 
     public static void main(String[] args) {
@@ -59,8 +66,7 @@ public class DirProcessor {
         try {
             DirProcessor processor = new DirProcessor(inputDir, ouputDir, tempDir);
             processor.start();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
