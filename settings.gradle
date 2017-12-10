@@ -4,4 +4,5 @@ include 'nettyserver'
 include 'nettyadapter'
 include 'infrastructure'
 include 'commonlib'
+include 'sort-tool'
 
