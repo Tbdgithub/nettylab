@@ -56,7 +56,7 @@ public class ProgressWatcher {
                 }
 
                 showCurrent();
-                System.out.println("water finished");
+                System.out.println("watcher finished");
 
             }
         });
