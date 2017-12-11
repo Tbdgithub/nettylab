@@ -1,6 +1,7 @@
 package com.saturn.sort.merge;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * Created by lyz on 2017/12/10.
@@ -10,9 +11,82 @@ public class FileHelper {
 
     static int MaxRecursiveLevel = 32;
 
+    public static void inStream2OutStream(InputStream is, OutputStream os, int buffSize) throws Exception {
+
+        try {
+
+
+            byte[] buff = new byte[buffSize];
+            int readed = is.read(buff, 0, buff.length);
+            while (readed > 0) {
+
+                os.write(buff, 0, readed);
+
+                readed = is.read(buff, 0, buff.length);
+            }
+
+            os.flush();
+        } finally {
+
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static String readAllText(File file, Charset charset) throws Exception {
+
+        FileInputStream fileInputStream = new FileInputStream(file);
+        ByteArrayOutputStream bio = new ByteArrayOutputStream();
+        inStream2OutStream(fileInputStream, bio);
+
+        String result = bio.toString(charset.name());
+        return result;
+    }
+
+    public static void inStream2OutStream(InputStream is, OutputStream os) throws Exception {
+
+        inStream2OutStream(is, os, 1024);
+
+    }
+
     public static void rmSubDirsForce(File dir) {
         cleanDirRecursize(dir, 0);
         //dir.delete();
+
+    }
+
+    public static void cleanFilesOnly(File dir) {
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+
+                if (pathname.getName().indexOf(Constants.outputFileTail) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        for (File file : files) {
+            if (!file.isDirectory()) {
+
+                if (file.getName().indexOf(Constants.outputFileTail) != -1) {
+                    boolean succ = file.delete();
+                    System.out.println("clean tmp file:" + file.getAbsolutePath() + " result:" + succ);
+                }
+            }
+        }
 
     }
 
@@ -51,11 +125,7 @@ public class FileHelper {
                 cleanDirRecursize(file, level + 1);
                 file.delete();
             }
-
-
         }
-
-
     }
 
     public static void copyFile(File src, File target) {

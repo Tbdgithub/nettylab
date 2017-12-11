@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,10 +21,13 @@ public class FileCutter {
     public static String outputFilehead = "sorted_";
     int outputFileIndex = 0;
 
-    public FileCutter(File inputDirFile, File outputDirFile, int maxLinePerFile) throws Exception {
+    private ProgressWatcher watcher;
+
+    public FileCutter(File inputDirFile, File outputDirFile, int maxLinePerFile, ProgressWatcher watcher) throws Exception {
         this.inputDirFile = inputDirFile;
         this.outputDirFile = outputDirFile;
         this.maxLinePerFile = maxLinePerFile;
+        this.watcher=watcher;
 
         if (maxLinePerFile < 1) {
             throw new Exception("bad maxLinePerFile");
@@ -68,6 +72,7 @@ public class FileCutter {
                     break;
                 }
 
+                this.watcher.getInputCounter().incrementAndGet();
                 ++totalLine;
                 ++currentLine;
 

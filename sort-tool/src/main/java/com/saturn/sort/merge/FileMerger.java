@@ -28,7 +28,18 @@ public class FileMerger {
 
     private boolean untiDup;
     long lastSuccVal=Long.MIN_VALUE;
-    public FileMerger(FilePair filePair, File subDir, int outputIndex,boolean untiDup) {
+
+    private long fileLine=0;
+
+    public long getFileLine() {
+        return fileLine;
+    }
+
+    public void setFileLine(long fileLine) {
+        this.fileLine = fileLine;
+    }
+
+    public FileMerger(FilePair filePair, File subDir, int outputIndex, boolean untiDup) {
         this.filePair = filePair;
         this.subDir = subDir;
         this.outputIndex = outputIndex;
@@ -45,12 +56,14 @@ public class FileMerger {
         if(untiDup) {
             if (val != lastSuccVal) {
                 bw.write(val + lineSeperator);
+                ++fileLine;
                 lastSuccVal=val;
             }
         }
         else
         {
             bw.write(val + lineSeperator);
+            ++fileLine;
         }
 
     }

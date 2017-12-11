@@ -17,9 +17,11 @@ public class DirMerger {
     private File currentSubDir;
 
     private File mergeFinishedFile;
+    private boolean antiDuplicate;
 
-    public DirMerger(File dir) {
+    public DirMerger(File dir,boolean antiDuplicate) {
         this.rootDir = dir;
+        this.antiDuplicate=antiDuplicate;
 
     }
 
@@ -33,6 +35,8 @@ public class DirMerger {
 
         boolean allFinished = false;
         File parent = rootDir;
+
+        FileMerger lastMerger=null;
         do {
 
             List<FilePair> filePairs = dispatch(parent);
@@ -40,10 +44,13 @@ public class DirMerger {
             File subDir = getSubDir(parent);
             for (FilePair pair : filePairs) {
                 ++outputIndex;
-                FileMerger merger = new FileMerger(pair, subDir, outputIndex, true);
+                FileMerger merger = new FileMerger(pair, subDir, outputIndex, antiDuplicate);
                 merger.start();
+                lastMerger=merger;
             }
 
+            //clean tempdir
+            FileHelper.cleanFilesOnly(parent);
             parent = subDir;
             allFinished = merged2One(parent);
 
@@ -53,6 +60,9 @@ public class DirMerger {
 
         this.mergeFinishedFile = getMergedFile(parent);
         System.out.println(this.getClass().getSimpleName() + " finished merge file:"+mergeFinishedFile.getAbsolutePath());
+
+        System.out.println("final file len:"+lastMerger.getFileLine());
+
 
 
     }
