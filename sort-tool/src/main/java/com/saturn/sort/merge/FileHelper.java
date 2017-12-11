@@ -186,4 +186,55 @@ public class FileHelper {
             e.printStackTrace();
         }
     }
+
+    public static long countFileLine(File inputFile) {
+        long result = 0;
+
+
+        FileReader fr = null;
+        BufferedReader br = null;
+        try
+        {
+            fr = new FileReader(inputFile);
+            br = new BufferedReader(fr);
+            String line =null;
+            do {
+
+                line=  br.readLine();
+
+                if(line!=null)
+                {
+                    ++result;
+                }
+            }
+            while (!CommonHelper.isNullOrEmpty(line));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally {
+            close(fr,br);
+        }
+
+        return result;
+    }
+
+    private static void close(FileReader fr, BufferedReader br) {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (fr != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
