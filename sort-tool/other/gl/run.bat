@@ -1,0 +1,1 @@
+java -cp  ./lib/* com.saturn.sort.merge.MergeSorter -c ./config.json
