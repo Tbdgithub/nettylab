@@ -40,6 +40,7 @@ public class MergeSorter {
 
 
         ProgressWatcher watcher=new ProgressWatcher();
+        watcher.setShowIntervalSecond(config.getProgressShowIntervalSecond());
         watcher.start();
 
         inputDirFile = new File(config.getInputDir());

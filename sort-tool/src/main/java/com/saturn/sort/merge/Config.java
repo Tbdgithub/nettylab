@@ -7,6 +7,15 @@ public class Config {
     private String tempDir;
     private int MaxLinePerFile;
     private boolean antiDuplicate;
+    private int progressShowIntervalSecond;
+
+    public int getProgressShowIntervalSecond() {
+        return progressShowIntervalSecond;
+    }
+
+    public void setProgressShowIntervalSecond(int progressShowIntervalSecond) {
+        this.progressShowIntervalSecond = progressShowIntervalSecond;
+    }
 
     public boolean isAntiDuplicate() {
         return antiDuplicate;

@@ -16,6 +16,7 @@ public class Config_test {
         config.setTempDir("/sz/MergeSorter/tempDir");
         config.setMaxLinePerFile(1000);
         config.setAntiDuplicate(true);
+        config.setProgressShowIntervalSecond(10);
 
         String str = gson.toJson(config);
         System.out.println(str);

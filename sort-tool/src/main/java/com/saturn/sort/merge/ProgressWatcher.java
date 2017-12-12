@@ -18,6 +18,20 @@ public class ProgressWatcher {
 
     public volatile boolean allFinished = false;
 
+    private int showIntervalSecond=5;
+    final int minVal=5;
+
+    public int getShowIntervalSecond() {
+
+        return showIntervalSecond;
+    }
+
+    public void setShowIntervalSecond(int showIntervalSecond) {
+
+        int temp= showIntervalSecond>=minVal?showIntervalSecond:minVal;
+        this.showIntervalSecond = temp;
+    }
+
     public AtomicInteger getAntiDupMergeCounter() {
         return antiDupMergeCounter;
     }

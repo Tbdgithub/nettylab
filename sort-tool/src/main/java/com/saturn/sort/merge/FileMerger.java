@@ -53,6 +53,14 @@ public class FileMerger {
 
     }
 
+    public FileMerger(FilePair filePair, File subDir, int outputIndex, boolean antiDup) {
+        this.filePair = filePair;
+        this.subDir = subDir;
+        this.outputIndex = outputIndex;
+        this.antiDuplicate = antiDup;
+
+    }
+
     private String getOutputFileName(int outputFileIndex) {
         return outputFilehead + outputFileIndex + outputFileTail;
     }
