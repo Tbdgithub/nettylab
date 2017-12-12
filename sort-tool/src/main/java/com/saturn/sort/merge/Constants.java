@@ -6,6 +6,7 @@ package com.saturn.sort.merge;
 public class Constants {
 
     public  static String outputFileTail = ".txt";
+    public static int MaxLevel=32;
 
 
 }

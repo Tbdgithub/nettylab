@@ -12,20 +12,16 @@ public class DirMerger {
 
     private File rootDir;
 
-    private int outputIndex;
-
-    private File currentSubDir;
-
     private File mergeFinishedFile;
     private boolean antiDuplicate;
+    private ProgressWatcher watcher;
 
-    public DirMerger(File dir,boolean antiDuplicate) {
+    public DirMerger(File dir,boolean antiDuplicate,ProgressWatcher watcher) {
         this.rootDir = dir;
         this.antiDuplicate=antiDuplicate;
+        this.watcher=watcher;
 
     }
-
-
 
 
     public void start() throws Exception {
@@ -44,7 +40,7 @@ public class DirMerger {
             File subDir = getSubDir(parent);
             for (FilePair pair : filePairs) {
                 ++outputIndex;
-                FileMerger merger = new FileMerger(pair, subDir, outputIndex, antiDuplicate);
+                FileMerger merger = new FileMerger(pair, subDir, outputIndex, antiDuplicate,watcher);
                 merger.start();
                 lastMerger=merger;
             }
@@ -53,10 +49,15 @@ public class DirMerger {
             FileHelper.cleanFilesOnly(parent);
             parent = subDir;
             allFinished = merged2One(parent);
+            watcher.getCurrentLevel().incrementAndGet();
+
+            if(watcher.getCurrentLevel().get()>Constants.MaxLevel)
+            {
+                throw new Exception("over limit MaxLevel:"+watcher.getCurrentLevel().get());
+            }
 
         }
         while (!allFinished);
-
 
         this.mergeFinishedFile = getMergedFile(parent);
         System.out.println(this.getClass().getSimpleName() + " finished merge file:"+mergeFinishedFile.getAbsolutePath());

@@ -1,52 +1,79 @@
 package com.saturn.sort.merge;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ProgressWatcher {
 
-    private AtomicLong inputCounter=new AtomicLong(0);
+    private AtomicInteger currentLevel = new AtomicInteger(0);
 
-    private AtomicLong tempCounter=new AtomicLong(0);
-    private AtomicLong outputCounter=new AtomicLong(0);
+    private AtomicLong cutCounter = new AtomicLong(0);
+    private AtomicLong readSourceCounter = new AtomicLong();
+    private AtomicLong mergeCompareCounter = new AtomicLong();
+    private AtomicLong mergeWriteCounter = new AtomicLong();
 
-    public AtomicLong getInputCounter() {
-        return inputCounter;
+    private AtomicInteger antiDupMergeCounter=new AtomicInteger();
+
+    private long beginTime = System.nanoTime();
+
+    public volatile boolean allFinished = false;
+
+    public AtomicInteger getAntiDupMergeCounter() {
+        return antiDupMergeCounter;
     }
 
-    public void setInputCounter(AtomicLong inputCounter) {
-        this.inputCounter = inputCounter;
+    public void setAntiDupMergeCounter(AtomicInteger antiDupMergeCounter) {
+        this.antiDupMergeCounter = antiDupMergeCounter;
     }
 
-    public AtomicLong getTempCounter() {
-        return tempCounter;
+    public AtomicInteger getCurrentLevel() {
+        return currentLevel;
     }
 
-    public void setTempCounter(AtomicLong tempCounter) {
-        this.tempCounter = tempCounter;
+    public void setCurrentLevel(AtomicInteger currentLevel) {
+        this.currentLevel = currentLevel;
     }
 
-    public AtomicLong getOutputCounter() {
-        return outputCounter;
+    public AtomicLong getCutCounter() {
+        return cutCounter;
     }
 
-    public void setOutputCounter(AtomicLong outputCounter) {
-        this.outputCounter = outputCounter;
+    public void setCutCounter(AtomicLong cutCounter) {
+        this.cutCounter = cutCounter;
     }
 
-    private long beginTime=System.nanoTime();
+    public AtomicLong getReadSourceCounter() {
+        return readSourceCounter;
+    }
 
-    public volatile boolean allFinished=false;
+    public void setReadSourceCounter(AtomicLong readSourceCounter) {
+        this.readSourceCounter = readSourceCounter;
+    }
 
-    public void start()
-    {
+    public AtomicLong getMergeCompareCounter() {
+        return mergeCompareCounter;
+    }
 
-        Thread thread=new Thread(new Runnable() {
+    public void setMergeCompareCounter(AtomicLong mergeCompareCounter) {
+        this.mergeCompareCounter = mergeCompareCounter;
+    }
+
+    public AtomicLong getMergeWriteCounter() {
+        return mergeWriteCounter;
+    }
+
+    public void setMergeWriteCounter(AtomicLong mergeWriteCounter) {
+        this.mergeWriteCounter = mergeWriteCounter;
+    }
+
+    public void start() {
+
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
 
 
-                while (!allFinished)
-                {
+                while (!allFinished) {
                     showCurrent();
                     try {
                         Thread.sleep(5000);
@@ -65,12 +92,28 @@ public class ProgressWatcher {
 
     }
 
-    private void showCurrent()
-    {
-        long current=System.nanoTime()-beginTime;
+    private void showCurrent() {
+        long current = System.nanoTime() - beginTime;
+        double costSecond = current / 1.0E9;
 
-        double costSecond= current/1.0E9;
-        double tps=costSecond>0 ? inputCounter.get()/costSecond:0;
-        System.out.println("input count:"+inputCounter.get() +" cost second:"+costSecond+" tps:"+tps);
+        String costSecondFormat=CommonHelper.printDecimalRadix2(costSecond);
+        String tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+
+        System.out.println("cutCounter count:" + cutCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
+
+         tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        System.out.println("readSourceCounter count:" + readSourceCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
+
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        System.out.println("mergeCompareCounter count:" + mergeCompareCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
+
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        System.out.println("mergeWriteCounter count:" + mergeWriteCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
+
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        System.out.println("antiDupMergeCounter count:" + antiDupMergeCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
+
+        System.out.println("currentLevel:"+currentLevel.get());
+
     }
 }

@@ -62,7 +62,7 @@ public class MergeSorter {
 
         System.out.println("File cut finished");
 
-        DirMerger dirMerger = new DirMerger(tempDirFile,config.isAntiDuplicate());
+        DirMerger dirMerger = new DirMerger(tempDirFile,config.isAntiDuplicate(),watcher);
         dirMerger.start();
 
         File mergeFinished = dirMerger.getFinishedFile();

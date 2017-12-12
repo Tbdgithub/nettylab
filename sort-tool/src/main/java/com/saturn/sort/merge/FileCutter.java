@@ -37,9 +37,7 @@ public class FileCutter {
     public void start() {
         List<File> files0 = collectFiles(inputDirFile);
 
-
         for (File item : files0) {
-
             cutAndSort(item, true);
         }
 
@@ -72,7 +70,7 @@ public class FileCutter {
                     break;
                 }
 
-                this.watcher.getInputCounter().incrementAndGet();
+                this.watcher.getCutCounter().incrementAndGet();
                 ++totalLine;
                 ++currentLine;
 
