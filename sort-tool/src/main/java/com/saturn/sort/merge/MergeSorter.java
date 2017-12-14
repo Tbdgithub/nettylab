@@ -74,7 +74,7 @@ public class MergeSorter {
         FileHelper.rmSubDirsForce(tempDirFile);
         System.out.println("temp dir cleaned:" + tempDirFile.getAbsolutePath());
         System.out.println("All finished");
-        watcher.allFinished=true;
+        watcher.close();
     }
 
 

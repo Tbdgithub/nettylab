@@ -16,7 +16,8 @@ public class ProgressWatcher {
 
     private long beginTime = System.nanoTime();
 
-    public volatile boolean allFinished = false;
+
+    private volatile boolean allFinished = false;
 
     private int showIntervalSecond=5;
     final int minVal=5;
@@ -110,7 +111,7 @@ public class ProgressWatcher {
         long current = System.nanoTime() - beginTime;
         double costSecond = current / 1.0E9;
 
-        String costSecondFormat=CommonHelper.printDecimalRadix2(costSecond);
+        String costSecondFormat= CommonHelper.printDecimalRadix2(costSecond);
         String tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
 
         System.out.println("cutCounter count:" + cutCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
@@ -129,5 +130,10 @@ public class ProgressWatcher {
 
         System.out.println("currentLevel:"+currentLevel.get());
 
+    }
+
+    public void close()
+    {
+        this.allFinished=true;
     }
 }
