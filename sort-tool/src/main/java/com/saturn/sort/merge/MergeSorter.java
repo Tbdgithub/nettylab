@@ -52,13 +52,14 @@ public class MergeSorter {
             throw new Exception("bad config getMaxLinePerFile:"+config.getMaxLinePerFile());
         }
 
-        ensureEmptyTempDir(tempDirFile);
+        //ensureEmptyTempDir(tempDirFile);
         if (!outputDirFile.exists()) {
             outputDirFile.mkdir();
         }
 
 
         if(config.isNeedCut()) {
+            ensureEmptyTempDir(tempDirFile);
             FileCutter cutter = new FileCutter(inputDirFile, tempDirFile, config.getMaxLinePerFile(), watcher);
             cutter.start();
             System.out.println("File cut finished");
