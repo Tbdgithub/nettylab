@@ -4,5 +4,6 @@
   "tempDir": "/sz/MergeSorter/tempDir",
   "MaxLinePerFile": 100000,
   "antiDuplicate":true,
-  "progressShowIntervalSecond":10
+  "progressShowIntervalSecond":10,
+  "needCut":false
 }

@@ -58,10 +58,15 @@ public class MergeSorter {
         }
 
 
-        FileCutter cutter = new FileCutter(inputDirFile, tempDirFile, config.getMaxLinePerFile(),watcher);
-        cutter.start();
-
-        System.out.println("File cut finished");
+        if(config.isNeedCut()) {
+            FileCutter cutter = new FileCutter(inputDirFile, tempDirFile, config.getMaxLinePerFile(), watcher);
+            cutter.start();
+            System.out.println("File cut finished");
+        }
+        else
+        {
+            System.out.println("skip cut process");
+        }
 
         DirMerger dirMerger = new DirMerger(tempDirFile,config.isAntiDuplicate(),watcher);
         dirMerger.start();

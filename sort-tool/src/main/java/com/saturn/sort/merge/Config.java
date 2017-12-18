@@ -9,6 +9,16 @@ public class Config {
     private boolean antiDuplicate;
     private int progressShowIntervalSecond;
 
+    private boolean needCut;
+
+    public boolean isNeedCut() {
+        return needCut;
+    }
+
+    public void setNeedCut(boolean needCut) {
+        this.needCut = needCut;
+    }
+
     public int getProgressShowIntervalSecond() {
         return progressShowIntervalSecond;
     }
