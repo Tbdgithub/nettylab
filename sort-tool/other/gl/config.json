@@ -2,8 +2,8 @@
   "inputDir": "/sz/MergeSorter/inputDir",
   "outputDir": "/sz/MergeSorter/outputDir",
   "tempDir": "/sz/MergeSorter/tempDir",
-  "MaxLinePerFile": 100000,
+  "MaxLinePerFile": 1000000,
   "antiDuplicate":true,
   "progressShowIntervalSecond":10,
-  "needCut":false
+  "needCut":true
 }

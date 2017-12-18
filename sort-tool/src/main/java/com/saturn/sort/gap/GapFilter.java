@@ -49,38 +49,6 @@ public class GapFilter {
     }
 
 
-//    private void showCurrent() {
-//        double tps = (stopwatch.getMillseconds() > 0 ? inputCounter.get() / stopwatch.getSeconds() : 0);
-//
-//        System.out.println("inputCounter:" + inputCounter.get() + " cost ms:" + stopwatch.getMillseconds()
-//                + " tps:" + FormatHelper.printDecimalRadix2(tps));
-//
-//        tps = (stopwatch.getMillseconds() > 0 ? filterCounter.get() / stopwatch.getSeconds() : 0);
-//        System.out.println("filterCounter:" + filterCounter.get() + " cost ms:" + stopwatch.getMillseconds()
-//                + " tps:" + FormatHelper.printDecimalRadix2(tps));
-//
-//        tps = (stopwatch.getMillseconds() > 0 ? outputCounter.get() / stopwatch.getSeconds() : 0);
-//        System.out.println("outputCounter:" + outputCounter.get() + " cost ms:" + stopwatch.getMillseconds()
-//                + " tps:" + FormatHelper.printDecimalRadix2(tps));
-//    }
-
-//    private void showProgress() {
-//
-//        System.out.println("Start monitor progress");
-//        while (!outputFinished) {
-//            try {
-//                showCurrent();
-//                Thread.sleep(progressIntervalMs);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            showCurrent();
-//        }
-//
-//        System.out.println("Monitor All finished");
-//
-//    }
-
     public static void main(String [] args)
     {
         try {
