@@ -116,16 +116,16 @@ public class ProgressWatcher {
 
         System.out.println("cutCounter count:" + cutCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
 
-         tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+         tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? readSourceCounter.get() / costSecond : 0);
         System.out.println("readSourceCounter count:" + readSourceCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
 
-        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? mergeCompareCounter.get() / costSecond : 0);
         System.out.println("mergeCompareCounter count:" + mergeCompareCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
 
-        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? mergeWriteCounter.get() / costSecond : 0);
         System.out.println("mergeWriteCounter count:" + mergeWriteCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
 
-        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? cutCounter.get() / costSecond : 0);
+        tpsFormat= CommonHelper.printDecimalRadix2(costSecond > 0 ? antiDupMergeCounter.get() / costSecond : 0);
         System.out.println("antiDupMergeCounter count:" + antiDupMergeCounter.get() + " cost second:" + costSecondFormat + " tps:" + tpsFormat);
 
         System.out.println("currentLevel:"+currentLevel.get());
