@@ -1,5 +1,6 @@
 package com.saturn.common.sort.quicksort;
 
+import com.google.gson.Gson;
 import org.junit.Test;
 
 /**
@@ -11,12 +12,13 @@ public class QuickSorter_test {
     public void test1()
     {
         try {
-            QuickSorter worker = new QuickSorter();
+            QuickSorter<Integer> worker = new QuickSorter();
 
-            int[] A = {2, 8, 7, 1, 3, 5, 6, 4};
+            Integer[] A = {2, 8, 7, 1, 3, 5, 6, 4};
 
-            //System.out.println(new Gson());
+            System.out.println(new Gson().toJson(A));
             worker.quickSort(A, 0, A.length - 1);
+            System.out.println(new Gson().toJson(A));
         }catch (Exception ex)
         {
             ex.printStackTrace();
