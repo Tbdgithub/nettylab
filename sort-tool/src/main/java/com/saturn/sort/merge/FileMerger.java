@@ -76,7 +76,9 @@ public class FileMerger {
                 ++fileLine;
                 lastSuccVal = val;
             } else {
-                watcher.getAntiDupMergeCounter().incrementAndGet();
+                if(watcher!=null) {
+                    watcher.getAntiDupMergeCounter().incrementAndGet();
+                }
             }
         } else {
             //bw.write(val + lineSeperator);
@@ -191,7 +193,9 @@ public class FileMerger {
                         leftSucc = false;
                     }
 
-                    watcher.getMergeCompareCounter().incrementAndGet();
+                    if(watcher!=null) {
+                        watcher.getMergeCompareCounter().incrementAndGet();
+                    }
                     //bw.write(succVal + lineSeperator);
                     writeValue(succVal);
                     continue;

@@ -18,4 +18,13 @@ public class FileMerger_test {
         fileMerger.start();
     }
 
+    @Test
+    public void test2()
+    {
+        FileMerger fileMerger=new FileMerger( new FilePair(new File("/sz/tempDir/31_convert.txt"),
+                new File("/sz/tempDir/20180131.txt")),
+                new File("/sz/tempDir"),100,true);
+        fileMerger.start();
+    }
+
 }
