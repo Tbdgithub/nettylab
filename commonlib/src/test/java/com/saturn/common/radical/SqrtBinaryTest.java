@@ -1,11 +1,23 @@
 package com.saturn.common.radical;
 
-import com.saturn.common.radical.RadicalBinary;
-import com.saturn.common.radical.RadicalBuilder;
-import com.saturn.common.radical.RadicalNewton;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SqrtBinaryTest {
+
+
+    @Before
+    public void setup()
+    {
+        System.out.println("before");
+    }
+
+    @After
+    public void after()
+    {
+        System.out.println("after");
+    }
 
     @Test
     public void test1() {

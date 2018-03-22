@@ -12,7 +12,7 @@ public class RadicalNewton extends RadicalBuilder {
         double result = n/2;
         while (Math.abs(result * result - n) > small) {
 
-            result= (result+ n/result)/2;
+            result= (result+ n/result)/2;//这一条关键
             this.count++;
             if (count >= maxCount) {
                 System.out.println("over maxCount:" + maxCount);
