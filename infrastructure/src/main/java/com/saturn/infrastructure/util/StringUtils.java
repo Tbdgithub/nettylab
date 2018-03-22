@@ -5,6 +5,8 @@ package com.saturn.infrastructure.util;
  */
 public class StringUtils {
 
+    //test
+
     public static boolean isNullOrEmpty(String str) {
         return str == null ? true : str.equals("");
     }
