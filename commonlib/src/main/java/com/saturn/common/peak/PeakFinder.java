@@ -21,6 +21,12 @@ public class PeakFinder {
 
         while (left < right) {
             int middle = (left + right) / 2;
+            //1.先中分
+            //2.通过相邻两项比较，确定斜率delta
+            //3.如果delta>0,则peak一定在middle+1,right 之间,闭区间
+            //4.如果delta<0,则peak一定在left,middle之间，闭区间
+            //5.如果delta==0,则peak在left,middle,闭区间 ；middle+1,right ，闭区间，都可能
+
             if (a[middle] < a[middle + 1]) {
                 //middle+1 一定不越界
                 //右分
@@ -29,8 +35,8 @@ public class PeakFinder {
             } else if (a[middle] == a[middle + 1]) {
 
                 //无法判断,左分，右分均可
-                right = middle;
-                //left = middle + 1;
+               // right = middle;
+                left = middle + 1;
 
             } else {
                 //左分
@@ -38,6 +44,8 @@ public class PeakFinder {
                 //middle 有可能是
 
             }
+
+            System.out.println("middle:"+middle+" ["+left+","+right+"]");
         }
 
          //left ==right 时

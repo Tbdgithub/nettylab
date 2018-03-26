@@ -11,7 +11,7 @@ public class PeakFinderTest {
 
         //int[] a = {1, 2, 3, 3, 2, 1};
         //
-        int[] a = {1, 2, 3, 3, 4, 4, 5, 2, 1,7,1};
+        int[] a = {1, 2, 3, 3, 4, 4, 5, 2, 1,1,7,7,1};
         PeakFinder finder = new PeakFinder();
         int result = finder.getPeak1(a);
         System.out.println("result:" + result);
