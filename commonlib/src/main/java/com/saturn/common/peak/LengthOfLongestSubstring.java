@@ -9,7 +9,7 @@ public class LengthOfLongestSubstring {
 
     public static void main(String[] args) {
 
-        String input = "abcabcde";
+        String input = "aabbccddabcdefgabcde";
 
         //int result = lengthOfLongestSubstring_Brute(input);
         int result = lengthOfLongestSubstring_slidewindow(input);
