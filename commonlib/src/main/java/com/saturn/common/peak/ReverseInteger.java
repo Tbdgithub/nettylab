@@ -16,7 +16,7 @@ public class ReverseInteger {
     public static void main(String[] args) {
 
         //  int result = reverse(1534236469);
-        int result = reverse(-2147483648);
+        int result = reverse(1534236469);
         System.out.println("result:" + result);
     }
 
@@ -27,12 +27,12 @@ public class ReverseInteger {
         //3.正负
         //4. overflow check
 
-        //long current = Math.abs((long)x);
-        //-2147483648
-//        System.out.println("is minuse:" +( Integer.MIN_VALUE==-Integer.MIN_VALUE));
-//        System.out.println(x<0);
-//        System.out.println((-x)<0);
-        long current = Math.abs(x);
+        //1.10进制，循环取余数
+        //2. 结束条件,当前除值为0
+        //3.正负
+        //4. overflow check
+
+        long current = Math.abs((long)x);
         long sum = 0;
 
         do {
