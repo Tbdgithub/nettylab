@@ -16,8 +16,30 @@ public class ReverseInteger {
     public static void main(String[] args) {
 
         //  int result = reverse(1534236469);
-        int result = reverse(1534236469);
+        //int result = reverse(1534236469);
+        int result = reverse1(Integer.MIN_VALUE);
         System.out.println("result:" + result);
+    }
+
+    public static int reverse1(int x) {
+
+        //hard to understand
+        int result = 0;
+
+        while (x != 0) {
+            int tail = x % 10;
+            int newResult = result * 10 + tail;
+
+            //check overflow
+            if ((newResult - tail) / 10 != result) {
+                return 0;
+            }
+
+            result = newResult;
+            x = x / 10;
+        }
+
+        return result;
     }
 
     public static int reverse(int x) {
@@ -27,12 +49,7 @@ public class ReverseInteger {
         //3.正负
         //4. overflow check
 
-        //1.10进制，循环取余数
-        //2. 结束条件,当前除值为0
-        //3.正负
-        //4. overflow check
-
-        long current = Math.abs((long)x);
+        long current = Math.abs((long) x);
         long sum = 0;
 
         do {
