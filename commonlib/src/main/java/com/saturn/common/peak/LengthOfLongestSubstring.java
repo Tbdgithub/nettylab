@@ -11,22 +11,54 @@ public class LengthOfLongestSubstring {
 
     public static void main(String[] args) {
 
-        String input = "abcabcde";
+        String input = "abccbaabcd";
 
         //int result = lengthOfLongestSubstring_Brute(input);
-        int result = lengthOfLongestSubstring_slidewindow(input);
+        //int result = lengthOfLongestSubstring_slidewindow_opt(input);
+        int result = lengthOfLongestSubstring_slidewindow_Array(input);
 
 
         System.out.println("result:" + result);
     }
 
+
+    public static int lengthOfLongestSubstring_slidewindow_Array(String s) {
+        int len = 0;
+        int[] indexArray = new int[128];
+        for (int i = 0, j = 0; j < s.length(); j++) {
+
+            i = Math.max(indexArray[s.charAt(j)], i);
+            len = Math.max(len, j - i + 1);// j-i+1 为 当前window长度
+            //map.put(s.charAt(j), j + 1); //值为index的右边
+            indexArray[s.charAt(j)] = j + 1;
+        }
+
+        return len;
+
+    }
+
     public static int lengthOfLongestSubstring_slidewindow_opt(String s) {
 
-        //1.windows 放不同的
+        //1.map 放s 放不同的
         //2.向右移动
         //
+        int len = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0, j = 0; j < s.length(); j++) {
 
-        throw new NotImplementedException();
+            //j 从0到 N-1
+            if (map.containsKey(s.charAt(j))) {
+                //i 直接跳到该到的位置.
+                //i 左边的index 已处理过
+                i = Math.max(map.get(s.charAt(j)), i);
+            }
+
+            len = Math.max(len, j - i + 1);// j-i+1 为 当前window长度
+            map.put(s.charAt(j), j + 1); //值为index的右边
+        }
+
+        return len;
+
     }
 
     public static int lengthOfLongestSubstring_slidewindow(String s) {
