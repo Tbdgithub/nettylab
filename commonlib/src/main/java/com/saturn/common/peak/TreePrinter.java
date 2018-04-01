@@ -144,7 +144,7 @@ public class TreePrinter {
 
             while (!stack.isEmpty()) {
 
-                //从节点节到根
+                //从节点节到根,反着处理
                 TreeNode pop = stack.pop();
 
                 String line = "";
@@ -160,7 +160,7 @@ public class TreePrinter {
                 String b = "";
                 String c = "";
 
-                //出现过
+                //未出现过的路径
                 if (!beforeSet.contains(pop))
                 {
 
@@ -202,15 +202,16 @@ public class TreePrinter {
                     //
                     if (pop.parent != null) {
                         //有双亲的
-                        a = C2; //关键
-                        b = C5;
+                        a = C2; //关键连接线总为|
+                        //a = C6;
+                        b = C5; //合并为空
                         c = "";
 
                         //节点是最右的
 
                         if(isRightest(pop,showFile))
                         {
-                            a = C6;
+                            a = C6; //最右的去掉顶部连接线
                         }
 
                     } else {
