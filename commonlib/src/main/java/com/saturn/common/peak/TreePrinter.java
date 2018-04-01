@@ -39,16 +39,15 @@ public class TreePrinter {
 
     public void start() {
 
-        //System.out.println(dir.getAbsoluteFile());
 
-        //TreeNode root = build();
-
-        TreeNode root = buildTreeByDir(new File("/sz"));
+        TreeNode root = buildTreeByDir(
+                ///Program Files/JetBrains/CLion 2017.2.3/bin/cmake_cygwin
+                new File("/Program Files/JetBrains/CLion 2017.2.3/bin/cmake/"));
 
         List<TreeNode> path = traverse_recursive(root);
 
-        print(path);
-        //System.out.println(new Gson().toJson(path));
+        print(path,true);
+
 
 
     }
@@ -58,8 +57,8 @@ public class TreePrinter {
 
         buildTreeByDirInner(root, dir);
 
-        TreeNode result=root.childNodes.get(0);
-        result.parent=null;
+        TreeNode result = root.childNodes.get(0);
+        result.parent = null;
         return result;
 
     }
@@ -68,15 +67,11 @@ public class TreePrinter {
 
         TreeNode newNode = new TreeNode(dir.getName());
 
-        if(dir.isDirectory())
-        {
-            newNode.isDir=true;
+        if (dir.isDirectory()) {
+            newNode.isDir = true;
         }
 
-
         parent.add(newNode);
-
-
 
         if (dir.isDirectory()) {
             File[] files = dir.listFiles();
@@ -89,7 +84,34 @@ public class TreePrinter {
     }
 
 
-    public void print(List<TreeNode> nodes) {
+    public void printSimple(List<TreeNode> nodes) {
+
+        for (TreeNode item : nodes) {
+
+            Stack<TreeNode> stack = new Stack<>();
+
+            TreeNode current = item;
+
+            while (current != null) {
+
+
+                stack.push(current);
+                current = current.parent;
+            }
+
+            while (!stack.isEmpty()) {
+                System.out.print("----" + stack.pop().name);
+            }
+
+            System.out.println();
+        }
+
+
+    }
+
+
+
+    public void print(List<TreeNode> nodes ,boolean showFile) {
 
         //分为a+b+c
         //连接线 + 双亲线 +节点名称
@@ -98,11 +120,17 @@ public class TreePrinter {
         //1.1没有有双亲的，没有连接线，没有双亲线
         //1.2有双亲的
 
-
-        HashMap<String, String> levelMap = new HashMap<>();
+        //已出现过的路径，合并连接线
+        Set<TreeNode> beforeSet = new HashSet<>();
 
         //paths
         for (TreeNode item : nodes) {
+
+            if(!showFile) {
+                if (!item.isDir) {
+                    continue;
+                }
+            }
 
             Stack<TreeNode> stack = new Stack<>();
             TreeNode current = item;
@@ -132,24 +160,36 @@ public class TreePrinter {
                 String b = "";
                 String c = "";
 
-                String key = pop.level + "-" + pop.name;
-
-
-                if (!levelMap.containsKey(key)) {
+                //出现过
+                if (!beforeSet.contains(pop))
+                {
 
                     //有双亲
                     if (pop.parent != null) {
                         //是最右的节点
-                        if (pop.isRightest()) {
+
+                        if(isRightest(pop,showFile))
+                        {
                             a = C3;
                         } else {
                             a = C4;
                         }
 
                         b = C1;
+
+//                        if(showFile)
+//                        {
+//                            //todo 格式化file
+////                            if(!pop.isDir)
+////                            {
+////                                a = C5;
+////                                b = C5;
+////                            }
+//                        }
+
                         c = showName(pop);
                     } else {
-                        //没有双亲
+                        //没有双亲,根节点
                         a = "";
                         b = "";
                         c = showName(pop);
@@ -161,15 +201,18 @@ public class TreePrinter {
                     //出现过的,要合并
                     //
                     if (pop.parent != null) {
-                        //有双新的
-                        a = C2;
+                        //有双亲的
+                        a = C2; //关键
                         b = C5;
                         c = "";
 
                         //节点是最右的
-                        if (pop.isRightest()) {
+
+                        if(isRightest(pop,showFile))
+                        {
                             a = C6;
                         }
+
                     } else {
                         //根节点，全为空
                         a = "";
@@ -179,9 +222,11 @@ public class TreePrinter {
                 }
 
                 line = a + b + c;
-                levelMap.put(key, pop.name);
+
+                beforeSet.add(pop);
                 lines.add(line);
             }
+
 
             while (!lines.isEmpty()) {
                 System.out.print(lines.pop());
@@ -192,15 +237,27 @@ public class TreePrinter {
 
     }
 
-    private String showName(TreeNode node)
+    private boolean isRightest(TreeNode node,boolean showFile)
     {
-        if(node.isDir)
+
+        if(showFile)
         {
-            return node.name+" (dir)";
+            return node.isRightest();
         }
         else
         {
-            return node.name+" (file)";
+            return node.isRightestDir();
+
+        }
+    }
+
+
+    private String showName(TreeNode node) {
+        if (node.isDir) {
+            return node.name;
+        } else {
+            return node.name ;
+                    //+ " (file)";
         }
     }
 
@@ -373,9 +430,30 @@ public class TreePrinter {
             return false;
         }
 
-        //1. has right brother |-
-        //2. has child  -
-        //3.
+        public boolean isRightestDir() {
+
+            if (parent != null) {
+
+                int rightestIndex=-1;
+
+                for(int i=0;i<parent.childNodes.size();i++)
+                {
+                    if(parent.childNodes.get(parent.childNodes.size()-1- i ).isDir)
+                    {
+                        rightestIndex=parent.childNodes.size()-1- i;
+                        break;
+                    }
+                }
+
+
+                if(parent.childNodes.indexOf(this)==rightestIndex)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
 
     }
