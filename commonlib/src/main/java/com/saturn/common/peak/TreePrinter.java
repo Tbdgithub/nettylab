@@ -41,7 +41,10 @@ public class TreePrinter {
 
         //System.out.println(dir.getAbsoluteFile());
 
-        TreeNode root = build();
+        //TreeNode root = build();
+
+        TreeNode root = buildTreeByDir(new File("/sz"));
+
         List<TreeNode> path = traverse_recursive(root);
 
         print(path);
@@ -49,6 +52,42 @@ public class TreePrinter {
 
 
     }
+
+    public TreeNode buildTreeByDir(File dir) {
+        TreeNode root = new TreeNode("dummy");
+
+        buildTreeByDirInner(root, dir);
+
+        TreeNode result=root.childNodes.get(0);
+        result.parent=null;
+        return result;
+
+    }
+
+    private void buildTreeByDirInner(TreeNode parent, File dir) {
+
+        TreeNode newNode = new TreeNode(dir.getName());
+
+        if(dir.isDirectory())
+        {
+            newNode.isDir=true;
+        }
+
+
+        parent.add(newNode);
+
+
+
+        if (dir.isDirectory()) {
+            File[] files = dir.listFiles();
+
+            for (File item : files) {
+                buildTreeByDirInner(newNode, item);
+            }
+
+        }
+    }
+
 
     public void print(List<TreeNode> nodes) {
 
@@ -81,46 +120,39 @@ public class TreePrinter {
                 TreeNode pop = stack.pop();
 
                 String line = "";
-                String C1  ="────";
-                String C2="│";
+                String C1 = "────";
+                String C2 = "│";
 
-                String C3="└";
-                String C4="├";
-                String C5="    ";
-                String C6=" ";
+                String C3 = "└";
+                String C4 = "├";
+                String C5 = "    ";
+                String C6 = " ";
 
-                String a="";
-                String b="";
-                String c="";
+                String a = "";
+                String b = "";
+                String c = "";
 
                 String key = pop.level + "-" + pop.name;
-
 
 
                 if (!levelMap.containsKey(key)) {
 
                     //有双亲
-                    if(pop.parent!=null)
-                    {
+                    if (pop.parent != null) {
                         //是最右的节点
-                        if(pop.isRightest())
-                        {
-                            a=C3;
-                        }
-                        else
-                        {
-                            a=C4;
+                        if (pop.isRightest()) {
+                            a = C3;
+                        } else {
+                            a = C4;
                         }
 
-                        b=C1;
-                        c=pop.name;
-                    }
-                    else
-                    {
+                        b = C1;
+                        c = showName(pop);
+                    } else {
                         //没有双亲
-                        a="";
-                        b="";
-                        c=pop.name;
+                        a = "";
+                        b = "";
+                        c = showName(pop);
                     }
 
 
@@ -128,29 +160,25 @@ public class TreePrinter {
 
                     //出现过的,要合并
                     //
-                    if(pop.parent!=null)
-                    {
+                    if (pop.parent != null) {
                         //有双新的
-                        a=C2;
-                        b=C5;
-                        c="";
+                        a = C2;
+                        b = C5;
+                        c = "";
 
                         //节点是最右的
-                        if(pop.isRightest())
-                        {
-                            a=C6;
+                        if (pop.isRightest()) {
+                            a = C6;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //根节点，全为空
-                        a="";
-                        b="";
-                        c="";
+                        a = "";
+                        b = "";
+                        c = "";
                     }
                 }
 
-                line=a+b+c;
+                line = a + b + c;
                 levelMap.put(key, pop.name);
                 lines.add(line);
             }
@@ -162,6 +190,18 @@ public class TreePrinter {
             System.out.println();
         }
 
+    }
+
+    private String showName(TreeNode node)
+    {
+        if(node.isDir)
+        {
+            return node.name+" (dir)";
+        }
+        else
+        {
+            return node.name+" (file)";
+        }
     }
 
 
@@ -278,6 +318,8 @@ public class TreePrinter {
         TreeNode parent;
 
         int level = 0;
+
+        boolean isDir;
 
         public int getLevel() {
             return level;
