@@ -1,5 +1,7 @@
 package com.saturn.common.peak;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -43,7 +45,7 @@ public class PreOrderTraverse {
 
         //  List<Integer> list = traverse_recursive(root);
         List<Integer> list = traverse_stack(root);
-        // System.out.println(new Gson().toJson(list));
+         System.out.println(new Gson().toJson(list));
 
 
     }
@@ -61,12 +63,12 @@ public class PreOrderTraverse {
             while (current != null) {
                 result.add(current.val);//D;
                 stack.push(current);
-                current = current.left;
+                current = current.left; //L
             }
 
             TreeNode parent = stack.pop();
 
-            current = parent.right;
+            current = parent.right; //R
 
         }
 

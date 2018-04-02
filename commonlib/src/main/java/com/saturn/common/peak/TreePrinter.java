@@ -42,7 +42,7 @@ public class TreePrinter {
 
         TreeNode root = buildTreeByDir(
                 ///Program Files/JetBrains/CLion 2017.2.3/bin/cmake_cygwin
-                new File("/Program Files/JetBrains/CLion 2017.2.3/bin/cmake/"));
+                new File("/sz"));
 
         List<TreeNode> path = traverse_recursive(root);
 
