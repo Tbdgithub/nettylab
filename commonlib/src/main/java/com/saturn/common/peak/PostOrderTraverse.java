@@ -86,14 +86,13 @@ public class PostOrderTraverse {
             TreeNode parent = stack.pop();
             int access = flag.pop();
             if (access == 0) {
-
                 //第二次机会
                 flag.push(1);
-                stack.push(parent);
+                stack.push(parent);//等等再来
                 System.out.println("stack :" + parent.val + " flag:" + 1);
                 current = parent.right; //R
             } else {
-                //第三次机会，弹出
+                //第三次,最后的机会，弹出
                 result.add(parent.val);//D
                 System.out.println("pop :" + parent.val + " flag:" + 1);
             }

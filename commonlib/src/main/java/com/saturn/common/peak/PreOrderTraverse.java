@@ -64,11 +64,13 @@ public class PreOrderTraverse {
                 result.add(current.val);//D;
                 stack.push(current);
                 current = current.left; //L
+                //一路向左
             }
 
-            TreeNode parent = stack.pop();
+            TreeNode parent = stack.pop();//找到回来的路
 
             current = parent.right; //R
+            //转向右边
 
         }
 
