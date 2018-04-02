@@ -22,7 +22,7 @@ public class TopKFrequent {
             map.put(n, temp);
         }
 
-        //准备bucket  0(m)
+        //准备bucket  0(m) 长度为max+1 ; 0,1,.... max;
         List<Integer>[] bucket = new List[max + 1];
         for (int n : map.keySet()) {
             int freq = map.get(n);
