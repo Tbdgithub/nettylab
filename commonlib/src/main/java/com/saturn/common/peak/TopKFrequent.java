@@ -13,6 +13,10 @@ public class TopKFrequent {
 
     public List<Integer> topKFrequent(int[] nums, int k) {
 
+        //1. 按key 分区
+        //2. 按value bucket 倒排
+        //3. 取最高的K个
+
         //max bucket ,最大的frequency ,避免outofindex
         int max = 0;
         Map<Integer, Integer> map = new HashMap<>();
