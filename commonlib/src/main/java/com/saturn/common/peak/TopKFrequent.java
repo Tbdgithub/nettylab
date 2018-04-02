@@ -18,7 +18,7 @@ public class TopKFrequent {
         //3. 取最高的K个
 
         //max bucket ,最大的frequency ,避免outofindex
-        int max = 0;
+        int max = 0;//减少内存
         Map<Integer, Integer> map = new HashMap<>();
         for (int n : nums) {
             int temp = map.getOrDefault(n, 0) + 1;
