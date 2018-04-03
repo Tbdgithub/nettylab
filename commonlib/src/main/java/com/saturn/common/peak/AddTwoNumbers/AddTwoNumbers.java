@@ -183,24 +183,7 @@ public class AddTwoNumbers {
         System.out.println();
     }
 
-    public ListNode reverse(ListNode root) {
 
-        //1. 拆一个
-        //2.反连一个
-        ListNode a = root;
-        ListNode b = a.next;
-
-        while (b != null) {
-            ListNode temp = b.next;
-            b.next = a;//
-            a = b;
-            b = temp;
-        }
-
-        root.next = null;
-
-        return a;
-    }
 
     public static void main(String[] args) {
 
