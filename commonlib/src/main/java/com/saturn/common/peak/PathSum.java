@@ -1,5 +1,6 @@
 package com.saturn.common.peak;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PathSum {
@@ -32,33 +33,76 @@ public class PathSum {
     }
 
     public void start() {
-        TreeNode n1 = new TreeNode(5);
-        TreeNode n2 = new TreeNode(4);
-        TreeNode n3 = new TreeNode(8);
-        TreeNode n4 = new TreeNode(11);
+        TreeNode n1 = new TreeNode(0);
+        TreeNode n2 = new TreeNode(1);
+        TreeNode n3 = new TreeNode(1);
+        //TreeNode n11 = new TreeNode(2);
 
         n1.left = n2;
         n1.right = n3;
-        n2.left = n4;
+        //n5.right = n11;
 
-        boolean flag = hasPathSum(n1, 22);
+        //boolean flag = hasPathSum(n1, 22);
+        //boolean flag = hasPathSum(n1, 1);
+        boolean flag = hasPathSum1(n1, 1);
         System.out.println(flag);
 
     }
 
     public boolean hasPathSum(TreeNode root, int sum) {
 
+        //  List<Integer> paths = new ArrayList<>();
+        TreeNode dummy = new TreeNode(0);
 
-        return hasPathSum_recursive(root, 0, sum);
+        hasPathSum_recursive(dummy, root, null, sum);
+
+        return dummy.val > 0;
     }
 
-    public boolean hasPathSum_recursive(TreeNode root, int add, int target) {
+    public boolean hasPathSum1(TreeNode root, int sum) {
+
+        if (root == null) {
+            return false;
+        }
+
+        if (root.left == null && root.right == null
+                && sum - root.val == 0) {
+            return true;
+        }
+
+        //关键在sum-root.val
+        return hasPathSum1(root.right, sum - root.val)
+                ||
+                hasPathSum1(root.left, sum - root.val);
 
 
-        //  boolean flag = hasPathSum_recursive(root.left, );
-        // flag = hasPathSum(paths, parentPath, root.right);
-        return false;
     }
 
 
+    public void hasPathSum_recursive(TreeNode find, TreeNode root, Integer add, int target) {
+
+        if (find.val > 0) {
+            return;
+        }
+
+        if (root == null) {
+            return;
+        }
+
+        if (add == null) {
+            add = root.val;
+        } else {
+            add = add + root.val;
+        }
+
+        if (root.left == null && root.right == null) {
+            if (add == target) {
+                find.val = 1;
+            }
+        }
+
+        hasPathSum_recursive(find, root.left, add, target);
+        hasPathSum_recursive(find, root.right, add, target);
+
+    }
 }
