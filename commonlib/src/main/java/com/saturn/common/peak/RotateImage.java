@@ -23,18 +23,17 @@ public class RotateImage {
             return;
         }
 
-//        int row= matrix.length;
-//        int col=matrix[0].length;
 
-        //原理 :
+        //输入 :
         // x1 :1 2 3
         // x2 :4 5 6
         // x3 :7 8 9
         //1. 行矩阵上下旋转
-        // x1,x2,x3 - >x3,x2,x1
-        // 行转列
+        // x1,x2,x3
+        //2. 行转列 ,转置
+        // ->
         // x3` x2` x1`
-
+         //结果:
         // 7 4 1
         // 8 5 2
         // 9 6 3
