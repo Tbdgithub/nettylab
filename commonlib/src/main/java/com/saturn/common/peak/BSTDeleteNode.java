@@ -66,72 +66,150 @@ public class BSTDeleteNode {
         TreeNode root = initDelete();
 
         printLevel(root);
-        TreeNode deleted = deleteNode(root, 15);
+        //TreeNode deleted = deleteNode(root, 15);
+        TreeNode deleted = deleteNode_iter(root, 15);
 
         printLevel(deleted);
     }
 
+    public TreeNode deleteNode_iter(TreeNode root, int key) {
+
+        TreeNode prevNode = null;
+        TreeNode cur = root;
+
+        boolean nodeFound = false;
+
+        while (cur != null) {
+
+            if (cur.val == key) {
+                nodeFound = true;
+                break;
+            }
+
+            prevNode = cur;
+            if (cur.val > key) {
+                cur = cur.left;
+            } else {
+                cur = cur.right;
+            }
+
+        }
+
+        if (!nodeFound) {
+            return root;
+        }
+
+
+        if (prevNode == null)
+        //if(root.left==null  &&root.right==null)
+        {
+            //cur is root
+            return deleteNode(cur);
+        }
+
+        if (prevNode.left == cur) {
+            //是左子
+            prevNode.left = deleteNode(cur);
+        } else {
+            prevNode.right = deleteNode(cur);
+        }
+
+        return root;
+    }
+
+    private TreeNode deleteNode(TreeNode node) {
+        if (node.left == null && node.right == null) {
+            return null;
+        }
+
+        if (node.left != null && node.right != null) {
+
+            TreeNode minRightSubtreeNode = findAndDeleteMinRightSubtree(node);
+            node.val = minRightSubtreeNode.val;
+
+        } else if (node.left != null) {
+            node = node.left; //
+        } else {
+            node = node.right;
+        }
+
+        return node;
+    }
+
+    private TreeNode findAndDeleteMinRightSubtree(TreeNode node) {
+        TreeNode prevNode = node;
+        node = node.right;
+
+        boolean noLeftTree = node.left == null;
+
+        if (noLeftTree) {
+            prevNode.right = node.right;//node无左子 //删除node
+            node.right = null;
+            return node;
+        }
+
+        //node 有左子
+        while (node.left != null) {
+            prevNode = node;
+            node = node.left;
+        }
+
+        prevNode.left = node.right;//删除node
+        node.right = null;
+        return node;
+    }
+
     /**
-     *1.如果root 为空，则返空
-     *2.如果 key 小于root值，则到root的左子树删除;左孩子为删除后左子树根节点
-     *3.如果 key 大于root值，则到root右子子树删除;右孩子为删除后右子树根节点
-     *4.如果 key 等于root值，则 分情况
-     *4.1.如果root 左孩子为空，则返回右孩子
-     *4.2.如果root 右孩子为空，则返回左孩子
-     *
-     *4.左右孩子均为空,则返回空
-     *5.左右孩子都不为空，则找到右孩子的最小节点,设置root 值为这个最小节点,设置root的右节点为root的删除了对应节点的子树根
-     *
+     * 1.如果root 为空，则返空
+     * 2.如果 key 小于root值，则到root的左子树删除;左孩子为删除后左子树根节点
+     * 3.如果 key 大于root值，则到root右子子树删除;右孩子为删除后右子树根节点
+     * 4.如果 key 等于root值，则 分情况
+     * 4.1.如果root 左孩子为空，则返回右孩子
+     * 4.2.如果root 右孩子为空，则返回左孩子
+     * <p>
+     * 4.左右孩子均为空,则返回空
+     * 5.左右孩子都不为空，则找到右孩子的最小节点,设置root 值为这个最小节点,设置root的右节点为root的删除了对应节点的子树根
      */
     public TreeNode deleteNode(TreeNode root, int key) {
 
-        if(root==null)
-        {
+        if (root == null) {
             return null;
         }
 
 
-        if(key<root.val)
-        {
-            root.left=deleteNode(root.left,key);
-        }
-        else if(key>root.val)
-        {
-            root.right=deleteNode(root.right,key);
-        }
-        else
-        {
-            if(root.left==null)
-            {
+        if (key < root.val) {
+            root.left = deleteNode(root.left, key);
+        } else if (key > root.val) {
+            root.right = deleteNode(root.right, key);
+        } else {
+            if (root.left == null) {
                 //root被删除了.因为上层调用的子节点为root.right ，就把root删除了
                 return root.right;
             }
 
-            if(root.right==null)
-            {
+            if (root.right == null) {
                 //root被删除了.因为上层调用的子树节点为root.right=xx ，就把root删除了
                 return root.left;
             }
 
-            TreeNode min=findRightSmallest(root.right);
-            root.val=min.val; //替换最小值
+            TreeNode min = findRightSmallest(root.right);
+            root.val = min.val; //替换最小值
             //关键
             //右子树最小值要删除掉
-            root.right=deleteNode(root.right,min.val);
-          //  System.out.println(root.right);
+            root.right = deleteNode(root.right, min.val);
+            //  System.out.println(root.right);
         }
 
 
         return root;
     }
 
-    private TreeNode findRightSmallest(TreeNode node){
-        while(node.left != null){
+    private TreeNode findRightSmallest(TreeNode node) {
+        while (node.left != null) {
             node = node.left;
         }
         return node;
     }
-
 
 
     TreeNode search_iter(TreeNode x, int key) {
@@ -214,6 +292,7 @@ public class BSTDeleteNode {
 
         }
 
+        System.out.println();
         System.out.println("----------------------------");
 
     }
