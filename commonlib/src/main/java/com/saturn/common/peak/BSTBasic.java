@@ -19,10 +19,14 @@ public class BSTBasic {
 
     private void start() {
 
-        TreeNode root = init();
+        TreeNode root = initDelete();
+        //init();
 
         printLevel(root);
-        //TreeNode find= job.search_recursive(root,13);
+        TreeNode find = search_recursive(root, 6);
+
+        TreeNode delRoot= deleleNode(root, find);
+        printLevel(delRoot);
         //  TreeNode find = search_iter(root, 15);
         //  System.out.println(find != null ? find.val : "null");
         //TreeNode min= job.getMinSubTreeHead(find);
@@ -50,12 +54,18 @@ public class BSTBasic {
         TreeNode(int x) {
             val = x;
         }
+
+        public void addLeft(TreeNode node) {
+            this.left = node;
+            node.parent = this;
+        }
+
+        public void addRight(TreeNode node) {
+            this.right = node;
+            node.parent = this;
+        }
     }
 
-    public TreeNode deleteNode(TreeNode root, int key) {
-
-        return null;
-    }
 
     private TreeNode init() {
         TreeNode n1 = new TreeNode(15);
@@ -100,6 +110,42 @@ public class BSTBasic {
 
         n11.left = n22;
         n22.parent = n11;
+
+        return n1;
+    }
+
+    private TreeNode initDelete() {
+        TreeNode n1 = new TreeNode(15);
+        TreeNode n2 = new TreeNode(5);
+        TreeNode n3 = new TreeNode(16);
+        TreeNode n4 = new TreeNode(3);
+        TreeNode n5 = new TreeNode(12);
+
+        TreeNode n7 = new TreeNode(20);
+        TreeNode n10 = new TreeNode(10);
+        TreeNode n11 = new TreeNode(13);
+        TreeNode n14 = new TreeNode(18);
+        TreeNode n15 = new TreeNode(23);
+
+        TreeNode n20 = new TreeNode(6);
+        TreeNode n41 = new TreeNode(7);
+
+        n1.addLeft(n2);
+        n1.addRight(n3);
+
+        n2.addLeft(n4);
+        n2.addRight(n5);
+
+        n3.addRight(n7);
+
+        n5.addLeft(n10);
+        n5.addRight(n11);
+
+        n7.addLeft(n14);
+        n7.addRight(n15);
+
+        n10.addLeft(n20);
+        n20.addRight(n41);
 
         return n1;
     }
@@ -239,13 +285,57 @@ public class BSTBasic {
         return newRoot;
     }
 
-    private void deleleNode(TreeNode root, int key) {
+    private TreeNode deleleNode(TreeNode root, TreeNode z) {
+
+       // TreeNode resultRoot=null;
+        TreeNode y = null;//要删除的
+        TreeNode x= null ;// y的子树
+        if (z.left == null || z.right == null) {
+        y=z;
+        }
+        else
+        {
+            y=getSuccessor(z);
+        }
+
+        if(y.left!=null)
+        {
+            x=y.left;
+        }
+        else
+        {
+            x=y.right;
+        }
+
+        if(y.parent==null)
+        {
+            //resultRoot=x;
+            return x;
+        }
+        else {
+            if (y.parent.left == y) {
+                y.parent.left = x;
+            } else {
+
+                y.parent.right=x;
+            }
+        }
+
+        if(y!=z)
+        {
+            int temp=z.val;
+            z.val=y.val;
+            y.val=temp;
+        }
+
+
+        return root;
 
     }
 
     //按层次遍历，同层打一行
     private void printLevel(TreeNode root) {
-
+        int high = 40;
         if (root == null) {
             return;
         }
@@ -262,9 +352,25 @@ public class BSTBasic {
             if (prev == null
                     || current.level != prev.level) {
                 System.out.println();
+                StringBuilder padLeft = new StringBuilder();
+
+
+                for (int i = 0; i < high - current.level; i++) {
+                    padLeft.append(" ");
+                }
+
+                System.out.print(padLeft.toString());
             }
 
-            System.out.print(current.node.val + " ");
+
+            StringBuilder padMiddle = new StringBuilder();
+
+            for (int i = 0; i < current.level; i++) {
+                padMiddle.append(" ");
+            }
+
+            System.out.print(current.node.val + padMiddle.toString());
+
             prev = current;
             if (current.node.left != null) {
                 queue.add(new MetaItem(current.node.left, current.level + 1));
@@ -276,6 +382,8 @@ public class BSTBasic {
 
 
         }
+
+        System.out.println("----------------------------");
 
     }
 
