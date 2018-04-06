@@ -1,5 +1,12 @@
 package com.saturn.common.peak;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+
 public class BSTBasic {
 
     public static void main(String[] args) {
@@ -13,9 +20,11 @@ public class BSTBasic {
     private void start() {
 
         TreeNode root = init();
+
+        printLevel(root);
         //TreeNode find= job.search_recursive(root,13);
-        TreeNode find = search_iter(root, 15);
-        System.out.println(find != null ? find.val : "null");
+        //  TreeNode find = search_iter(root, 15);
+        //  System.out.println(find != null ? find.val : "null");
         //TreeNode min= job.getMinSubTreeHead(find);
         //System.out.println(min!=null ?min.val:"null");
 
@@ -26,9 +35,9 @@ public class BSTBasic {
 
         //TreeNode presessor = job.getPresessor(find);
         //System.out.println(presessor != null ? presessor.val : "null");
-        TreeNode newNode = new TreeNode(8);
-        TreeNode newRoot = insert(root, newNode);
-        System.out.println(newRoot);
+        //  TreeNode newNode = new TreeNode(8);
+        //  TreeNode newRoot = insert(root, newNode);
+        // System.out.println(newRoot);
     }
 
     public class TreeNode {
@@ -234,7 +243,49 @@ public class BSTBasic {
 
     }
 
+    //按层次遍历，同层打一行
     private void printLevel(TreeNode root) {
 
+        if (root == null) {
+            return;
+        }
+
+        Queue<MetaItem> queue = new LinkedBlockingDeque<>();
+
+        queue.add(new MetaItem(root, 1));
+
+        MetaItem prev = null;
+        while (queue.size() > 0) {
+            MetaItem current = queue.remove();
+
+
+            if (prev == null
+                    || current.level != prev.level) {
+                System.out.println();
+            }
+
+            System.out.print(current.node.val + " ");
+            prev = current;
+            if (current.node.left != null) {
+                queue.add(new MetaItem(current.node.left, current.level + 1));
+            }
+
+            if (current.node.right != null) {
+                queue.add(new MetaItem(current.node.right, current.level + 1));
+            }
+
+
+        }
+
+    }
+
+    class MetaItem {
+        TreeNode node;
+        int level;
+
+        public MetaItem(TreeNode node, int level) {
+            this.level = level;
+            this.node = node;
+        }
     }
 }
