@@ -2,10 +2,7 @@ package com.saturn.common.peak;
 
 import com.saturn.common.tree.TreeNode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class TreeNodePrinter {
@@ -41,19 +38,19 @@ public class TreeNodePrinter {
         n1.right = n3;
 
         n2.left = n4;
-        n2.right=n5;
+        n2.right = n5;
 
-        n3.left=n6;
-        n3.right=n7;
+        n3.left = n6;
+        n3.right = n7;
 
-        n4.left=n8;
-        n4.right=n9;
-        n5.left=n10;
-        n5.right=n11;
-        n6.left=n12;
-        n6.right=n13;
-        n7.left=n14;
-        n7.right=n15;
+        n4.left = n8;
+        n4.right = n9;
+        n5.left = n10;
+        n5.right = n11;
+        n6.left = n12;
+        n6.right = n13;
+        n7.left = n14;
+        n7.right = n15;
         //n8.left=n16;
 
 
@@ -66,6 +63,7 @@ public class TreeNodePrinter {
             return;
         }
 
+        int height = getHeight(root);
 
         Stack<List<MetaItem>> layers = new Stack<List<MetaItem>>();
 
@@ -80,7 +78,7 @@ public class TreeNodePrinter {
             MetaItem current = queue.remove();
 
             if (current.level != lastLevel) {
-                System.out.println();
+                //System.out.println();
                 lastLevel = current.level;
 
                 layers.add(line);
@@ -91,38 +89,60 @@ public class TreeNodePrinter {
             line.add(current);
 
 
-            if (!current.isNull) {
+            if(current.isNull)
+            {
 
+                MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
+                current.left = emptyItem;
+                emptyItem.parent = current;
 
-                MetaItem newMetaItem = new MetaItem(current.node.left, current.level + 1, current.node.left == null);
-                current.left = newMetaItem;
-                queue.add(newMetaItem);
-
-                MetaItem rightMetaItem = new MetaItem(current.node.right, current.level + 1, current.node.right == null);
-
-                current.right = rightMetaItem;
-                queue.add(rightMetaItem);
+                MetaItem dataItem = new MetaItem(null, current.level + 1, true);
+                current.right = dataItem;
+                dataItem.parent = current;
 
             }
+            else {
 
-        }
+                if (current.node.left == null) {
+                    MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
+                    current.left = emptyItem;
+                    emptyItem.parent = current;
+                } else {
+                    MetaItem dataItem = new MetaItem(current.node.left, current.level + 1, false);
+                    current.left = dataItem;
+                    dataItem.parent = current;
+                }
 
-
-        if (line.size() > 0) {
-            boolean allEmpty = false;
-
-            for (MetaItem item : line) {
-                if (item.isNull) {
-                    allEmpty = true;
-                    break;
+                if (current.node.right == null) {
+                    MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
+                    current.right = emptyItem;
+                    emptyItem.parent = current;
+                } else {
+                    MetaItem dataItem = new MetaItem(current.node.right, current.level + 1, false);
+                    current.right = dataItem;
+                    dataItem.parent = current;
                 }
             }
 
-            if (!allEmpty) {
-                layers.add(line);
+
+            if (current.level < height) {
+
+                 queue.add(current.left);
+                 queue.add(current.right);
+
             }
+
         }
 
+       // layers.add(line);
+//
+        if (line.size() > 0) {
+
+            layers.add(line);
+
+        }
+
+        //  makeFullTree(layers);
         //////////////////////////
         calcIndex(layers);
 
@@ -131,15 +151,53 @@ public class TreeNodePrinter {
 
     }
 
-    private void calcIndex(Stack<List<MetaItem>> layers) {
+//    private void makeFullTree(Stack<List<MetaItem>> layers) {
+//
+//        Iterator<List<MetaItem>> iterable = layers.iterator();
+//
+//        while (iterable.hasNext()) {
+//            List<MetaItem> line = iterable.next();
+//            for (MetaItem item : line) {
+//                //无右子
+//
+//                if (item.parent == null) {
+//                    //root node
+//                    continue;
+//                }
+//
+//                if (item.parent.left == item) {
+//                    if (item.parent.right == null) {
+//                        System.out.println("right is null");
+//
+//                        MetaItem emptyItem = new MetaItem(null, item.level, false);
+//                        item.parent.right = emptyItem;
+//                        emptyItem.parent = item.parent;
+//                    }
+//                }
+//
+//                if (item.parent.right == item) {
+//                    if (item.parent.left == null) {
+//                        System.out.println("left is null");
+//                        MetaItem emptyItem = new MetaItem(null, item.level, false);
+//                        item.parent.left = emptyItem;
+//                        emptyItem.parent = item.parent;
+//                    }
+//                }
+//
+//
+//            }
+//        }
+//
+//    }
 
+    private void calcIndex(Stack<List<MetaItem>> layers) {
 
 
         if (layers.size() == 0) {
             return;
         }
 
-       Stack<List<MetaItem>> printStack=new Stack<>();
+        Stack<List<MetaItem>> printStack = new Stack<>();
 
         List<MetaItem> bottomLine = layers.pop();
         printStack.push(bottomLine);
@@ -171,7 +229,7 @@ public class TreeNodePrinter {
 
             for (MetaItem col : popLine) {
 
-                col.startIndex = ( col.left.startIndex+col.right.startIndex)/2;
+                col.startIndex = (col.left.startIndex + col.right.startIndex) / 2;
                 //lastIndex = lastIndex + wordWidth + siblingWidth;
 
 //                if (!col.isNull) {
@@ -186,13 +244,13 @@ public class TreeNodePrinter {
         }
 
         ///////////////////////////////////
-       // System.out.println("\r\n------------------start------------");
+        // System.out.println("\r\n------------------start------------");
 
-        while (printStack.size()>0) {
+        while (printStack.size() > 0) {
             List<MetaItem> item0 = printStack.pop();
 
             printValue(wordWidth, siblingWidth, item0);
-            printConnectionLine(wordWidth,siblingWidth,item0);
+            printConnectionLine(wordWidth, siblingWidth, item0);
 
 
         }
@@ -201,53 +259,42 @@ public class TreeNodePrinter {
     }
 
     private void printConnectionLine(int wordWidth, int siblingWidth, List<MetaItem> item0) {
-        int currentIndex=0;
-        for(MetaItem col:item0)
-        {
+        int currentIndex = 0;
+        for (MetaItem col : item0) {
 
-            while (currentIndex<col.startIndex)
-            {
+            while (currentIndex < col.startIndex) {
                 System.out.print(" ");
                 currentIndex++;
             }
 
-            String value="";
-            if(!col.isNull) {
+            String value = "";
+            if (!col.isNull) {
 
-                if(col.left!=null && !col.left.isNull)
-                {
-                    value+="/";
-                }
-                else
-                {
-                    value+=" ";
+                if (col.left != null && !col.left.isNull) {
+                    value += "/";
+                } else {
+                    value += " ";
                 }
 
-                if(col.right!=null && !col.right.isNull)
-                {
-                    value+="\\";
-                }
-                else
-                {
-                    value+=" ";
+                if (col.right != null && !col.right.isNull) {
+                    value += "\\";
+                } else {
+                    value += " ";
                 }
 
-                System.out.print(fillWidth(value,wordWidth,' '));
+                System.out.print(fillWidth(value, wordWidth, ' '));
 
-            }
-            else
-            {
-                System.out.print(fillWidth(value,wordWidth,' '));
+            } else {
+                System.out.print(fillWidth(value, wordWidth, ' '));
             }
 
-            currentIndex+=wordWidth;
+            currentIndex += wordWidth;
 
-            for(int i=0;i<siblingWidth;i++)
-            {
+            for (int i = 0; i < siblingWidth; i++) {
                 System.out.print(" ");
             }
 
-            currentIndex+=wordWidth;
+            currentIndex += wordWidth;
 
         }
 
@@ -255,51 +302,44 @@ public class TreeNodePrinter {
     }
 
     private void printValue(int wordWidth, int siblingWidth, List<MetaItem> item0) {
-        int currentIndex=0;
-        for(MetaItem col:item0)
-        {
+        int currentIndex = 0;
+        for (MetaItem col : item0) {
 
-            while (currentIndex<col.startIndex)
-            {
+            while (currentIndex < col.startIndex) {
                 System.out.print(" ");
                 currentIndex++;
             }
 
-            String value=" ";
-            if(!col.isNull) {
-                value=String.valueOf(col.node.val);
-                System.out.print(fillWidth(value,wordWidth,' '));
+            String value = " ";
+            if (!col.isNull) {
+                value = String.valueOf(col.node.val);
+                System.out.print(fillWidth(value, wordWidth, ' '));
 
-            }
-            else
-            {
-                System.out.print(fillWidth(value,wordWidth,' '));
+            } else {
+                System.out.print(fillWidth(value, wordWidth, ' '));
             }
 
-            currentIndex+=wordWidth;
+            currentIndex += wordWidth;
 
-            for(int i=0;i<siblingWidth;i++)
-            {
+            for (int i = 0; i < siblingWidth; i++) {
                 System.out.print(" ");
             }
 
-            currentIndex+=wordWidth;
+            currentIndex += wordWidth;
 
         }
 
         System.out.println();
     }
 
-    private String fillWidth(String item,int padLen, char padChar)
-    {
+    private String fillWidth(String item, int padLen, char padChar) {
 
 
-        int padLeft=padLen- item.length() >0?padLen- item.length():0;
+        int padLeft = padLen - item.length() > 0 ? padLen - item.length() : 0;
 
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        for(int i=0;i<padLeft;i++)
-        {
+        for (int i = 0; i < padLeft; i++) {
             sb.append(padChar);
         }
 
@@ -326,6 +366,8 @@ public class TreeNodePrinter {
 
         MetaItem left;
         MetaItem right;
+
+        MetaItem parent;
 
 
         public MetaItem(TreeNode node, int level, boolean isNull) {

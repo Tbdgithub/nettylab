@@ -72,7 +72,9 @@ public class BSTDeleteNode {
         //TreeNode deleted = deleteNode(root, 15);
         TreeNode deleted = deleteNode_iter(root, 15);
 
-        printLevel(deleted);
+      //  printLevel(deleted);
+
+        printer.print(deleted);
     }
 
     public TreeNode deleteNode_iter(TreeNode root, int key) {
