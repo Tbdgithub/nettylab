@@ -1,6 +1,7 @@
 package com.saturn.common.peak;
 
 import com.saturn.common.peak.AddTwoNumbers.AddTwoNumbers;
+import com.saturn.common.tree.TreeNode;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -8,15 +9,15 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class BSTDeleteNode {
 
 
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) {
-            val = x;
-        }
-    }
+//    public class TreeNode {
+//        int val;
+//        TreeNode left;
+//        TreeNode right;
+//
+//        TreeNode(int x) {
+//            val = x;
+//        }
+//    }
 
     public static void main(String[] args) {
 
@@ -65,7 +66,9 @@ public class BSTDeleteNode {
     public void start() {
         TreeNode root = initDelete();
 
-        printLevel(root);
+       // printLevel(root);
+        TreeNodePrinter printer=new TreeNodePrinter();
+        printer.print(root);
         //TreeNode deleted = deleteNode(root, 15);
         TreeNode deleted = deleteNode_iter(root, 15);
 

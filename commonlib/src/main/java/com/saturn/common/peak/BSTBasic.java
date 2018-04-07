@@ -22,7 +22,11 @@ public class BSTBasic {
         TreeNode root = initDelete();
         //init();
 
-        printLevel(root);
+        TreeNodePrinter printer=new TreeNodePrinter();
+
+       // printer.print(root);
+
+        //printLevel(root);
         TreeNode find = search_recursive(root, 6);
 
         TreeNode delRoot= deleleNode(root, find);
