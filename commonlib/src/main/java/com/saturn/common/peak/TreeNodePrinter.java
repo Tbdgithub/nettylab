@@ -66,9 +66,7 @@ public class TreeNodePrinter {
         int height = getHeight(root);
 
         Stack<List<MetaItem>> layers = new Stack<List<MetaItem>>();
-
         Queue<MetaItem> queue = new LinkedBlockingDeque<>();
-
         queue.add(new MetaItem(root, 1, false));
 
         List<MetaItem> line = new ArrayList<>();
@@ -78,7 +76,7 @@ public class TreeNodePrinter {
             MetaItem current = queue.remove();
 
             if (current.level != lastLevel) {
-                //System.out.println();
+
                 lastLevel = current.level;
 
                 layers.add(line);
@@ -134,15 +132,8 @@ public class TreeNodePrinter {
 
         }
 
-       // layers.add(line);
-//
-        if (line.size() > 0) {
+        layers.add(line);
 
-            layers.add(line);
-
-        }
-
-        //  makeFullTree(layers);
         //////////////////////////
         calcIndex(layers);
 
@@ -151,44 +142,6 @@ public class TreeNodePrinter {
 
     }
 
-//    private void makeFullTree(Stack<List<MetaItem>> layers) {
-//
-//        Iterator<List<MetaItem>> iterable = layers.iterator();
-//
-//        while (iterable.hasNext()) {
-//            List<MetaItem> line = iterable.next();
-//            for (MetaItem item : line) {
-//                //无右子
-//
-//                if (item.parent == null) {
-//                    //root node
-//                    continue;
-//                }
-//
-//                if (item.parent.left == item) {
-//                    if (item.parent.right == null) {
-//                        System.out.println("right is null");
-//
-//                        MetaItem emptyItem = new MetaItem(null, item.level, false);
-//                        item.parent.right = emptyItem;
-//                        emptyItem.parent = item.parent;
-//                    }
-//                }
-//
-//                if (item.parent.right == item) {
-//                    if (item.parent.left == null) {
-//                        System.out.println("left is null");
-//                        MetaItem emptyItem = new MetaItem(null, item.level, false);
-//                        item.parent.left = emptyItem;
-//                        emptyItem.parent = item.parent;
-//                    }
-//                }
-//
-//
-//            }
-//        }
-//
-//    }
 
     private void calcIndex(Stack<List<MetaItem>> layers) {
 
@@ -205,18 +158,8 @@ public class TreeNodePrinter {
         int lastIndex = 0;
         for (MetaItem col : bottomLine) {
 
-
             col.startIndex = lastIndex;
             lastIndex = lastIndex + wordWidth + siblingWidth;
-
-//            if (!col.isNull) {
-//                System.out.print(col.node.val + " ");
-//            } else {
-//                System.out.print("(null)" + " ");
-//            }
-//
-//            System.out.print(" index:[" + col.startIndex+"]");
-
 
         }
 
@@ -230,15 +173,6 @@ public class TreeNodePrinter {
             for (MetaItem col : popLine) {
 
                 col.startIndex = (col.left.startIndex + col.right.startIndex) / 2;
-                //lastIndex = lastIndex + wordWidth + siblingWidth;
-
-//                if (!col.isNull) {
-//                    System.out.print(col.node.val + " ");
-//                } else {
-//                    System.out.print("(null)" + " ");
-//                }
-//
-//                System.out.print(" index:[" + col.startIndex+"]");
 
             }
         }
@@ -359,14 +293,12 @@ public class TreeNodePrinter {
 
     class MetaItem {
         TreeNode node;
-        //int value;
         int level;
         boolean isNull;
         int startIndex;
 
         MetaItem left;
         MetaItem right;
-
         MetaItem parent;
 
 
@@ -376,22 +308,6 @@ public class TreeNodePrinter {
             this.isNull = isNull;
         }
 
-//        public MetaItem(TreeNode node, int level) {
-//            this.level = level;
-//            this.node=node;
-//            this.isNull=false;
-//        }
     }
 
-
-//    class TreeNode {
-//        int val;
-//        TreeNode left;
-//        TreeNode right;
-//
-//        TreeNode(int x) {
-//            val = x;
-//        }
-//
-//    }
 }
