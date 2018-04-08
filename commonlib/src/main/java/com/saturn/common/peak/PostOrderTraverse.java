@@ -1,6 +1,7 @@
 package com.saturn.common.peak;
 
 import com.google.gson.Gson;
+import com.saturn.common.tree.TreeNode;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -9,15 +10,15 @@ import java.util.Stack;
 
 public class PostOrderTraverse {
 
-    class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) {
-            val = x;
-        }
-    }
+//    class TreeNode {
+//        int val;
+//        TreeNode left;
+//        TreeNode right;
+//
+//        TreeNode(int x) {
+//            val = x;
+//        }
+//    }
 
     public static void main(String[] args) {
 
@@ -56,6 +57,10 @@ public class PostOrderTraverse {
 
 
         // List<Integer> list = traverse_recursive(root);
+
+        TreeNodePrinter printer=new TreeNodePrinter();
+        printer.print(n1);
+
         List<Integer> list = traverse_stack(n1);
         System.out.println(new Gson().toJson(list));
 
