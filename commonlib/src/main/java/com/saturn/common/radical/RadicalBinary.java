@@ -1,5 +1,8 @@
 package com.saturn.common.radical;
 
+/**
+ * 求根
+ */
 public class RadicalBinary extends RadicalBuilder {
 
     public RadicalBinary(int n) {
