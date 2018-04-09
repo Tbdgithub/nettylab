@@ -1,7 +1,5 @@
 package com.saturn.common.array;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class WordSearch {
@@ -19,15 +17,7 @@ public class WordSearch {
 //        System.out.println(a);
 //        a ^= a;
 //      //  System.out.println(a);
-        char[][] board = {{'A', 'C', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
-
-        // char[][] board = {{'a'}};
-        print(board);
-
-
-         Stack<Character> path=new Stack<>();
-         boolean exists = exist_recursive(board, "ACU",path);
-//
+        //
 //        System.out.println();
 //         while (!path.isEmpty())
 //        {
@@ -36,7 +26,16 @@ public class WordSearch {
 
         // boolean exists = exist(board, "a");
 
-       // boolean exists = exist_iter(board, "FC");
+        // boolean exists = exist_iter(board, "FC");
+        //char[][] board = {{'A', 'C', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        // char[][] board = {{'a'}};
+        char[][] board = {{'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'b'}};
+        print(board);
+        Stack<Character> path = new Stack<>();
+        //boolean exists = exist_recursive(board, "ACU", path);
+        boolean exists = exist_iter(board, "aaaaaaaaaaaaaaaaaaaa");
+
+
         System.out.println("exists:" + exists);
     }
 
@@ -49,46 +48,101 @@ public class WordSearch {
         }
     }
 
+//
+//    private boolean exist_iter1(char[][] board, String words) {
+//
+//    }
 
     private boolean exist_iter(char[][] board, String words) {
         char[] wordChars = words.toCharArray();
         //1. 用一个stack
 
+        if (wordChars.length == 0) {
+            return false;
+        }
 
-        Stack<Point> stack=new Stack<>();
-
+        Stack<Point> stack = new Stack<>();
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
 
+                if (board[i][j] != wordChars[0]) {
+                    continue;
+                }
 
-               // Point current=new Point(i,j);
-              //  stack.push(current);
-                int wordIndex=0;
-                while ( wordIndex<wordChars.length)
-                {
-                    if(wordIndex==wordChars.length)
-                    {
+                Point current = new Point(i, j);
+                // current.val = board[i][j];
+                current.wordIndex = 0;
+                stack.push(current);
+                board[i][j] ^= 256;
+
+                while (stack.size() > 0) {
+                    Point prev = stack.pop();
+
+                    if (prev.wordIndex >= wordChars.length - 1) {
                         return true;
                     }
 
-                    if(wordChars[wordIndex]!=board[i][j])
-                    {
-
-                        //4 个方向
-                        //board[current.x][current.y] ^= 256;
-
-
-                        break;
+                    if (prev.arrowIndex >= 4) {
+                        board[prev.x][prev.y] ^= 256;
+                        continue;
                     }
 
-                    wordIndex++;
-                }
+                    //move next;
+                    //check 1,2,3,4
 
+                    int nextX = -1;
+                    int nextY = -1;
+                    int nextArrow = prev.arrowIndex;
+
+                    if (nextArrow == 0) {
+                        nextX = prev.x - 1;
+                        nextY = prev.y;
+
+                    } else if (nextArrow == 1) {
+                        nextX = prev.x;
+                        nextY = prev.y + 1;
+                    } else if (nextArrow == 2) {
+                        nextX = prev.x + 1;
+                        nextY = prev.y;
+                    } else if (nextArrow == 3) {
+                        nextX = prev.x;
+                        nextY = prev.y - 1;
+                    } else {
+                        System.out.println("impossible");
+                    }
+
+                    nextArrow++;
+                    prev.arrowIndex = nextArrow;
+
+                    if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board[prev.x].length) {
+                        stack.push(prev);
+                        continue;
+                    }
+
+                    int nextWordIndex = prev.wordIndex + 1;
+
+                    if (wordChars[nextWordIndex] == board[nextX][nextY]) {
+                        stack.push(prev);//
+                        //push next
+                        //
+                        Point milestone = new Point(nextX, nextY);
+                        // milestone.val = board[nextX][nextY];
+                        milestone.wordIndex = prev.wordIndex + 1;
+                        milestone.arrowIndex = 0;
+                        stack.push(milestone);
+                        // System.out.print(board[nextX][nextY] + " ");
+
+                        board[nextX][nextY] ^= 256;
+
+                        continue;
+                    } else {
+                        stack.push(prev);//
+                    }
+                }
 
             }
         }
-
 
         return false;
     }
@@ -96,12 +150,15 @@ public class WordSearch {
     class Point {
         int x;
         int y;
+        int arrowIndex;
+        int wordIndex;
+        // char val;
 
         public Point(int x, int y) {
             this.x = x;
             this.y = y;
-
         }
+
     }
 
 
@@ -145,11 +202,10 @@ public class WordSearch {
         }
 
         //此时说明 wordIndex 命中
-        System.out.print(board[x][y]+" ("+x+","+y+") ");
+        System.out.print(board[x][y] + " (" + x + "," + y + ") ");
         //标识visited
         //已visited 过的，不能包含在要检查的点中
         board[x][y] ^= 256;
-
 
 
         //大搜四方
@@ -161,14 +217,14 @@ public class WordSearch {
 
             //恢复
             board[x][y] ^= 256;
-           // System.out.print(board[x][y]+" (Y) ");
+            // System.out.print(board[x][y]+" (Y) ");
             path.add(board[x][y]);
             return true;
         } else {
             //恢复
             board[x][y] ^= 256;
 
-           // System.out.print(board[x][y] + " (N) ");
+            // System.out.print(board[x][y] + " (N) ");
             return false;
         }
 
