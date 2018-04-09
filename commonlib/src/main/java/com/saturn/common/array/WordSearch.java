@@ -111,34 +111,28 @@ public class WordSearch {
                     } else if (nextArrow == 3) {
                         nextX = prev.x;
                         nextY = prev.y - 1;
-                    } else {
-                        System.out.println("impossible");
                     }
 
                     //arrow move next
                     nextArrow++;
                     prev.arrowIndex = nextArrow;
 
+                    stack.push(prev);
+
                     if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board[prev.x].length) {
                         //没找到
-                        stack.push(prev);
                         continue;
                     }
 
                     int nextWordIndex = prev.wordIndex + 1;
-                    //回退,arrow 之前已加1
-                    stack.push(prev);//
                     if (wordChars[nextWordIndex] == board[nextX][nextY]) {
 
                         Point milestone = new Point(nextX, nextY);
-
                         milestone.wordIndex = prev.wordIndex + 1;
                         milestone.arrowIndex = 0;
                         stack.push(milestone);
-
                         //标识已visited
                         board[nextX][nextY] ^= 256;
-
                         continue;
                     }
                 }
