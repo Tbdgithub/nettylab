@@ -1,5 +1,6 @@
 package com.saturn.common.array;
 
+import java.util.Iterator;
 import java.util.Stack;
 
 public class WordSearch {
@@ -27,13 +28,14 @@ public class WordSearch {
         // boolean exists = exist(board, "a");
 
         // boolean exists = exist_iter(board, "FC");
-        //char[][] board = {{'A', 'C', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        char[][] board = {{'A', 'C', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
         // char[][] board = {{'a'}};
-        char[][] board = {{'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'b'}};
+        // char[][] board = {{'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'b'}};
         print(board);
         Stack<Character> path = new Stack<>();
         //boolean exists = exist_recursive(board, "ACU", path);
-        boolean exists = exist_iter(board, "aaaaaaaaaaaaaaaaaaaa");
+        //aaaaaaaaaaaaaaaaaaaa
+        boolean exists = exist_iter(board, "ACCESEEDASF");
 
 
         System.out.println("exists:" + exists);
@@ -73,7 +75,9 @@ public class WordSearch {
                 //第一个匹配的
                 Point current = new Point(i, j);
                 current.wordIndex = 0;
+                current.val = board[i][j];
                 stack.push(current);
+                //标识visited
                 board[i][j] ^= 256;
 
                 while (stack.size() > 0) {
@@ -81,12 +85,21 @@ public class WordSearch {
 
                     if (prev.wordIndex >= wordChars.length - 1) {
                         //已找完了
+
+                        System.out.println("Path:");
+                        Iterator<Point> iterator = stack.iterator();
+                        while (iterator.hasNext()) {
+                          System.out.print(iterator.next().val+" ");
+                        }
+
+                        System.out.print(prev.val+" ");
+
                         return true;
                     }
 
                     //上下左右都找了
                     if (prev.arrowIndex >= 4) {
-                        //恢复visited
+                        //清除visited
                         board[prev.x][prev.y] ^= 256;
                         continue;
                     }
@@ -127,9 +140,11 @@ public class WordSearch {
                     int nextWordIndex = prev.wordIndex + 1;
                     if (wordChars[nextWordIndex] == board[nextX][nextY]) {
 
+                        //  System.out.println( board[nextX][nextY]+" ");
                         Point milestone = new Point(nextX, nextY);
                         milestone.wordIndex = prev.wordIndex + 1;
                         milestone.arrowIndex = 0;
+                        milestone.val = board[nextX][nextY];
                         stack.push(milestone);
                         //标识已visited
                         board[nextX][nextY] ^= 256;
@@ -148,7 +163,7 @@ public class WordSearch {
         int y;
         int arrowIndex;
         int wordIndex;
-        // char val;
+        char val;
 
         public Point(int x, int y) {
             this.x = x;
