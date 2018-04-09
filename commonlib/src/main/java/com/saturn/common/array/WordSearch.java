@@ -70,8 +70,8 @@ public class WordSearch {
                     continue;
                 }
 
+                //第一个匹配的
                 Point current = new Point(i, j);
-                // current.val = board[i][j];
                 current.wordIndex = 0;
                 stack.push(current);
                 board[i][j] ^= 256;
@@ -80,10 +80,13 @@ public class WordSearch {
                     Point prev = stack.pop();
 
                     if (prev.wordIndex >= wordChars.length - 1) {
+                        //已找完了
                         return true;
                     }
 
+                    //上下左右都找了
                     if (prev.arrowIndex >= 4) {
+                        //恢复visited
                         board[prev.x][prev.y] ^= 256;
                         continue;
                     }
@@ -112,32 +115,31 @@ public class WordSearch {
                         System.out.println("impossible");
                     }
 
+                    //arrow move next
                     nextArrow++;
                     prev.arrowIndex = nextArrow;
 
                     if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board[prev.x].length) {
+                        //没找到
                         stack.push(prev);
                         continue;
                     }
 
                     int nextWordIndex = prev.wordIndex + 1;
-
+                    //回退,arrow 之前已加1
+                    stack.push(prev);//
                     if (wordChars[nextWordIndex] == board[nextX][nextY]) {
-                        stack.push(prev);//
-                        //push next
-                        //
+
                         Point milestone = new Point(nextX, nextY);
-                        // milestone.val = board[nextX][nextY];
+
                         milestone.wordIndex = prev.wordIndex + 1;
                         milestone.arrowIndex = 0;
                         stack.push(milestone);
-                        // System.out.print(board[nextX][nextY] + " ");
 
+                        //标识已visited
                         board[nextX][nextY] ^= 256;
 
                         continue;
-                    } else {
-                        stack.push(prev);//
                     }
                 }
 
