@@ -17,5 +17,6 @@ dependencies {
     compile group: 'io.netty', name: 'netty-all', version: '4.1.12.Final'
 
     compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
+    compile group: 'com.google.guava', name: 'guava', version: '24.0-jre'
 
 }

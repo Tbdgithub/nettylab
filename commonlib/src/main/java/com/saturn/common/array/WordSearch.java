@@ -72,6 +72,8 @@ public class WordSearch {
                     continue;
                 }
 
+
+
                 //第一个匹配的
                 Point current = new Point(i, j);
                 current.wordIndex = 0;
