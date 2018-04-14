@@ -6,7 +6,46 @@ public class Tbter {
         Tbter job = new Tbter();
         // job.start();
 
-        job.test1();
+        //job.test1();
+        job.test2();
+    }
+
+    public void test2() {
+
+
+        TreeNode n1 = genEmptyNode();
+
+        printer.print(n1);
+
+
+        TreeNode newNode = new TreeNode(41);
+        TreeNode afterInsertedRoot = insert(n1, newNode);
+       // printer.print(afterInsertedRoot);
+
+        System.out.println("----------------");
+        newNode = new TreeNode(38);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+//
+        System.out.println("-------insert 31 ---------");
+        newNode = new TreeNode(31);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+//
+        System.out.println("-----insert 12 -----------");
+        newNode = new TreeNode(12);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+//
+        System.out.println("------insert 19----------");
+        newNode = new TreeNode(19);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+//
+        System.out.println("----insert 8------------");
+        newNode = new TreeNode(8);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
     }
 
     RbtPrinter printer = new RbtPrinter();
@@ -192,10 +231,12 @@ public class Tbter {
 
             } else {
                 //右枝
+                System.err.println("not imp");
             }
         }
 
-        root.color = NodeColor.Black;
+        //root.color = NodeColor.Black;
+        resultRoot.color=NodeColor.Black;
 
         return resultRoot;
 

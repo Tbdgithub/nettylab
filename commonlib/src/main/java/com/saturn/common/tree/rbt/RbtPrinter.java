@@ -11,7 +11,13 @@ public class RbtPrinter {
     int siblingWidth = 2;
 
     public void print(TreeNode root) {
-        if (root == null) {
+
+//        if (root == null) {
+//            return;
+//        }
+
+        if(root==NullNode.Instance)
+        {
             return;
         }
 
