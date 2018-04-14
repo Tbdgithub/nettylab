@@ -20,7 +20,7 @@ public class Tbter {
 
         TreeNode newNode = new TreeNode(41);
         TreeNode afterInsertedRoot = insert(n1, newNode);
-       // printer.print(afterInsertedRoot);
+        // printer.print(afterInsertedRoot);
 
         System.out.println("----------------");
         newNode = new TreeNode(38);
@@ -44,6 +44,21 @@ public class Tbter {
 //
         System.out.println("----insert 8------------");
         newNode = new TreeNode(8);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+
+        System.out.println("----insert xx------------");
+        newNode = new TreeNode(69);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+
+        System.out.println("----insert xx------------");
+        newNode = new TreeNode(80);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+        printer.print(afterInsertedRoot);
+
+        System.out.println("----insert xx------------");
+        newNode = new TreeNode(83);
         afterInsertedRoot = insert(afterInsertedRoot, newNode);
         printer.print(afterInsertedRoot);
     }
@@ -207,7 +222,7 @@ public class Tbter {
                     z = z.parent.parent;
 
                     System.out.println("case 1");
-                    printer.print(root);
+                    printer.print(resultRoot);
                 } else {
                     //case 2,case 3
                     if (z == z.parent.right) {
@@ -231,12 +246,39 @@ public class Tbter {
 
             } else {
                 //右枝
-                System.err.println("not imp");
+
+                TreeNode y = z.parent.parent.left;
+                if (y.color == NodeColor.Red) {
+                    //case 1
+                    z.parent.color = NodeColor.Black;
+                    y.color = NodeColor.Black;
+                    z.parent.parent.color = NodeColor.Red;
+                    z=z.parent.parent;
+                    System.out.println("right case 1");
+                    printer.print(resultRoot);
+                }
+                else
+                {
+                    //case 2
+                    if(z==z.parent.left)
+                    {
+                        z=z.parent;
+                        resultRoot=rotateRight(resultRoot, z);
+                        System.out.println("right case 2");
+                        printer.print(resultRoot);
+                    }
+
+                    System.out.println("right case 3");
+                    z.parent.color=NodeColor.Black;
+                    z.parent.parent.color=NodeColor.Red;
+                    resultRoot=rotateLeft(resultRoot,z.parent.parent);
+                    printer.print(resultRoot);
+                }
             }
         }
 
         //root.color = NodeColor.Black;
-        resultRoot.color=NodeColor.Black;
+        resultRoot.color = NodeColor.Black;
 
         return resultRoot;
 
