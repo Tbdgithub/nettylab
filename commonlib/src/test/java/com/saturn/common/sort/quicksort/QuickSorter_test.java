@@ -58,7 +58,7 @@ public class QuickSorter_test {
                 int[] a = new int[N];
                 int[] b = new int[N];
                 for (int j = 0; j < a.length; j++) {
-                    int temp=random.nextInt();
+                    int temp=random.nextInt(10);
                     a[j] = temp;
                     b[j]=temp;
                 }
@@ -66,10 +66,13 @@ public class QuickSorter_test {
                 //draft.process(a);
 
                 YanWeiMingSimple.QuickSort(a);
-                YanWeiMingSimple.QuickSort(b);
+                //YanWeiMingSimple.QuickSort(b);
+                draft.process(b);
 
                 if (!valueEqual(a, b)) {
                     System.err.println("not equal");
+                    draft.print(a);
+                    draft.print(b);
                     return;
                 }
 
@@ -77,11 +80,6 @@ public class QuickSorter_test {
 
             System.out.println("all equal");
 
-            //System.out.println(new Gson().toJson(A));
-
-
-           // draft.process(A);
-           // System.out.println(new Gson().toJson(A));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
