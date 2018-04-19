@@ -11,7 +11,13 @@ public class RbtPrinter {
     int siblingWidth = 2;
 
     public void print(TreeNode root) {
-        if (root == null) {
+
+//        if (root == null) {
+//            return;
+//        }
+
+        if(root==NullNode.Instance)
+        {
             return;
         }
 
@@ -39,8 +45,7 @@ public class RbtPrinter {
             line.add(current);
 
 
-            if(current.isNull)
-            {
+            if (current.isNull) {
 
                 MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
                 current.left = emptyItem;
@@ -50,10 +55,11 @@ public class RbtPrinter {
                 current.right = dataItem;
                 dataItem.parent = current;
 
-            }
-            else {
+            } else {
 
-                if (current.node.left == null) {
+                //if (current.node.left == null)
+                if (current.node.left == NullNode.Instance)
+                {
                     MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
                     current.left = emptyItem;
                     emptyItem.parent = current;
@@ -63,7 +69,9 @@ public class RbtPrinter {
                     dataItem.parent = current;
                 }
 
-                if (current.node.right == null) {
+                //if (current.node.right == null)
+                if (current.node.right == NullNode.Instance)
+                {
                     MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
                     current.right = emptyItem;
                     emptyItem.parent = current;
@@ -157,6 +165,7 @@ public class RbtPrinter {
             if (!col.isNull) {
 
                 if (col.left != null && !col.left.isNull) {
+                    //todo
                     value += "/";
                 } else {
                     value += " ";
@@ -168,7 +177,8 @@ public class RbtPrinter {
                     value += " ";
                 }
 
-                System.out.print(fillWidth(value, wordWidth, ' '));
+                String nodeText = fillWidth(value, wordWidth, ' ');
+                System.out.print(nodeText);
 
             } else {
                 System.out.print(fillWidth(value, wordWidth, ' '));
@@ -199,6 +209,13 @@ public class RbtPrinter {
             String value = " ";
             if (!col.isNull) {
                 value = String.valueOf(col.node.val);
+
+                if (col.node.color == NodeColor.Black) {
+                    value = value + "(b)";
+                } else {
+                    value = value + "(r)";
+                }
+
                 System.out.print(fillWidth(value, wordWidth, ' '));
 
             } else {
@@ -235,9 +252,10 @@ public class RbtPrinter {
     }
 
     public int getHeight(TreeNode root) {
-        if (root == null) {
+        if (root == NullNode.Instance) {
             return 0;
         }
+
 
         return Math.max(1 + getHeight(root.left), 1 + getHeight(root.right));
     }
