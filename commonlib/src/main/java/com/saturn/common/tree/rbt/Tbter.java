@@ -11,162 +11,83 @@ public class Tbter {
         //job.test1();
         // job.test2();
 
-        job.insertTest();
-        //job.delTest();
+        //job.insertTest();
+        job.delTest();
     }
 
-    public void insertTest()
-    {
-
-        RbtTree tree = new RbtTree();
-        //TreeNode n1 = genEmptyNode();
+    public void insertTest() {
 
 
-        TreeNode newNode = new TreeNode(41);
-        tree.insert( newNode);
-
-        newNode = new TreeNode(38);
-        tree.insert( newNode);
-
-        newNode = new TreeNode(31);
-        tree.insert( newNode);
-
-        newNode = new TreeNode(12);
-        tree.insert( newNode);
-
-
-        newNode = new TreeNode(19);
-        tree.insert( newNode);
-
-        newNode = new TreeNode(8);
-        tree.insert( newNode);
-
-        //tree.root = afterInsertedRoot;
+        RbtTree tree = buildTree1();
 
         printer.printTree(tree);
 
 
+    }
+
+    private RbtTree buildTree1() {
+        RbtTree tree = new RbtTree();
+
+        TreeNode newNode = new TreeNode(41);
+        tree.insert(newNode);
+
+        newNode = new TreeNode(38);
+        tree.insert(newNode);
+
+        newNode = new TreeNode(31);
+        tree.insert(newNode);
+
+        newNode = new TreeNode(12);
+        tree.insert(newNode);
+
+
+        newNode = new TreeNode(19);
+        tree.insert(newNode);
+
+        newNode = new TreeNode(8);
+        tree.insert(newNode);
+
+        return tree;
     }
 
     public void delTest() {
 
-        RbtTree tree = new RbtTree();
+        RbtTree tree = buildTree1();
+        System.out.println("---------- before delete-------------------");
+        printer.printTree(tree);
 
-        TreeNode n1 = genEmptyNode();
+//        TreeNode node=tree.find(8);
+//        tree.deleteNode(node);
+//        System.out.println("---------- after delete 8-------------------");
+//        printer.printTree(tree);
+//
+//        node=tree.find(12);
+//        tree.deleteNode(node);
+//        System.out.println("---------- after delete 12 -------------------");
+//        printer.printTree(tree);
+//
+//        node=tree.find(19);
+//        tree.deleteNode(node);
+//        System.out.println("---------- after delete 19 -------------------");
+//        printer.printTree(tree);
+//
+//        node=tree.find(31);
+//        tree.deleteNode(node);
+//        System.out.println("---------- after delete 31 -------------------");
+//        printer.printTree(tree);
+//
+//        node=tree.find(38);
+//        tree.deleteNode(node);
+//        System.out.println("---------- after delete 38 -------------------");
+//        printer.printTree(tree);
 
-
-        TreeNode newNode = new TreeNode(41);
-        TreeNode afterInsertedRoot = insert(n1, newNode);
-
-        System.out.println("----------------");
-        newNode = new TreeNode(38);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-
-        newNode = new TreeNode(31);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-
-        newNode = new TreeNode(12);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-
-
-        newNode = new TreeNode(19);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-
-        newNode = new TreeNode(8);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-
-        tree.root = afterInsertedRoot;
-
+        TreeNode node=tree.find(41);
+        tree.deleteNode(node);
+        System.out.println("---------- after delete 41 -------------------");
         printer.printTree(tree);
 
     }
 
-    public TreeNode deleteNode(RbtTree tree, TreeNode z) {
-
-        TreeNode resultRoot = tree.root;
-
-        TreeNode y = NullNode.Instance;
-        TreeNode x = NullNode.Instance;
-
-        if (z == NullNode.Instance) {
-            return resultRoot;
-        }
-
-        if (z.left == NullNode.Instance || z.right == NullNode.Instance) {
-            y = z;
-        } else {
-            y = successor(z);
-        }
-
-        if (y.left != NullNode.Instance) {
-            x = y.left;
-        } else {
-            x = y.right;
-        }
-
-        x.parent = y.parent;
-
-        if (y.parent == NullNode.Instance) {
-
-            tree.root=x;
-        } else {
-            if (y == y.parent.left) {
-                y.parent.left = x;
-            } else {
-                y.parent.right = x;
-            }
-        }
-
-        if (y != z) {
-            int temp = y.val;
-            y.val = z.val;
-            z.val = temp;
-
-        }
-
-        if (y.color == NodeColor.Black) {
-            deleteFixup(tree, x);
-        }
-
-        return y;
-
-    }
-
-    public void deleteFixup(RbtTree tree, TreeNode x) {
-
-    }
-
-    public TreeNode successor(TreeNode x) {
-        if (x == NullNode.Instance) {
-            return NullNode.Instance;
-        }
-
-        if (x.right != NullNode.Instance) {
-            return getMinSubTreeHead(x.right);
-        }
-
-        //没有右子树
-        TreeNode y = x.parent;
-        while (y != NullNode.Instance && y.right == x) {
-            x = y;
-            y = y.parent;
-        }
-
-        return y;
-    }
-
-    private TreeNode getMinSubTreeHead(TreeNode x) {
-        if (x == NullNode.Instance) {
-            return NullNode.Instance;
-        }
-
-        TreeNode current = x;
-        while (current.left != NullNode.Instance) {
-            current = current.left;
-        }
-
-        return current;
-    }
 
     public void test2() {
 

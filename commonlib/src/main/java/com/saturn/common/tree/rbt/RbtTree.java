@@ -2,8 +2,23 @@ package com.saturn.common.tree.rbt;
 
 public class RbtTree {
 
-    public TreeNode root=NullNode.Instance;
+    public TreeNode root = NullNode.Instance;
 
+
+    public TreeNode find(int key) {
+
+        TreeNode current = this.root;
+        while (current != NullNode.Instance && key != current.val) {
+            if (key < current.val) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+
+        return current;
+
+    }
 
     public void insert(TreeNode z) {
 
@@ -206,6 +221,168 @@ public class RbtTree {
         //return result;
 
 
+    }
+
+    public TreeNode deleteNode(TreeNode z) {
+
+        if (z == NullNode.Instance) {
+            return z;
+        }
+
+        TreeNode resultRoot = this.root;
+
+        TreeNode y = NullNode.Instance;
+        TreeNode x = NullNode.Instance;
+
+
+        if (z.left == NullNode.Instance || z.right == NullNode.Instance) {
+            y = z;
+        } else {
+            y = successor(z);
+        }
+
+        if (y.left != NullNode.Instance) {
+            x = y.left;
+        } else {
+            x = y.right;
+        }
+
+        x.parent = y.parent;
+
+        if (y.parent == NullNode.Instance) {
+
+            this.root = x;
+        } else {
+            if (y == y.parent.left) {
+                y.parent.left = x;
+            } else {
+                y.parent.right = x;
+            }
+        }
+
+        if (y != z) {
+            int temp = y.val;
+            y.val = z.val;
+            z.val = temp;
+
+        }
+
+        if (y.color == NodeColor.Black) {
+            deleteFixup(this, x);
+        }
+
+        return y;
+
+    }
+
+    public void deleteFixup(RbtTree tree, TreeNode x) {
+
+//        if(x==NullNode.Instance)
+//        {
+//            return;
+//        }
+
+        while (x != tree.root && x.color == NodeColor.Black) {
+            if (x == x.parent.left) {
+                TreeNode w = x.parent.right;
+
+                if (w.color == NodeColor.Red) {//case 1
+                    w.color = NodeColor.Black;
+                    x.parent.color = NodeColor.Red;
+                    rotateLeft(tree, x.parent);
+                    w = x.parent.right; //
+                }
+
+                if (w.left.color == NodeColor.Black && w.right.color == NodeColor.Black) {
+                    //case 2
+                    w.color = NodeColor.Red;
+                    x = x.parent;
+                    //退出循环
+                } else if (w.right.color == NodeColor.Black) {
+                    //case 3
+                    w.left.color = NodeColor.Black;
+                    w.color = NodeColor.Red;
+                    rotateRight(tree, w);
+                    w = x.parent.right;
+                }
+
+
+                w.color = x.parent.color;
+                x.parent.color = NodeColor.Black;
+                rotateLeft(tree, x.parent);
+                x = tree.root;
+
+
+            } else {
+                //right part
+
+                System.out.println("right part");
+                TreeNode w = x.parent.left;
+
+                if (w.color == NodeColor.Red) {
+                    //case 1
+                    w.color = NodeColor.Black;
+                    x.parent.color = NodeColor.Red;
+                    rotateRight(tree, x.parent);
+                    w = x.parent.left; //
+                }
+
+                if (w.right.color == NodeColor.Black && w.left.color == NodeColor.Black) {
+                    //case 2
+                    w.color = NodeColor.Red;
+                    x = x.parent;
+                    //退出循环
+                } else if (w.left.color == NodeColor.Black) {
+                    //case 3
+                    w.left.color = NodeColor.Black;
+                    w.color = NodeColor.Red;
+                    rotateLeft(tree, w);
+                    w = x.parent.left;
+                }
+
+                w.color = x.parent.color;
+                x.parent.color = NodeColor.Black;
+                rotateRight(tree, x.parent);
+                x = tree.root;
+
+
+            }
+        }
+
+        x.color = NodeColor.Black;
+
+    }
+
+    public TreeNode successor(TreeNode x) {
+        if (x == NullNode.Instance) {
+            return NullNode.Instance;
+        }
+
+        if (x.right != NullNode.Instance) {
+            return getMinSubTreeHead(x.right);
+        }
+
+        //没有右子树
+        TreeNode y = x.parent;
+        while (y != NullNode.Instance && y.right == x) {
+            x = y;
+            y = y.parent;
+        }
+
+        return y;
+    }
+
+    private TreeNode getMinSubTreeHead(TreeNode x) {
+//        if (x == NullNode.Instance) {
+//            return NullNode.Instance;
+//        }
+
+        TreeNode current = x;
+        while (current.left != NullNode.Instance) {
+            current = current.left;
+        }
+
+        return current;
     }
 
 
