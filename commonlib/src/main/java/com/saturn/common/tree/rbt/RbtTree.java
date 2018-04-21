@@ -304,13 +304,16 @@ public class RbtTree {
                     w.color = NodeColor.Red;
                     rotateRight(tree, w);
                     w = x.parent.right;
+
+                    //case 4
+                    w.color = x.parent.color;
+                    x.parent.color = NodeColor.Black;
+                    rotateLeft(tree, x.parent);
+                    x = tree.root;
                 }
 
 
-                w.color = x.parent.color;
-                x.parent.color = NodeColor.Black;
-                rotateLeft(tree, x.parent);
-                x = tree.root;
+
 
 
             } else {
@@ -334,16 +337,20 @@ public class RbtTree {
                     //退出循环
                 } else if (w.left.color == NodeColor.Black) {
                     //case 3
-                    w.left.color = NodeColor.Black;
+                    w.right.color = NodeColor.Black;
                     w.color = NodeColor.Red;
                     rotateLeft(tree, w);
                     w = x.parent.left;
+                    //case 4
+
+                    w.color = x.parent.color;
+                    x.parent.color = NodeColor.Black;
+                    rotateRight(tree, x.parent);
+                    x = tree.root;
                 }
 
-                w.color = x.parent.color;
-                x.parent.color = NodeColor.Black;
-                rotateRight(tree, x.parent);
-                x = tree.root;
+
+
 
 
             }
