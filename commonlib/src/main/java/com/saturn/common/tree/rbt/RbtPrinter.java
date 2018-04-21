@@ -10,6 +10,14 @@ public class RbtPrinter {
     int wordWidth = 2;
     int siblingWidth = 2;
 
+    public void printTree(RbtTree tree)
+    {
+        if(tree.root!=NullNode.Instance)
+        {
+            print(tree.root);
+        }
+    }
+
     public void print(TreeNode root) {
 
 //        if (root == null) {

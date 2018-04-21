@@ -1,5 +1,7 @@
 package com.saturn.common.tree.rbt;
 
+import com.saturn.common.peak.BSTBasic;
+
 public class Tbter {
 
     public static void main(String[] args) {
@@ -7,7 +9,163 @@ public class Tbter {
         // job.start();
 
         //job.test1();
-        job.test2();
+        // job.test2();
+
+        job.insertTest();
+        //job.delTest();
+    }
+
+    public void insertTest()
+    {
+
+        RbtTree tree = new RbtTree();
+        //TreeNode n1 = genEmptyNode();
+
+
+        TreeNode newNode = new TreeNode(41);
+        tree.insert( newNode);
+
+        newNode = new TreeNode(38);
+        tree.insert( newNode);
+
+        newNode = new TreeNode(31);
+        tree.insert( newNode);
+
+        newNode = new TreeNode(12);
+        tree.insert( newNode);
+
+
+        newNode = new TreeNode(19);
+        tree.insert( newNode);
+
+        newNode = new TreeNode(8);
+        tree.insert( newNode);
+
+        //tree.root = afterInsertedRoot;
+
+        printer.printTree(tree);
+
+
+    }
+
+    public void delTest() {
+
+        RbtTree tree = new RbtTree();
+
+        TreeNode n1 = genEmptyNode();
+
+
+        TreeNode newNode = new TreeNode(41);
+        TreeNode afterInsertedRoot = insert(n1, newNode);
+
+        System.out.println("----------------");
+        newNode = new TreeNode(38);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+
+        newNode = new TreeNode(31);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+
+        newNode = new TreeNode(12);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+
+
+        newNode = new TreeNode(19);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+
+        newNode = new TreeNode(8);
+        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+
+        tree.root = afterInsertedRoot;
+
+        printer.printTree(tree);
+
+    }
+
+    public TreeNode deleteNode(RbtTree tree, TreeNode z) {
+
+        TreeNode resultRoot = tree.root;
+
+        TreeNode y = NullNode.Instance;
+        TreeNode x = NullNode.Instance;
+
+        if (z == NullNode.Instance) {
+            return resultRoot;
+        }
+
+        if (z.left == NullNode.Instance || z.right == NullNode.Instance) {
+            y = z;
+        } else {
+            y = successor(z);
+        }
+
+        if (y.left != NullNode.Instance) {
+            x = y.left;
+        } else {
+            x = y.right;
+        }
+
+        x.parent = y.parent;
+
+        if (y.parent == NullNode.Instance) {
+
+            tree.root=x;
+        } else {
+            if (y == y.parent.left) {
+                y.parent.left = x;
+            } else {
+                y.parent.right = x;
+            }
+        }
+
+        if (y != z) {
+            int temp = y.val;
+            y.val = z.val;
+            z.val = temp;
+
+        }
+
+        if (y.color == NodeColor.Black) {
+            deleteFixup(tree, x);
+        }
+
+        return y;
+
+    }
+
+    public void deleteFixup(RbtTree tree, TreeNode x) {
+
+    }
+
+    public TreeNode successor(TreeNode x) {
+        if (x == NullNode.Instance) {
+            return NullNode.Instance;
+        }
+
+        if (x.right != NullNode.Instance) {
+            return getMinSubTreeHead(x.right);
+        }
+
+        //没有右子树
+        TreeNode y = x.parent;
+        while (y != NullNode.Instance && y.right == x) {
+            x = y;
+            y = y.parent;
+        }
+
+        return y;
+    }
+
+    private TreeNode getMinSubTreeHead(TreeNode x) {
+        if (x == NullNode.Instance) {
+            return NullNode.Instance;
+        }
+
+        TreeNode current = x;
+        while (current.left != NullNode.Instance) {
+            current = current.left;
+        }
+
+        return current;
     }
 
     public void test2() {
@@ -47,20 +205,20 @@ public class Tbter {
         afterInsertedRoot = insert(afterInsertedRoot, newNode);
         printer.print(afterInsertedRoot);
 
-        System.out.println("----insert xx------------");
-        newNode = new TreeNode(69);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-        printer.print(afterInsertedRoot);
-
-        System.out.println("----insert xx------------");
-        newNode = new TreeNode(80);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-        printer.print(afterInsertedRoot);
-
-        System.out.println("----insert xx------------");
-        newNode = new TreeNode(83);
-        afterInsertedRoot = insert(afterInsertedRoot, newNode);
-        printer.print(afterInsertedRoot);
+//        System.out.println("----insert xx------------");
+//        newNode = new TreeNode(69);
+//        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+//        printer.print(afterInsertedRoot);
+//
+//        System.out.println("----insert xx------------");
+//        newNode = new TreeNode(80);
+//        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+//        printer.print(afterInsertedRoot);
+//
+//        System.out.println("----insert xx------------");
+//        newNode = new TreeNode(83);
+//        afterInsertedRoot = insert(afterInsertedRoot, newNode);
+//        printer.print(afterInsertedRoot);
     }
 
     RbtPrinter printer = new RbtPrinter();
@@ -253,25 +411,22 @@ public class Tbter {
                     z.parent.color = NodeColor.Black;
                     y.color = NodeColor.Black;
                     z.parent.parent.color = NodeColor.Red;
-                    z=z.parent.parent;
+                    z = z.parent.parent;
                     System.out.println("right case 1");
                     printer.print(resultRoot);
-                }
-                else
-                {
+                } else {
                     //case 2
-                    if(z==z.parent.left)
-                    {
-                        z=z.parent;
-                        resultRoot=rotateRight(resultRoot, z);
+                    if (z == z.parent.left) {
+                        z = z.parent;
+                        resultRoot = rotateRight(resultRoot, z);
                         System.out.println("right case 2");
                         printer.print(resultRoot);
                     }
 
                     System.out.println("right case 3");
-                    z.parent.color=NodeColor.Black;
-                    z.parent.parent.color=NodeColor.Red;
-                    resultRoot=rotateLeft(resultRoot,z.parent.parent);
+                    z.parent.color = NodeColor.Black;
+                    z.parent.parent.color = NodeColor.Red;
+                    resultRoot = rotateLeft(resultRoot, z.parent.parent);
                     printer.print(resultRoot);
                 }
             }
