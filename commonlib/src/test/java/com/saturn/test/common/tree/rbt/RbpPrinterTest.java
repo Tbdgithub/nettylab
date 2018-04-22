@@ -12,7 +12,11 @@ public class RbpPrinterTest {
     {
 
         RbtTree tree=buildTree1();
-        RbtPrinter printer=new RbtPrinter();
+        RbtPrinter printer=new RbtPrinter(true);
+        printer.printTree(tree);
+        System.out.println("-------------------------------");
+
+        printer=new RbtPrinter(false);
         printer.printTree(tree);
     }
 

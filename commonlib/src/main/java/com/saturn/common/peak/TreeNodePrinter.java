@@ -1,5 +1,6 @@
 package com.saturn.common.peak;
 
+import com.saturn.common.tree.Tree;
 import com.saturn.common.tree.TreeNode;
 
 import java.util.*;
@@ -7,8 +8,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class TreeNodePrinter {
 
-    int wordWidth = 2;
-    int siblingWidth = 2;
+    int wordWidth = 5;
+    int siblingWidth = 5;
+
+
 
 
     public static void main(String[] args) {
@@ -18,6 +21,8 @@ public class TreeNodePrinter {
     }
 
     public void start() {
+
+        Tree tree=new Tree();
         TreeNode n1 = new TreeNode(1);
         TreeNode n2 = new TreeNode(2);
         TreeNode n3 = new TreeNode(3);
@@ -54,9 +59,18 @@ public class TreeNodePrinter {
         //n8.left=n16;
 
 
-        print(n1);
+        tree.root=n1;
+        printTree(tree);
     }
 
+
+    public void printTree(Tree tree)
+    {
+        if(tree!=null && tree.root!=null)
+        {
+            print(tree.root);
+        }
+    }
 
     public void print(TreeNode root) {
         if (root == null) {

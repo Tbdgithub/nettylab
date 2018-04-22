@@ -7,13 +7,25 @@ import java.util.Stack;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class RbtPrinter {
-    int wordWidth = 2;
-    int siblingWidth = 2;
+    int wordWidth = 5;
+    int siblingWidth = 5;
+
+    private boolean showNullNode;
 
 
     public static void main(String[] args) {
 
     }
+
+
+    public RbtPrinter(boolean showNullNode) {
+        this.showNullNode = showNullNode;
+    }
+
+    public RbtPrinter() {
+
+    }
+
 
     public void printTree(RbtTree tree) {
         if (tree.root != NullNode.Instance) {
@@ -21,20 +33,8 @@ public class RbtPrinter {
         }
     }
 
-    public void printTree(RbtTree tree, boolean showNullNode) {
-        if (tree.root != NullNode.Instance) {
-            print(tree.root);
-        }
-    }
 
     public void print(TreeNode root) {
-
-        print(root, false);
-
-    }
-
-
-    public void print(TreeNode root, boolean showNullNode) {
 
 
         if (root == NullNode.Instance) {
@@ -123,6 +123,8 @@ public class RbtPrinter {
 
     private void calcIndex(Stack<List<MetaItem>> layers) {
 
+        //todo 计算最宽的
+        //
 
         if (layers.size() == 0) {
             return;
@@ -151,6 +153,7 @@ public class RbtPrinter {
             for (MetaItem col : popLine) {
 
                 col.startIndex = (col.left.startIndex + col.right.startIndex) / 2;
+                // col.startIndex= (col.left.startIndex+)
 
             }
         }
@@ -161,8 +164,12 @@ public class RbtPrinter {
         while (printStack.size() > 0) {
             List<MetaItem> item0 = printStack.pop();
 
-            printValue(wordWidth, siblingWidth, item0);
-            printConnectionLine(wordWidth, siblingWidth, item0);
+            printValue(item0);
+
+            if (printStack.size() > 0) {
+                //last line no connection line
+                printConnectionLine(item0);
+            }
 
 
         }
@@ -170,7 +177,7 @@ public class RbtPrinter {
 
     }
 
-    private void printConnectionLine(int wordWidth, int siblingWidth, List<MetaItem> item0) {
+    private void printConnectionLine(List<MetaItem> item0) {
         int currentIndex = 0;
         for (MetaItem col : item0) {
 
@@ -179,43 +186,42 @@ public class RbtPrinter {
                 currentIndex++;
             }
 
-            String value = "";
-            if (!col.isNull) {
+            if (showNullNode) {
+                System.out.print("/");
+                currentIndex++;
 
-                if (col.left != null && !col.left.isNull) {
-                    //todo
-                    value += "/";
-                } else {
-                    value += " ";
+                for (int i = 0; i < wordWidth - 2; i++) {
+                    System.out.print(" ");
+                    currentIndex++;
                 }
 
-                if (col.right != null && !col.right.isNull) {
-                    value += "\\";
-                } else {
-                    value += " ";
-                }
-
-                String nodeText = fillWidth(value, wordWidth, ' ');
-                System.out.print(nodeText);
-
+                System.out.print("\\");
+                currentIndex++;
             } else {
-                System.out.print(fillWidth(value, wordWidth, ' '));
+                if (!col.isNull) {
+                    if (!col.left.isNull) {
+                        System.out.print("/");
+                        currentIndex++;
+                    }
+
+                    if (!col.right.isNull) {
+                        for (int i = 0; i < wordWidth - 2; i++) {
+                            System.out.print(" ");
+                            currentIndex++;
+                        }
+
+                        System.out.print("\\");
+                        currentIndex++;
+                    }
+                }
             }
-
-            currentIndex += wordWidth;
-
-            for (int i = 0; i < siblingWidth; i++) {
-                System.out.print(" ");
-            }
-
-            currentIndex += wordWidth;
 
         }
 
         System.out.println();
     }
 
-    private void printValue(int wordWidth, int siblingWidth, List<MetaItem> item0) {
+    private void printValue(List<MetaItem> item0) {
         int currentIndex = 0;
         for (MetaItem col : item0) {
 
@@ -224,34 +230,47 @@ public class RbtPrinter {
                 currentIndex++;
             }
 
-            String value = " ";
+
             if (!col.isNull) {
-                value = String.valueOf(col.node.val);
 
-                if (col.node.color == NodeColor.Black) {
-                    value = value + "(b)";
-                } else {
-                    value = value + "(r)";
-                }
-
-                System.out.print(fillWidth(value, wordWidth, ' '));
+                String valueText = getValueText(col, showNullNode);
+                System.out.print(valueText);
+                currentIndex += wordWidth;
 
             } else {
 
-                System.out.print(fillWidth(value, wordWidth, ' '));
+                String valueText = getValueText(col, showNullNode);
+                System.out.print(valueText);
+                currentIndex += wordWidth;
             }
-
-            currentIndex += wordWidth;
-
-            for (int i = 0; i < siblingWidth; i++) {
-                System.out.print(" ");
-            }
-
-            currentIndex += wordWidth;
 
         }
 
         System.out.println();
+    }
+
+    private String getValueText(MetaItem col, boolean showNullNode) {
+
+        String value = "";
+
+        if (!col.isNull) {
+            value = String.valueOf(col.node.val);
+            if (col.node.color == NodeColor.Black) {
+                value = value + "(b)";
+            } else {
+                value = value + "(r)";
+            }
+
+        } else {
+
+            if (showNullNode) {
+                value = "(nil)";
+            }
+        }
+
+
+        String text = fillWidth(value, wordWidth, ' ');
+        return text;
     }
 
     private String fillWidth(String item, int padLen, char padChar) {
