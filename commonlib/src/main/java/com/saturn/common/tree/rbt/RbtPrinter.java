@@ -10,22 +10,34 @@ public class RbtPrinter {
     int wordWidth = 2;
     int siblingWidth = 2;
 
-    public void printTree(RbtTree tree)
-    {
-        if(tree.root!=NullNode.Instance)
-        {
+
+    public static void main(String[] args) {
+
+    }
+
+    public void printTree(RbtTree tree) {
+        if (tree.root != NullNode.Instance) {
+            print(tree.root);
+        }
+    }
+
+    public void printTree(RbtTree tree, boolean showNullNode) {
+        if (tree.root != NullNode.Instance) {
             print(tree.root);
         }
     }
 
     public void print(TreeNode root) {
 
-//        if (root == null) {
-//            return;
-//        }
+        print(root, false);
 
-        if(root==NullNode.Instance)
-        {
+    }
+
+
+    public void print(TreeNode root, boolean showNullNode) {
+
+
+        if (root == NullNode.Instance) {
             return;
         }
 
@@ -66,8 +78,7 @@ public class RbtPrinter {
             } else {
 
                 //if (current.node.left == null)
-                if (current.node.left == NullNode.Instance)
-                {
+                if (current.node.left == NullNode.Instance) {
                     MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
                     current.left = emptyItem;
                     emptyItem.parent = current;
@@ -78,8 +89,7 @@ public class RbtPrinter {
                 }
 
                 //if (current.node.right == null)
-                if (current.node.right == NullNode.Instance)
-                {
+                if (current.node.right == NullNode.Instance) {
                     MetaItem emptyItem = new MetaItem(null, current.level + 1, true);
                     current.right = emptyItem;
                     emptyItem.parent = current;
@@ -227,6 +237,7 @@ public class RbtPrinter {
                 System.out.print(fillWidth(value, wordWidth, ' '));
 
             } else {
+
                 System.out.print(fillWidth(value, wordWidth, ' '));
             }
 
