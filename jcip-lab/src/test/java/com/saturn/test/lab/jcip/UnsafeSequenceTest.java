@@ -1,6 +1,6 @@
 package com.saturn.test.lab.jcip;
 
-import com.saturn.lab.jcip.UnsafeSequence;
+import com.saturn.lab.jcip.introduction.UnsafeSequence;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
