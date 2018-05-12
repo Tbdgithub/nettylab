@@ -6,4 +6,5 @@ include 'infrastructure'
 include 'commonlib'
 include 'sort-tool'
 include 'jcip-lab'
+include 'jvm-lab'
 
