@@ -4,38 +4,45 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class ReentryLockTest {
+public class ReentrantReadWriteLockTest
+
+{
 
 
     /**
-     * 3kw/s tps
+     * 500w/s reader tps, 300/s writer tps ; reader 50 ,writer  2 居然少于reentrylock??
+     * 1.3kw /s tps reader 10;writer 5
      */
+
     @Test
     public void lockTest() {
-        ReentrantLock reentrantLock = new ReentrantLock();
-        AtomicInteger accessCount = new AtomicInteger(0);
+        ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+
+        AtomicInteger readerCounter = new AtomicInteger(0);
+        AtomicInteger writerCounter=new AtomicInteger(0);
         long begin=System.nanoTime();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 10; i++) {
             Thread t1 = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
                     while (true) {
                         //System.out.println("t1 locking...");
-                        reentrantLock.lock();
+                        reentrantLock.readLock().lock();
 
                         try {
                             //System.out.println("t1 got lock");
                             //Thread.sleep(1);
-                            accessCount.incrementAndGet();
+                            readerCounter.incrementAndGet();
                         }
 //                        catch (InterruptedException ex) {
 //                            Thread.currentThread().interrupt();
 //                        }
                         finally {
-                            reentrantLock.unlock();
+                            reentrantLock.readLock().unlock();
                             //  System.out.println("t1 unlock lock");
                         }
                     }
@@ -45,25 +52,25 @@ public class ReentryLockTest {
             t1.start();
         }
 
-        for (int j = 0; j < 5; j++) {
+        for (int j = 0; j < 1; j++) {
             Thread t2 = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
                     while (true) {
                         //  System.out.println("t2 locking...");
-                        reentrantLock.lock();
+                        reentrantLock.writeLock().lock();
 
                         try {
                             //  System.out.println("t2 got lock");
                             // Thread.sleep(1);
-                            accessCount.incrementAndGet();
+                            writerCounter.incrementAndGet();
                         }
 //                        catch (InterruptedException ex) {
 //                            Thread.currentThread().interrupt();
 //                        }
                         finally {
-                            reentrantLock.unlock();
+                            reentrantLock.writeLock().unlock();
                             // System.out.println("t1 unlock lock");
                         }
                     }
@@ -87,8 +94,11 @@ public class ReentryLockTest {
 
                         if (costNano > 0) {
 
-                            long tps = (long)(accessCount.get() * 1e9 / costNano);
-                            System.out.println("tps:" + tps + " accessCount:" + accessCount.get()+" costSecond:"+costSecond);
+                            long tps = (long)(readerCounter.get() * 1e9 / costNano);
+                            System.out.println("readerCounter tps:" + tps + " accessCount:" + readerCounter.get()+" costSecond:"+costSecond);
+
+                             tps = (long)(writerCounter.get() * 1e9 / costNano);
+                            System.out.println("writerCounter tps:" + tps + " accessCount:" + writerCounter.get()+" costSecond:"+costSecond);
                         }
 
                         try {
