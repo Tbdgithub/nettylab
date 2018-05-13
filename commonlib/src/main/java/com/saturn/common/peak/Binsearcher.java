@@ -6,7 +6,7 @@ public class Binsearcher {
         int left = 0;
         int right = a.length - 1;
 
-        while (left < right) {
+        while (left <= right) {
             int middle = (left + right) / 2;
 
             if (a[middle] == key) {
@@ -22,6 +22,7 @@ public class Binsearcher {
         }
 
         //left ==right 时
-        return left;
+        //return left;
+        return -1;
     }
 }
