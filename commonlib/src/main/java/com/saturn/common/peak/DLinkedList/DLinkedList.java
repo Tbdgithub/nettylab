@@ -148,10 +148,6 @@ public class DLinkedList<E> implements Iterable<E> {
         size++;
     }
 
-    public void addBefore(E val, Node<E> node) {
-
-    }
-
     private Node<E> findNode(E val) {
         if (val == null) {
             return null;
@@ -161,7 +157,6 @@ public class DLinkedList<E> implements Iterable<E> {
 
         while (current != null) {
             if (current.getVal().equals(val)) {
-
                 return current;
             }
 
@@ -179,14 +174,6 @@ public class DLinkedList<E> implements Iterable<E> {
         } else {
             return false;
         }
-    }
-
-    public boolean remove(Object o) {
-
-        //1. find
-        //2. remove
-        //3  true if removed succeed
-        return false;
     }
 
 
