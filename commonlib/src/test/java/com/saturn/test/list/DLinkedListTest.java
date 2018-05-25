@@ -20,8 +20,6 @@ public class DLinkedListTest {
 
         System.out.println("Before reverse:");
 
-        boolean find = list.find(1);
-        System.out.println("find:" + find);
 
         System.out.println("head->tail:" + list.print());
         System.out.println("tail->head:" + list.printNegativeDirection());
@@ -31,25 +29,41 @@ public class DLinkedListTest {
         Assert.assertTrue(original.equals(actual));
 
         list.removeAtHead();
+
         actual = list.print();
         Assert.assertTrue("2->3".equals(actual));
+
+        actual = list.printNegativeDirection();
+        Assert.assertTrue("3->2".equals(actual));
 
         list.addBeforeHead(1);
         actual = list.print();
         Assert.assertTrue("1->2->3".equals(actual));
 
+        actual = list.printNegativeDirection();
+        Assert.assertTrue("3->2->1".equals(actual));
+
         list.removeAtTail();
         actual = list.print();
         Assert.assertTrue("1->2".equals(actual));
+
+        actual = list.printNegativeDirection();
+        Assert.assertTrue("2->1".equals(actual));
 
         list.addAfterTail(3);
         actual = list.print();
         Assert.assertTrue("1->2->3".equals(actual));
 
+        actual = list.printNegativeDirection();
+        Assert.assertTrue("3->2->1".equals(actual));
+
         System.out.println("After reverse:");
         list.reverse();
+        actual = list.print();
+        System.out.println("head->tail:"+actual);
 
-        System.out.println(list);
+        actual = list.printNegativeDirection();
+        System.out.println("tail->head:"+actual);
 
         String expected = "3->2->1";
         actual = list.print();

@@ -128,21 +128,22 @@ public class DLinkedList<E> implements Iterable<E> {
         size++;
     }
 
-    public void addAfterTail(E newVal) {
+    public void addAfterTail(E val) {
 
-        if (newVal == null) {
+        if (val == null) {
             return;
         }
 
-        Node<E> newNode = new Node<>(newVal);
+        Node<E> addedNode = new Node<>(val);
 
-        newNode.setPrev(tail);
+        addedNode.setPrev(tail);
         if (tail != null) {
-            tail.setNext(newNode);
+            tail.setNext(addedNode);
         } else {
-            head = newNode;
+            head = addedNode;
         }
-        tail = newNode;
+
+        tail = addedNode;
         //
         modCount++;
         size++;
@@ -181,6 +182,7 @@ public class DLinkedList<E> implements Iterable<E> {
 
         Node<E> prev = null;
         Node<E> current = head;
+        Node<E> headTemp=head;
 
         while (current != null) {
             Node<E> next = current.getNext();
@@ -192,6 +194,8 @@ public class DLinkedList<E> implements Iterable<E> {
         }
 
         head = prev;
+        tail=headTemp;
+
     }
 
 
@@ -268,5 +272,4 @@ public class DLinkedList<E> implements Iterable<E> {
         }
     }
 }
-
 
