@@ -16,7 +16,7 @@ public class ReverseDoubleLinkedListTest {
     @Test
     public void test1() {
 
-        int checkSize=3;
+        int checkSize = 3;
         DoubleLinkedList list = DoubleLinkedListHelper.build(checkSize);
 
         System.out.println("Before reverse:");
@@ -25,7 +25,6 @@ public class ReverseDoubleLinkedListTest {
         System.out.println("After reverse:");
         list.reverse();
         list.print();
-
 
     }
 

@@ -28,7 +28,6 @@ public class DoubleLinkedList {
 
     public void reverse()
     {
-
         ListNode prev=null;
         ListNode current=head;
 
@@ -41,7 +40,6 @@ public class DoubleLinkedList {
             //move one step
             prev=current;
             current=next;
-
         }
 
         head=prev;
