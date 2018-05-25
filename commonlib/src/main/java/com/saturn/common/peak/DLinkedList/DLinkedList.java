@@ -148,8 +148,50 @@ public class DLinkedList<E> implements Iterable<E> {
         size++;
     }
 
+    public void addBefore(E val, Node<E> node) {
+
+    }
+
+    private Node<E> findNode(E val) {
+        if (val == null) {
+            return null;
+        }
+
+        Node<E> current = head;
+
+        while (current != null) {
+            if (current.getVal().equals(val)) {
+
+                return current;
+            }
+
+            current = current.getNext();
+        }
+
+        return null;
+    }
+
+    public boolean find(E val) {
+
+        Node<E> node = findNode(val);
+        if (node != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean remove(Object o) {
+
+        //1. find
+        //2. remove
+        //3  true if removed succeed
+        return false;
+    }
+
 
     public void reverse() {
+
         Node<E> prev = null;
         Node<E> current = head;
 

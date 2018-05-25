@@ -1,11 +1,10 @@
 package com.saturn.test.list;
 
 import com.saturn.common.peak.DLinkedList.DLinkedList;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.LinkedList;
+import java.util.ConcurrentModificationException;
 import java.util.concurrent.CountDownLatch;
 
 public class DLinkedListTest {
@@ -20,6 +19,9 @@ public class DLinkedListTest {
         DLinkedList<Integer> list = getMockedList(checkSize);
 
         System.out.println("Before reverse:");
+
+        boolean find = list.find(1);
+        System.out.println("find:" + find);
 
         System.out.println("head->tail:" + list.print());
         System.out.println("tail->head:" + list.printNegativeDirection());
@@ -131,10 +133,11 @@ public class DLinkedListTest {
     public void multiThreadTest1() {
 
         int checkSize = 10;
-        DLinkedList<Integer> list = getMockedList(checkSize);
-
-        int runCount = 10;
+        int runCount = 1000;
         int threadCount = 1;
+
+        DLinkedList<Integer> list = getMockedList(checkSize);
+        final boolean[] hasEx = new boolean[1];
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
@@ -144,14 +147,15 @@ public class DLinkedListTest {
 
                     try {
                         for (int i = 0; i < runCount; i++) {
-                            synchronized (list)
-                            {
-                                list.reverse();
-                            }
+
+                            list.print();
+                            Thread.sleep(1);
                         }
 
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    } catch (InterruptedException ex) {
+
+                    } catch (ConcurrentModificationException ex) {
+                        hasEx[0] = true;
                     } finally {
                         latch.countDown();
                     }
@@ -162,21 +166,38 @@ public class DLinkedListTest {
             t1.start();
         }
 
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    for (int i = 0; i < runCount; i++) {
+                        list.addBeforeHead(-1);
+                        list.removeAtHead();
+
+                        list.addAfterTail(5);
+                        list.removeAtTail();
+
+                        Thread.sleep(1);
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        t2.start();
+
+
         try {
             latch.await();
-
-            String original = correctAnswer(checkSize, separator, true);
-
-            Assert.assertTrue(original.equals(list.print()));
-
             System.out.println("finished");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException ex1) {
+            ex1.printStackTrace();
         }
 
-        for (Integer item : list) {
-
-        }
+        Assert.assertTrue(hasEx[0]);
     }
 
     public DLinkedList getMockedList(int size) {
