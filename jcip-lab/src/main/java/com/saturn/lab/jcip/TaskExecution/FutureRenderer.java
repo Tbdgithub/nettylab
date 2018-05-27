@@ -4,10 +4,68 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+
+class FutureRendererImp extends FutureRenderer
+{
+
+    @Override
+   public void renderPage(CharSequence source) {
+        super.renderPage(source);
+        System.out.println("renderPage");
+    }
+
+    @Override
+    void renderText(CharSequence s) {
+        System.out.println("renderText");
+    }
+
+    @Override
+    List<ImageInfo> scanForImageInfo(CharSequence s) {
+
+        List<ImageInfo> list=new ArrayList<>();
+
+        ImageInfo item=new ImageInfo() {
+            @Override
+            public ImageData downloadImage() {
+
+                ImageData data=new ImageData() {
+                };
+
+                return data;
+            }
+        };
+
+        list.add(item);
+
+        return list;
+    }
+
+    @Override
+    void renderImage(ImageData i) {
+        System.out.println("renderImage");
+    }
+
+    public static void main(String [] args)
+    {
+        FutureRenderer  worker =new FutureRendererImp();
+
+        worker.renderPage("hello");
+
+        try {
+            Thread.sleep(Integer.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * todo
+ */
 public abstract class FutureRenderer {
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
-    void renderPage(CharSequence source) {
+   public void renderPage(CharSequence source) {
         final List<ImageInfo> imageInfos = scanForImageInfo(source);
         Callable<List<ImageData>> task =
                 new Callable<List<ImageData>>() {
@@ -54,4 +112,6 @@ public abstract class FutureRenderer {
     abstract List<ImageInfo> scanForImageInfo(CharSequence s);
 
     abstract void renderImage(ImageData i);
+
+
 }
