@@ -1,4 +1,4 @@
-package com.saturn.common.radical;
+package com.saturn.test.common.radical;
 
 public abstract class RadicalBuilder {
 

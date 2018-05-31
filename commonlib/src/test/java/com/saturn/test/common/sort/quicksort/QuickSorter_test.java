@@ -1,11 +1,8 @@
-package com.saturn.common.sort.quicksort;
+package com.saturn.test.common.sort.quicksort;
 
 import com.google.gson.Gson;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 /**

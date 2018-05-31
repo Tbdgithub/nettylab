@@ -1,4 +1,4 @@
-package com.saturn.common;
+package com.saturn.test.common;
 
 import com.saturn.common.peak.Binsearcher;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.saturn.common.sort.quicksort;
+package com.saturn.test.common.sort.quicksort;
 
 /**
  * 严版算法

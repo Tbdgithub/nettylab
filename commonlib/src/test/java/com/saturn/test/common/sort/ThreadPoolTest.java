@@ -1,9 +1,8 @@
-package com.saturn.common.sort;
+package com.saturn.test.common.sort;
 
 import org.junit.Test;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolTest {
 

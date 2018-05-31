@@ -7,4 +7,5 @@ include 'commonlib'
 include 'sort-tool'
 include 'jcip-lab'
 include 'jvm-lab'
+include 'websocket-lab'
 

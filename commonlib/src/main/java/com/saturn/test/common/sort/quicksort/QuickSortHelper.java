@@ -1,12 +1,11 @@
-package com.saturn.common.sort.quicksort;
+package com.saturn.test.common.sort.quicksort;
 
 /**
  * Created by lyz on 2018/1/28.
  */
-public class QuickSorter<T extends Comparable> {
+public class QuickSortHelper {
 
-
-    public void quickSort(T[] A, int p, int r) {
+    public static  <T extends Comparable> void quickSort(T[] A, int p, int r) {
 
         if (p < r) {
             int q = partition(A, p, r);
@@ -17,7 +16,7 @@ public class QuickSorter<T extends Comparable> {
 
     }
 
-    public int partition(T A[], int p, int r) {
+    public static  <T extends Comparable> int partition(T A[], int p, int r) {
         T x = A[r];
         int i = p - 1;
         for (int j = p; j < r; j++) {
@@ -36,5 +35,4 @@ public class QuickSorter<T extends Comparable> {
 
         return i + 1;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.saturn.common.radical;
+package com.saturn.test.common.radical;
 
 import org.junit.After;
 import org.junit.Before;
