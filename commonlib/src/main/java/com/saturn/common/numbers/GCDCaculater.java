@@ -34,6 +34,7 @@ public class GCDCaculater {
         long a = caculater.calc(1, 1);
         Assert.assertTrue(a == 1);
 
+
         a = caculater.calc(12, 6);
         Assert.assertTrue(a == 6);
 
@@ -46,6 +47,9 @@ public class GCDCaculater {
 
         a = caculater.calc(12, 16);
         Assert.assertTrue(a == 4);
+
+        a = caculater.calc(62, 36);
+        Assert.assertTrue(a == 2);
 
         System.out.println("all succeed");
 
