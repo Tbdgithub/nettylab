@@ -50,7 +50,7 @@ public class DynamicOrderDeadlock {
     }
 
    public static class Account {
-        private DollarAmount balance;
+        private DollarAmount balance=new DollarAmount(0);
         private final int acctNo;
         private static final AtomicInteger sequence = new AtomicInteger();
 
