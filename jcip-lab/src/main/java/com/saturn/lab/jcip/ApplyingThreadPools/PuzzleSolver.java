@@ -2,8 +2,8 @@ package com.saturn.lab.jcip.ApplyingThreadPools;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PuzzleSolver <P,M> extends ConcurrentPuzzleSolver<P, M> {
-    PuzzleSolver(Puzzle<P, M> puzzle) {
+public class PuzzleSolver<P, M> extends ConcurrentPuzzleSolver<P, M> {
+    public PuzzleSolver(Puzzle<P, M> puzzle) {
         super(puzzle);
     }
 
