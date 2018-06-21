@@ -57,7 +57,10 @@ public class DistributedLock implements Lock, Watcher {
             connectedSignal.countDown();
             return;
         }
+
+        //这个代码有问题
         //其他线程放弃锁的标志
+        //?? 任何事件都countdown ??
         if (this.latch != null) {
             this.latch.countDown();
         }
