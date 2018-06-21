@@ -20,6 +20,7 @@ public class Dispatcher {
         availableTaxis.add(taxi);
     }
 
+    //先lock dispater,再lock taxi
     public synchronized Image getImage() {
         Image image = new Image();
         for (Taxi t : taxis)

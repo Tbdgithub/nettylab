@@ -21,6 +21,7 @@ public class Taxi {
         return location;
     }
 
+    //先lock taxi ,再lock dispacher , 在次序不同的情况下,容易造成死锁
     public synchronized void setLocation(Point location) {
         this.location = location;
         if (location.equals(destination))
