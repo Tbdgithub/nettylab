@@ -55,16 +55,31 @@ class ZNodeName implements Comparable<ZNodeName> {
     }
 
     public int compareTo(ZNodeName that) {
-        int answer = this.prefix.compareTo(that.prefix);
-        if (answer == 0) {
-            int s1 = this.sequence;
-            int s2 = that.sequence;
-            if (s1 == -1 && s2 == -1) {
-                return this.name.compareTo(that.name);
-            }
-            answer = s1 == -1 ? 1 : s2 == -1 ? -1 : s1 - s2;
+//        int answer = this.prefix.compareTo(that.prefix);
+//        if (answer == 0) {
+//            int s1 = this.sequence;
+//            int s2 = that.sequence;
+//            if (s1 == -1 && s2 == -1) {
+//                return this.name.compareTo(that.name);
+//            }
+//            answer = s1 == -1 ? 1 : s2 == -1 ? -1 : s1 - s2;
+//        }
+//        return answer;
+
+        ///////////////// 公平的比较
+        int s1 = this.sequence;
+        int s2 = that.sequence;
+        if (s1 == -1 && s2 == -1) {
+            return this.name.compareTo(that.name);
         }
-        return answer;
+
+        if (s1 == -1) {
+            return -1;
+        } else if (s2 == -1) {
+            return 1;
+        } else {
+            return s1 - s2;
+        }
     }
 
     /**

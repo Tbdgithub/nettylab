@@ -6,15 +6,20 @@ import org.apache.zookeeper.data.Stat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
+/**
+ *  too simple ,just for demo ,can not use in production
+ *  不要用这个代码
+ */
 public class DistributedLock implements Lock, Watcher {
     private ZooKeeper zk;
-    private String root = "/locks";//根
+    private String root = "/notgood_locks";//根
     private String lockName;//竞争资源的标志
     private String waitNode;//等待前一个锁
     private String myZnode;//当前锁
@@ -75,8 +80,10 @@ public class DistributedLock implements Lock, Watcher {
                 waitForLock(waitNode, sessionTimeout);//等待锁
             }
         } catch (KeeperException e) {
+            e.printStackTrace();
             throw new LockException(e);
         } catch (InterruptedException e) {
+            e.printStackTrace();
             throw new LockException(e);
         }
     }
@@ -87,7 +94,8 @@ public class DistributedLock implements Lock, Watcher {
             if (lockName.contains(splitStr))
                 throw new LockException("lockName can not contains \\u000B");
             //创建临时子节点
-            myZnode = zk.create(root + "/" + lockName + splitStr, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+            myZnode = zk.create(root + "/" + lockName + splitStr, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                    CreateMode.EPHEMERAL_SEQUENTIAL);
             System.out.println(myZnode + " is created ");
             //取出所有子节点
             List<String> subNodes = zk.getChildren(root, false);
@@ -135,7 +143,9 @@ public class DistributedLock implements Lock, Watcher {
         if (stat != null) {
             System.out.println("Thread " + Thread.currentThread().getId() + " waiting for " + root + "/" + lower);
             this.latch = new CountDownLatch(1);
-            this.latch.await(waitTime, TimeUnit.MILLISECONDS);//等待，这里应该一直等待其他线程释放锁
+            System.out.println("begin wait:"+new Date().toString());
+           boolean succ= this.latch.await(waitTime, TimeUnit.MILLISECONDS);//等待，这里应该一直等待其他线程释放锁
+            System.out.println("end wait:"+new Date().toString()+ " succ:"+succ);
             this.latch = null;
         }
         return true;
@@ -175,7 +185,7 @@ public class DistributedLock implements Lock, Watcher {
     }
 
     public static void main(String[] args) {
-        DistributedLock lock = new DistributedLock("192.168.1.127:2181", "lock");
+        DistributedLock lock = new DistributedLock("mred2:2181", "lock");
         lock.lock();
 //共享资源
         if (lock != null) {

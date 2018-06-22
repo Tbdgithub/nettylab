@@ -28,7 +28,7 @@ class ProtocolSupport {
 
     /**
      * Closes this strategy and releases any ZooKeeper resources; but keeps the
-     *  ZooKeeper instance open
+     * ZooKeeper instance open
      */
     public void close() {
         if (closed.compareAndSet(false, true)) {
@@ -38,6 +38,7 @@ class ProtocolSupport {
 
     /**
      * return zookeeper client instance
+     *
      * @return zookeeper client instance
      */
     public ZooKeeper getZookeeper() {
@@ -46,6 +47,7 @@ class ProtocolSupport {
 
     /**
      * return the acl its using
+     *
      * @return the acl.
      */
     public List<ACL> getAcl() {
@@ -54,6 +56,7 @@ class ProtocolSupport {
 
     /**
      * set the acl
+     *
      * @param acl the acl to set to
      */
     public void setAcl(List<ACL> acl) {
@@ -62,6 +65,7 @@ class ProtocolSupport {
 
     /**
      * get the retry delay in milliseconds
+     *
      * @return the retry delay
      */
     public long getRetryDelay() {
@@ -70,6 +74,7 @@ class ProtocolSupport {
 
     /**
      * Sets the time waited between retry delays
+     *
      * @param retryDelay the retry delay
      */
     public void setRetryDelay(long retryDelay) {
@@ -86,6 +91,7 @@ class ProtocolSupport {
 
     /**
      * Perform the given operation, retrying if the connection fails
+     *
      * @return object. it needs to be cast to the callee's expected
      * return type.
      */
@@ -104,6 +110,9 @@ class ProtocolSupport {
                 }
                 LOG.debug("Attempt " + i + " failed with connection loss so " +
                         "attempting to reconnect: " + e, e);
+
+                System.out.println("Attempt " + i + " failed with connection loss so " +
+                        "attempting to reconnect: " + e.getMessage());
                 retryDelay(i);
             }
         }
@@ -113,6 +122,7 @@ class ProtocolSupport {
     /**
      * Ensures that the given path exists with no data, the current
      * ACL and no flags
+     *
      * @param path
      */
     protected void ensurePathExists(String path) {
@@ -121,6 +131,7 @@ class ProtocolSupport {
 
     /**
      * Ensures that the given path exists with the given data, ACL and flags
+     *
      * @param path
      * @param acl
      * @param flags
@@ -147,6 +158,7 @@ class ProtocolSupport {
 
     /**
      * Returns true if this protocol has been closed
+     *
      * @return true if this protocol is closed
      */
     protected boolean isClosed() {
@@ -155,6 +167,7 @@ class ProtocolSupport {
 
     /**
      * Performs a retry delay if this is not the first attempt
+     *
      * @param attemptCount the number of the attempts performed so far
      */
     protected void retryDelay(int attemptCount) {
