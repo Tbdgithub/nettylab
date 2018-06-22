@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CountDownLatch;
 
 import static org.apache.zookeeper.CreateMode.EPHEMERAL_SEQUENTIAL;
 
@@ -30,6 +31,8 @@ public class WriteLock extends ProtocolSupport {
     private byte[] data = {0x12, 0x34};
     private LockListener callback;
     private LockZooKeeperOperation zop;
+
+    private CountDownLatch waitLatch=new CountDownLatch(1);
 
     /**
      * zookeeper contructor for writelock
@@ -141,7 +144,15 @@ public class WriteLock extends ProtocolSupport {
                     " Watcher fired on path: " + event.getPath() + " state: " +
                     event.getState() + " type " + event.getType());
             try {
-                lock();
+               // lock();
+
+//                if(event.getType()== Event.EventType.NodeDeleted)
+//                {
+//                    //notifyAll();
+//                    waitLatch.countDown();
+//                }
+                waitLatch.countDown();
+
             } catch (Exception e) {
                 LOG.warn("Failed to acquire lock: " + e, e);
             }
@@ -196,6 +207,9 @@ public class WriteLock extends ProtocolSupport {
          * @return if the command was successful or not
          */
         public boolean execute() throws KeeperException, InterruptedException {
+
+            boolean getLock=false;
+
             do {
                 if (id == null) {
                     long sessionId = zookeeper.getSessionId();
@@ -238,7 +252,19 @@ public class WriteLock extends ProtocolSupport {
                             // 等待前辈退位
                             Stat stat = zookeeper.exists(lastChildId, new LockWatcher());
                             if (stat != null) {
+                               // wait();//wait
+                                System.out.println("await");
+                                waitLatch.await();
+
+                                if(!isOwner())
+                                {
+                                  //  id=null;//retry
+                                    System.out.println("retry");
+                                    continue;
+                                }
+
                                 return Boolean.FALSE;
+
                             } else {
                                 LOG.warn("Could not find the" +
                                         " stats for less than me: " + lastChildName.getName());
@@ -250,13 +276,15 @@ public class WriteLock extends ProtocolSupport {
                                 if (callback != null) {
                                     callback.lockAcquired();
                                 }
+
+                              //  waitLatch.countDown();
                                 return Boolean.TRUE;
                             }
                         }
                     }
                 }
             }
-            while (id == null);
+            while (id == null  ||!getLock);
             return Boolean.FALSE;
         }
     }

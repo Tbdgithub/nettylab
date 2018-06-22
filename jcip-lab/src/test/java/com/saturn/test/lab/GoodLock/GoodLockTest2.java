@@ -7,6 +7,7 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;
@@ -42,7 +43,9 @@ public class GoodLockTest2 {
 
             LongAdder longAdder=new LongAdder();
             Random random=new Random();
-            for(int i=0;i<10000;i++) {
+            long begin=System.nanoTime();
+            int count=1;
+            for(int i=0;i<count;i++) {
                 boolean succ = writeLock.lock();
 
                 try {
@@ -50,8 +53,8 @@ public class GoodLockTest2 {
                     {
                         longAdder.increment();
                     }
-                    System.out.println("get lock:" + succ+" i:"+i);
-                    Thread.sleep(random.nextInt(100));
+                    System.out.println(new Date()+" get lock:" + succ+" i:"+i);
+                   // Thread.sleep(random.nextInt(100));
 
                 } finally {
                     if (writeLock != null) {
@@ -59,10 +62,17 @@ public class GoodLockTest2 {
                     }
                 }
 
-                Thread.sleep(1);
+               // Thread.sleep(1);
             }
 
             System.out.println("Get lock succ count:"+longAdder.longValue());
+            long costMs= (long)((System.nanoTime()-begin)/1e6);
+            long tps=count*1000/costMs;
+            if(costMs>0)
+            {
+                System.out.println("cost Ms:"+costMs+" tps:"+tps);
+            }
+
             Thread.sleep(Integer.MAX_VALUE);
 
         } catch (Exception e) {
