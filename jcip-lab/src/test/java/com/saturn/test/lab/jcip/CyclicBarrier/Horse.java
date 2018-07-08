@@ -19,6 +19,9 @@ class Horse implements Runnable {
                     strides += rand.nextInt(3); // Produces 0, 1 or 2
                 }
                 barrier.await();
+
+                //实质上是每个时间段结束时, 比如200 ms ，计数每个horse跑的路程。即所有horse都 跑了200ms后。重新计数.
+
                 //多个horse 线程全都到barrier了时，继续执行，否则等待
             }
         } catch(InterruptedException e) {
