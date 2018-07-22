@@ -21,7 +21,7 @@ public class HashTimerWheelTest {
             @Override
             public void run(Timeout timeout) throws Exception {
 
-                System.out.println(new Date()+" time out");
+                System.out.println(new Date()+" time out boys ");
 
             }
         },5000,TimeUnit.MILLISECONDS);
