@@ -1,4 +1,4 @@
-package com.saturn.test.lab.election;
+package com.saturn.test.lab.election.leaderlatch;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -19,8 +19,8 @@ public class LeaderLatchTest1 {
         try {
 
             String PATH = "/leader_latch";
-            int COUNT = 5;
-            String zookeeperConnectionString = "mred2:2181";
+            int COUNT = 3;
+            String zookeeperConnectionString = "localhost:2181";
             RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
 
             CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
