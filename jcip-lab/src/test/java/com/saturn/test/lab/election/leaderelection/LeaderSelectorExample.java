@@ -15,7 +15,7 @@ import java.util.List;
  * @Date: 2018/8/19 下午5:51
  */
 public class LeaderSelectorExample {
-    private static final int CLIENT_QTY = 3;
+    private static final int CLIENT_QTY = 10;
 
     private static final String PATH = "/examples/leader";
 

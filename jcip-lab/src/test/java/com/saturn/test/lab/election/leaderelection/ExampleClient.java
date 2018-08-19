@@ -14,6 +14,7 @@ import org.apache.curator.framework.recipes.leader.LeaderSelector;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,6 +61,9 @@ public class ExampleClient extends LeaderSelectorListenerAdapter implements Clos
         try {
 
             System.out.println(new Date() +" le me do leader job!!!");
+
+            //int seconds =new Random().nextInt(waitSeconds);
+            //Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
             Thread.sleep(TimeUnit.SECONDS.toMillis(waitSeconds));
         } catch (InterruptedException e) {
             System.err.println(name + " was interrupted.");
