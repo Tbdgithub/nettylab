@@ -39,7 +39,7 @@ public class SimpleTest {
         );
 
         System.out.println(list.hashCode());
-        System.out.println(list);
+        System.out.println("that is :"+list);
 
     }
 
